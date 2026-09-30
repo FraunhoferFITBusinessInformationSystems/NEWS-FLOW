@@ -1,0 +1,82 @@
+publiccodeYmlVersion: "0.4"
+name: "NEWS FLOW"
+url: "https://github.com/FraunhoferFITBusinessInformationSystems/NEWS-FLOW.git"
+landingURL: "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings.html"
+platforms:
+  - web
+categories:
+  - data-analytics
+  - data-collection
+  - geographic-information-systems
+  - predictive-analysis
+  - resource-management
+developmentStatus: beta
+softwareType: standalone/web
+usedBy:
+  - "Stadt Frankfurt am Main (Grünflächenamt und Palmengarten)"
+description:
+  de:
+    localisedName: "NEWS FLOW – Smarte Bewässerung fürs Stadtgrün"
+    shortDescription: "Datenbasierte Bewässerungsplanung für klimaresiliente Stadtbäume und Grünflächen"
+    longDescription: >
+      NEWS FLOW unterstützt Kommunen dabei, Stadtbäume und Grünflächen bedarfsgerecht,
+      wassersparend und transparent zu bewässern. Vernetzte Bodenfeuchtesensoren an
+      ca. 200 Standorten liefern zusammen mit Umwelt-, Wetter- und Pflanzendaten ein
+      aktuelles Bild der Wasserverfügbarkeit. Die Webanwendung analysiert diese Daten,
+      erstellt Bewässerungsempfehlungen und unterstützt sowohl die Planung als auch die
+      digital begleitete Durchführung von Bewässerungseinsätzen. Perspektivisch ergänzen
+      KI- und Machine-Learning-Verfahren die Anwendung um vorausschauende Prognosen.
+      NEWS FLOW wird seit Anfang 2025 vom Fraunhofer FIT im Auftrag der Stadt Frankfurt
+      am Main entwickelt. Kommunale Partner sind das Grünflächenamt und der Palmengarten;
+      das Projekt wird durch das Hessische Ministerium für Digitalisierung und Innovation
+      im Rahmen der Starke-Heimat-Förderung unterstützt.
+    features:
+      - "Bedarfsgerechte Bewässerung auf Basis von Bodenfeuchte-, Umwelt-, Wetter- und Pflanzendaten"
+      - "Datenbasierte Bewässerungsempfehlungen und perspektivisch vorausschauende Prognosen"
+      - "Planung und digital unterstützte Durchführung von Bewässerungseinsätzen"
+      - "Optimierte Gießrouten und effizientere Arbeitsabläufe"
+      - "Transparente Datengrundlage für Steuerung, Planung und Entscheidungen"
+    screenshots:
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_1897805583/imageComponent1/image.img.4col.large.jpg/1777284913188/sachbearbeiter-1.jpg"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_1897805583/imageComponent2/image.img.4col.large.png/1777284913188/Sachbearbeiter-Bild-2.png"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_1897805583/imageComponent3/image.img.4col.large.png/1777284913188/Sachbearbeiter-Bild-3.png"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_189780/imageComponent1/image.img.4col.large.png/1777355559299/Gaertner-Bild-1-neu.png"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_189780/imageComponent2/image.img.4col.large.png/1777355208440/Gaertner-Bild-2-neu.png"
+  en:
+    localisedName: "NEWS FLOW – Smart irrigation for urban greenery"
+    shortDescription: "Data-driven irrigation planning for climate-resilient urban trees and green spaces"
+    longDescription: >
+      NEWS FLOW helps municipalities irrigate urban trees and green spaces according to
+      actual demand while saving water and making operational decisions transparent.
+      Connected soil-moisture sensors at around 200 locations combine with environmental,
+      weather and plant data to provide an up-to-date picture of water availability. The
+      web application analyses these data, generates irrigation recommendations and
+      supports both planning and digitally assisted execution of irrigation operations.
+      Artificial-intelligence and machine-learning methods are planned to add predictive
+      forecasts. Fraunhofer FIT has been developing NEWS FLOW since early 2025 on behalf
+      of the City of Frankfurt am Main, together with its Parks Department and Palmengarten.
+    features:
+      - "Demand-based irrigation using soil-moisture, environmental, weather and plant data"
+      - "Data-driven irrigation recommendations and planned predictive forecasts"
+      - "Planning and digitally assisted execution of irrigation operations"
+      - "Optimised watering routes and more efficient workflows"
+      - "Transparent data for operational control, planning and decisions"
+    screenshots:
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_1897805583/imageComponent1/image.img.4col.large.jpg/1777284913188/sachbearbeiter-1.jpg"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_1897805583/imageComponent2/image.img.4col.large.png/1777284913188/Sachbearbeiter-Bild-2.png"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_1897805583/imageComponent3/image.img.4col.large.png/1777284913188/Sachbearbeiter-Bild-3.png"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_189780/imageComponent1/image.img.4col.large.png/1777355559299/Gaertner-Bild-1-neu.png"
+      - "https://www.wi.fit.fraunhofer.de/de/projekte/industrieprojekte/NEWS-Natural-digital-Ecosystem-for-Water-Savings/jcr:content/contentPar/sectioncomponent/sectionParsys/imagerow_copy_189780/imageComponent2/image.img.4col.large.png/1777355208440/Gaertner-Bild-2-neu.png"
+legal:
+  license: AGPL-3.0-only
+maintenance:
+  type: contract
+  contacts:
+    - name: "Fraunhofer-Institut für Angewandte Informationstechnik FIT"
+organisation:
+  uri: "https://www.fit.fraunhofer.de/"
+  name: "Fraunhofer-Institut für Angewandte Informationstechnik FIT"
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - de
