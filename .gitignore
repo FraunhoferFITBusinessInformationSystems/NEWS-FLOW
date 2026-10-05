@@ -39,6 +39,11 @@ supabase/.branches/
 supabase/.temp/
 supabase/snippets/
 
+# claude code (local assistant instructions and settings)
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
 # vercel
 .vercel
 
