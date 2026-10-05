@@ -27,9 +27,9 @@ export async function updateSession(request: NextRequest) {
 	});
 
 	const supabase = createServerClient(
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and docs/setup.md
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and docs/setup.md
 		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 		{
 			cookies: {
