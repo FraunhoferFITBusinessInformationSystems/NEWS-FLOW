@@ -1,0 +1,8 @@
+-- Seed data for local development, applied by `supabase db reset` after the
+-- migrations.
+--
+-- Intentionally empty: the schema ships without data. The application roles
+-- are not seed data; they are inserted by the initial schema migration.
+--
+-- Rows added here should be fictional demo data only (trees, sensors,
+-- readings, irrigation targets), never data exported from a real deployment.
