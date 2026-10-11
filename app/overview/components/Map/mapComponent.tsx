@@ -284,7 +284,13 @@ export default function MapComponent() {
 				tree.bewaesserungsbereich_name === filterBewaesserungsbereich;
 			return colorMatch && districtMatch && bewaesserungsbereichMatch;
 		});
-	}, [trees, filterColor, filterDistrict, filterBewaesserungsbereich]);
+	}, [
+		trees,
+		filterColor,
+		filterDistrict,
+		filterBewaesserungsbereich,
+		assignIcon,
+	]);
 
 	const uniqueDistricts = [
 		...new Set(trees.map((t) => t.bezirk).filter(Boolean)),
@@ -360,6 +366,8 @@ export default function MapComponent() {
 		filterDistrict,
 		filterPhase,
 		filterBewaesserungsbereich,
+		assignIcon,
+		fuzzyObjectMatchSet,
 	]);
 
 	// Draw the tree markers whenever the map, filtered data or icons change.

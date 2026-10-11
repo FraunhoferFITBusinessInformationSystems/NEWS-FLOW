@@ -168,6 +168,8 @@ export function DataTable<TData, TValue>({
 		}
 	}, [sorting, sortingQuery, persistSortingInQuery]);
 
+	// Column filters -> URL.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: columnFiltersQuery is only read to decide whether the URL needs clearing. As a dependency, every URL update would re-run this effect and write the same value back.
 	React.useEffect(() => {
 		if (columnFilters.length > 0) {
 			setColumnFiltersQuery(
@@ -178,6 +180,8 @@ export function DataTable<TData, TValue>({
 		}
 	}, [columnFilters, setColumnFiltersQuery]);
 
+	// URL -> column filters: a shared link with ?columnFilters=… restores them.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: must react to URL changes only. Reacting to columnFilters.length would restore the old filters from the URL right after the user resets them, before the effect above has cleared the URL.
 	React.useEffect(() => {
 		if (columnFilters.length === 0 && columnFiltersQuery) {
 			setColumnFilters(columnFiltersQuery as unknown as ColumnFiltersState);

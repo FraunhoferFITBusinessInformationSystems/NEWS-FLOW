@@ -229,6 +229,22 @@ function SoilMoistureTooltipBody(
 	);
 }
 
+/** Strips the time of day so dates compare by calendar day only. */
+function toDateOnly(date: Date): Date {
+	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+/**
+ * Formats the year label of a series. A range that crosses the turn of the
+ * year is shown as "24/25" instead of "2024".
+ */
+function formatYearLabel(year: number, isCrossYearRange: boolean): string {
+	if (!isCrossYearRange) return String(year);
+	const shortStart = String(year).slice(2);
+	const shortEnd = String(year + 1).slice(2);
+	return `${shortStart}/${shortEnd}`;
+}
+
 export default function LineChartComponent({
 	data,
 	startDate,
@@ -246,21 +262,13 @@ export default function LineChartComponent({
 		return Object.values(sollZustandData);
 	}, [sollZustandData]);
 
-	const parseDate = (str: string) => {
-		const [day, month, year] = str.split('.').map(Number);
-		return new Date(year, month - 1, day);
-	};
-
-	const toDateOnly = (date: Date) =>
-		new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
 	const filterByDateRange = useCallback(
 		(arr: SoilMoistureDataPoint[]) => {
 			if (!startDate || !endDate) return arr;
 			const start = toDateOnly(new Date(startDate));
 			const end = toDateOnly(new Date(endDate));
 			return arr.filter((d) => {
-				const date = toDateOnly(parseDate(d.date));
+				const date = toDateOnly(parseGermanDate(d.date));
 				return date >= start && date <= end;
 			});
 		},
@@ -272,7 +280,7 @@ export default function LineChartComponent({
 			if (!startDate || !endDate) return true;
 			const start = toDateOnly(new Date(startDate));
 			const end = toDateOnly(new Date(endDate));
-			const t = toDateOnly(parseDate(dateStr));
+			const t = toDateOnly(parseGermanDate(dateStr));
 			return t >= start && t <= end;
 		},
 		[startDate, endDate],
@@ -383,17 +391,10 @@ export default function LineChartComponent({
 		!!endDate &&
 		new Date(startDate).getFullYear() !== new Date(endDate).getFullYear();
 
-	const formatYearLabel = (year: number) => {
-		if (!isCrossYearRange) return String(year);
-		const shortStart = String(year).slice(2);
-		const shortEnd = String(year + 1).slice(2);
-		return `${shortStart}/${shortEnd}`;
-	};
-
 	const mainPeriodLabel = useMemo(() => {
 		if (!startDate) return 'Hauptzeitraum';
 		const y = new Date(startDate).getFullYear();
-		return formatYearLabel(y);
+		return formatYearLabel(y, isCrossYearRange);
 	}, [startDate, isCrossYearRange]);
 
 	/** Gleiches Basisjahr wie die Hauptserie-Bezeichnung — für Tooltip-Sortierung nach Jahr. */
@@ -585,7 +586,7 @@ export default function LineChartComponent({
 							)}
 							{comparisonSortedDesc.map(({ year }) => {
 								const yearIndex = comparisonYearStyleIndex.get(year) ?? 0;
-								const yLabel = formatYearLabel(year);
+								const yLabel = formatYearLabel(year, isCrossYearRange);
 								const n = comparisonSorted.length;
 								const stroke = getComparisonLineColor('cm30', yearIndex, n);
 								return (
@@ -620,7 +621,7 @@ export default function LineChartComponent({
 							)}
 							{comparisonSortedDesc.map(({ year }) => {
 								const yearIndex = comparisonYearStyleIndex.get(year) ?? 0;
-								const yLabel = formatYearLabel(year);
+								const yLabel = formatYearLabel(year, isCrossYearRange);
 								const n = comparisonSorted.length;
 								const stroke = getComparisonLineColor('cm60', yearIndex, n);
 								return (
@@ -655,7 +656,7 @@ export default function LineChartComponent({
 							)}
 							{comparisonSortedDesc.map(({ year }) => {
 								const yearIndex = comparisonYearStyleIndex.get(year) ?? 0;
-								const yLabel = formatYearLabel(year);
+								const yLabel = formatYearLabel(year, isCrossYearRange);
 								const n = comparisonSorted.length;
 								const stroke = getComparisonLineColor('cm90', yearIndex, n);
 								return (

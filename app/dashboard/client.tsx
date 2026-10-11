@@ -199,6 +199,7 @@ export default function DashboardClient() {
 	}, [selectedStreetObjekt]);
 
 	// Track how often object was changed — after 3x reset selected tree
+	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedObjekt is the trigger (run on every object change), not a value read inside the effect. Removing it would run the effect only once.
 	useEffect(() => {
 		objektSetCount.current += 1;
 		if (objektSetCount.current > 3) {
@@ -214,6 +215,7 @@ export default function DashboardClient() {
 	};
 
 	// If no date range selected, use default range (last 30 days)
+	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedObjekt is the trigger: the default range is applied when the object changes. startDate and endDate are deliberately not dependencies, otherwise clearing a date in the picker would immediately refill it.
 	useEffect(() => {
 		if (!startDate || !endDate) {
 			const { start, end } = getDefaultDateRange();

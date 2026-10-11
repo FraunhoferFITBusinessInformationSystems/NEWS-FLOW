@@ -65,19 +65,22 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
 	const [search, setSearch] = useQueryState('search');
 
+	// URL -> search field: a shared link with ?search=… fills the search field.
 	useEffect(() => {
 		if (search) {
 			setGlobalFilterValue(search ?? '');
 		}
-	}, [search]);
+	}, [search, setGlobalFilterValue]);
 
+	// Search field -> URL: typing updates ?search=, clearing the field removes it.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: search is read but must not trigger this effect. On a page load with ?search=… the field is still empty in the first render, so re-running on search would delete the URL value before the effect above can copy it into the field.
 	useEffect(() => {
 		if (globalFilterValue) {
 			setSearch(globalFilterValue);
 		} else if (search && !globalFilterValue) {
 			setSearch(null);
 		}
-	}, [globalFilterValue]);
+	}, [globalFilterValue, setSearch]);
 
 	const isFiltered = table.getState().columnFilters.length > 0;
 

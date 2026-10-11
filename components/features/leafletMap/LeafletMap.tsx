@@ -60,6 +60,7 @@ export default function LeafletMap({
 	onMapReadyRef.current = onMapReady;
 
 	// Create the Leaflet map once.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Created once on mount. initialView and scrollWheelZoom only apply on creation; re-running would destroy and recreate the map, dropping the parent's layers and the user's view. Later view changes are driven by the parent through onMapReady.
 	useEffect(() => {
 		if (!containerRef.current || mapRef.current) return;
 
@@ -87,8 +88,6 @@ export default function LeafletMap({
 			map.remove();
 			mapRef.current = null;
 		};
-		// Created once on mount; later view changes are driven by the parent.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	// Keep the button state in sync when the user leaves native fullscreen via
