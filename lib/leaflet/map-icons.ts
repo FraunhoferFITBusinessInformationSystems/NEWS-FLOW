@@ -1,9 +1,14 @@
 import L from 'leaflet';
-import { ROUTE_COLOR } from './map-config';
 
 // Single home for every Leaflet marker icon used across the app's maps: the
-// tree "pin" icons (colored markers, with sensor and recent-watering variants)
-// and the route markers (ordered stops, route endpoints, water points).
+// tree "pin" icons (colored markers, with sensor and recent-watering variants).
+//
+// The route markers (ordered stops, route endpoints) and the water extraction
+// point markers were removed together with irrigation route planning, which is
+// not part of this build. When those features return, the original functions
+// (createStopIcon, createRouteEndpointIcon, createWaterPointIcon,
+// createDynamicWaterPointIcon) and the route colors from map-config.ts can be
+// restored from commit 00b219b.
 
 // ---------------------------------------------------------------------------
 // Tree pin icons
@@ -61,6 +66,7 @@ function createBaseTreeMapIcon(iconUrl: string): L.Icon {
 }
 
 function createRecentWateringDivIcon(iconUrl: string): L.DivIcon {
+	// biome-ignore lint/style/useTemplate: One concatenated string per HTML tag reads better than a single long template literal
 	const html =
 		'<div class="tree-map-pin-recent-watering__frame">' +
 		`<img src="${iconUrl}" alt="" role="presentation" class="tree-map-pin-recent-watering__img" />` +
@@ -159,78 +165,4 @@ export function getTreeMapPinIcon(
 	return variant === 'default'
 		? registry.base[color]
 		: registry.recentWatering[color];
-}
-
-// ---------------------------------------------------------------------------
-// Route markers
-// ---------------------------------------------------------------------------
-
-// Numbered green circle marking an ordered stop along a route.
-export function createStopIcon(position: number): L.DivIcon {
-	const badge =
-		'<span style="display:flex;align-items:center;justify-content:center;' +
-		`width:26px;height:26px;border-radius:9999px;background:${ROUTE_COLOR};` +
-		'color:#fff;font-size:13px;font-weight:600;border:2px solid #fff;' +
-		`box-shadow:0 1px 4px rgba(0,0,0,0.4);">${position}</span>`;
-
-	return new L.DivIcon({
-		className: 'route-map-stop-marker',
-		html: badge,
-		iconSize: [26, 26],
-		iconAnchor: [13, 13],
-		popupAnchor: [0, -14],
-	});
-}
-
-// Squared badge marking a route endpoint (start "S" / depot / end "E"). The
-// letter and color are supplied by the caller.
-export function createRouteEndpointIcon(
-	letter: string,
-	color: string,
-): L.DivIcon {
-	const badge =
-		'<span style="display:flex;align-items:center;justify-content:center;' +
-		`width:30px;height:30px;border-radius:8px;background:${color};` +
-		'color:#fff;font-size:15px;font-weight:700;border:2px solid #fff;' +
-		`box-shadow:0 1px 4px rgba(0,0,0,0.4);">${letter}</span>`;
-
-	return new L.DivIcon({
-		className: 'route-endpoint-marker',
-		html: badge,
-		iconSize: [30, 30],
-		iconAnchor: [15, 15],
-		popupAnchor: [0, -16],
-	});
-}
-
-// Small blue dot marking a static water extraction point (hydrant).
-export function createWaterPointIcon(): L.DivIcon {
-	const html =
-		'<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">' +
-		'<circle cx="7" cy="7" r="5" fill="#2A81CB" stroke="#ffffff" stroke-width="2" />' +
-		'</svg>';
-
-	return new L.DivIcon({
-		className: 'water-extraction-point-marker',
-		html,
-		iconSize: [14, 14],
-		iconAnchor: [7, 7],
-		popupAnchor: [0, -8],
-	});
-}
-
-// Small teal square marking a dynamic water extraction point (fill-level sensor).
-export function createDynamicWaterPointIcon(): L.DivIcon {
-	const html =
-		'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">' +
-		'<rect x="2" y="2" width="12" height="12" rx="3" fill="#2A81CB" stroke="#ffffff" stroke-width="2" />' +
-		'</svg>';
-
-	return new L.DivIcon({
-		className: 'dynamic-water-extraction-point-marker',
-		html,
-		iconSize: [16, 16],
-		iconAnchor: [8, 8],
-		popupAnchor: [0, -9],
-	});
 }

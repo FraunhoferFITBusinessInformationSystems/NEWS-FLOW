@@ -1,5 +1,3 @@
-import { skip } from 'node:test';
-
 const RESISTANCE_INVALID_THRESHOLD = 1_000_000;
 
 const KPA_RESISTANCE_MAPPING = {

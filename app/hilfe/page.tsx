@@ -348,12 +348,12 @@ export default function HilfePage() {
 				<p>
 					{' '}
 					Beispiele:
-					<br></br>
+					<br />
 					Ein Standort, der einen Wert von <strong>45 kPa</strong> hat und einen
 					SOLL-Wert von maximal <strong>60 kPa</strong>, wird beispielsweise als{' '}
 					<span className="font-bold text-green-600">🟢 Grün</span> angezeigt,
 					da der IST-Wert unter dem SOLL-Wert liegt.
-					<br></br>
+					<br />
 					Ein Standort mit einem IST-Wert von <strong>120 kPa</strong> und einem
 					SOLL-Wert von <strong>90 kPa</strong> wird als{' '}
 					<span className="font-bold text-orange-600">🟠 Orange</span>{' '}

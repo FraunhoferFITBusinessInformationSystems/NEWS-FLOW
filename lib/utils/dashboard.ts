@@ -38,7 +38,9 @@ export function transformSensorData(
 			const avg = (field: keyof RawSensorRow) => {
 				const validValues = entries
 					.map((cur) => cur[field])
-					.filter((v) => v !== null && v !== undefined && !isNaN(Number(v)))
+					.filter(
+						(v) => v !== null && v !== undefined && !Number.isNaN(Number(v)),
+					)
 					.map((v) => Number(v));
 
 				if (validValues.length === 0) return null; // or NaN?

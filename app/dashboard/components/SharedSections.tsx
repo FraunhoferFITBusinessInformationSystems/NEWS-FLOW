@@ -164,7 +164,7 @@ export default function SharedSections({
 											Benutzer: userNames[user_id] ?? 'Unbekannt',
 										};
 									});
-									await exportToCSV(translated, 'watering_report_' + objekt);
+									await exportToCSV(translated, `watering_report_${objekt}`);
 									toast.info('Download wurde gestartet...');
 								}}
 							>
