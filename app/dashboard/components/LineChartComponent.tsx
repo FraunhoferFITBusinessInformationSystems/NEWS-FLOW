@@ -99,7 +99,7 @@ function getComparisonLineColor(
 		}
 	}
 
-	return palette[indexFromOldest]!;
+	return palette[indexFromOldest];
 }
 
 function depthKeyFromDataKey(dataKey: string | undefined): DepthKey | null {

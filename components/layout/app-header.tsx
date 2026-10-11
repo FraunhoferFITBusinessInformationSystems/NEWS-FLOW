@@ -117,6 +117,8 @@ export function AppHeader({
 												</NavigationMenuItem>
 											);
 										}
+										// An item without a submenu needs its own link to be rendered.
+										if (!item.href) return null;
 										return (
 											<NavigationMenuItem key={key}>
 												<NavigationMenuLink
@@ -127,7 +129,7 @@ export function AppHeader({
 													)}
 												>
 													<Link
-														href={item.href!}
+														href={item.href}
 														className="min-h-[44px] px-4 py-2 text-sm font-medium flex items-center gap-2"
 													>
 														{item.iconOnly ? (

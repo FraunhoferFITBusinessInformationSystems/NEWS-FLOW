@@ -31,7 +31,9 @@ export function DataTableColumnFilter<TData, TValue>({
 	title,
 }: DataTableFacetedFilterProps<TData, TValue>) {
 	const facets = column?.getFacetedUniqueValues();
-	const selectedValues = new Set(column?.getFilterValue() as any[]);
+	const selectedValues = new Set(
+		column?.getFilterValue() as unknown[] | undefined,
+	);
 
 	let options = Array.from(facets?.keys() ?? [])
 		.sort()
@@ -121,7 +123,8 @@ export function DataTableColumnFilter<TData, TValue>({
 
 								if (isSelected) {
 									const obj = Array.from(selectedValues).find(
-										(v) => v.label === val.label,
+										(v) =>
+											(v as { label?: unknown } | null)?.label === val.label,
 									);
 									selectedValues.delete(obj);
 								} else {

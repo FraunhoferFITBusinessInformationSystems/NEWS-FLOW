@@ -16,9 +16,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { useEffect } from 'react';
-import useSWR from 'swr';
-// import { getUserOptionRows } from "@/app/(app)/settings/action";
 
 interface DataTablePaginationProps<TData> {
 	table: Table<TData>;
@@ -27,14 +24,6 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
 	table,
 }: DataTablePaginationProps<TData>) {
-	// const { data } = useSWR("getRowsOption", () => getUserOptionRows(),);
-
-	// useEffect(() => {
-	//   if (data && data.value !== "10") {
-	//     table.setPageSize(Number(data?.value))
-	//   }
-	// }, [data]);
-
 	return (
 		<div className="flex items-center justify-between px-2">
 			<div className="flex items-center space-x-6 lg:space-x-8">
@@ -42,7 +31,7 @@ export function DataTablePagination<TData>({
 					<p className="text-sm font-medium">Zeilen pro Seite</p>
 					<Select
 						value={`${table.getState().pagination.pageSize}`}
-						onValueChange={(value: any) => {
+						onValueChange={(value: string) => {
 							table.setPageSize(Number(value));
 						}}
 					>

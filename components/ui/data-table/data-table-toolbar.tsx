@@ -1,33 +1,44 @@
 'use client';
 
-import { CalendarIcon, Cross2Icon } from '@radix-ui/react-icons';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import type { Table } from '@tanstack/react-table';
-
-// import { Input } from "@/components/ui/input"
-// import { DataTableViewOptions } from "./data-table-view-options";
-
 import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
 import type React from 'react';
-import { useEffect, useId } from 'react';
-//import { DateRange } from "react-day-picker";
-//import { format, set, sub } from "date-fns";
-
-//import { Calendar } from "../calendar";
-//import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-
-import { DataTableFacetedFilter } from './data-table-faceted-filter';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 import { useQueryState } from 'nuqs';
 
-type filterColumnOptions = {
-	label: string;
-	value: string | number | boolean;
-	icon?: React.ComponentType<{ className?: string }>;
-}[];
+// Flattens nested objects into a single level for the CSV export, joining the
+// keys with the delimiter, e.g. { tree: { site: 'A' } } becomes
+// { 'tree.site': 'A' }.
+function flattenObject(
+	obj: Record<string, unknown>,
+	delimiter = '.',
+	prefix = '',
+): Record<string, unknown> {
+	return Object.keys(obj).reduce<Record<string, unknown>>((acc, key) => {
+		const pre = prefix.length ? `${prefix}${delimiter}` : '';
+		const value = obj[key];
+
+		if (
+			typeof value === 'object' &&
+			value !== null &&
+			Object.keys(value).length > 0
+		) {
+			Object.assign(
+				acc,
+				flattenObject(value as Record<string, unknown>, delimiter, pre + key),
+			);
+		} else {
+			acc[pre + key] = value;
+		}
+
+		return acc;
+	}, {});
+}
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
@@ -70,29 +81,14 @@ export function DataTableToolbar<TData>({
 
 	const isFiltered = table.getState().columnFilters.length > 0;
 
-	const flattenObject = (obj: any, delimiter = '.', prefix = '') =>
-		Object.keys(obj).reduce((acc, k) => {
-			const pre = prefix.length ? `${prefix}${delimiter}` : '';
-
-			if (
-				typeof obj[k] === 'object' &&
-				obj[k] !== null &&
-				Object.keys(obj[k]).length > 0
-			)
-				Object.assign(acc, flattenObject(obj[k], delimiter, pre + k));
-			// eslint-disable-next-line
-			// @ts-ignore
-			else acc[pre + k] = obj[k];
-
-			return acc;
-		}, {});
-
 	const saveAction = () => {
 		// Export all rows matching current filters/sort, not only the current page.
 		const flatRows = table.getPrePaginationRowModel().flatRows;
 		const res = csvExportRowMapper
 			? flatRows.map((v) => csvExportRowMapper(v.original))
-			: flatRows.map((v) => flattenObject(v.original));
+			: flatRows.map((v) =>
+					flattenObject(v.original as Record<string, unknown>),
+				);
 
 		const csv = Papa.unparse(res);
 
@@ -100,26 +96,6 @@ export function DataTableToolbar<TData>({
 
 		saveAs(file, csvExportFilename ?? 'export.csv');
 	};
-
-	// Filter
-
-	const facetedFilter = ({
-		column,
-		label,
-	}: { column: string; label: string }) => {
-		return (
-			<DataTableFacetedFilter
-				key={useId()}
-				column={table.getColumn(column)}
-				title={label}
-			/>
-		);
-	};
-
-	// const [date, setDate] = React.useState<DateRange | undefined>({
-	//   from: sub(new Date(), { months: 2 }),
-	//   to: new Date(),
-	// });
 
 	return (
 		<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -137,18 +113,6 @@ export function DataTableToolbar<TData>({
 						Filter können über die einzelnen Spalten gesetzt werden.
 					</p>
 				</div>
-				{/* {filterColumns.map(({ column, label, isDate }) => {
-            if (isDate) {
-              return dateFilter({ column, label });
-            }
-            else {
-              let opt: filterColumnOptions = [
-                { label: "asdf", value: "asdf" }
-              ]
-
-              return facetedFilter({ column, label })
-            };
-          })} */}
 
 				{isFiltered && (
 					<Button
@@ -173,7 +137,6 @@ export function DataTableToolbar<TData>({
 				</Button>
 				{toolbarTrailing}
 			</div>
-			{/* <DataTableViewOptions table={table} /> */}
 		</div>
 	);
 }

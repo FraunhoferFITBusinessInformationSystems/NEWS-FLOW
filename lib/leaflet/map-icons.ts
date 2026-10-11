@@ -66,8 +66,8 @@ function createBaseTreeMapIcon(iconUrl: string): L.Icon {
 }
 
 function createRecentWateringDivIcon(iconUrl: string): L.DivIcon {
-	// biome-ignore lint/style/useTemplate: One concatenated string per HTML tag reads better than a single long template literal
 	const html =
+		// biome-ignore lint/style/useTemplate: One concatenated string per HTML tag reads better than a single long template literal
 		'<div class="tree-map-pin-recent-watering__frame">' +
 		`<img src="${iconUrl}" alt="" role="presentation" class="tree-map-pin-recent-watering__img" />` +
 		'<span class="tree-map-pin-recent-watering__dot" title="Kürzlich bewässert" aria-hidden="true"></span>' +
