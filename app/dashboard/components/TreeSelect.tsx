@@ -69,7 +69,7 @@ export default function TreeSelect({
 	if (!isClient) {
 		return (
 			<div className="flex flex-col gap-2">
-				<label className="text-sm text-gray-600">Bäume auswählen:</label>
+				<span className="text-sm text-gray-600">Bäume auswählen:</span>
 				<div className="w-full h-[150px] rounded border bg-gray-100 animate-pulse" />
 			</div>
 		);
@@ -78,9 +78,12 @@ export default function TreeSelect({
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="flex items-center justify-between">
-				<label className="text-sm text-gray-600">Baum:</label>
+				<label htmlFor="baum-select" className="text-sm text-gray-600">
+					Baum:
+				</label>
 			</div>
 			<Select
+				inputId="baum-select"
 				isMulti
 				options={options}
 				value={normalizedSelectedBaum}

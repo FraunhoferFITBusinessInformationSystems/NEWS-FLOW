@@ -91,9 +91,9 @@ export default function SharedSections({
 					{treeWaterings && treeWaterings.length > 0 ? (
 						<>
 							<ul className="space-y-4">
-								{paginatedWaterings.map((w, index) => (
+								{paginatedWaterings.map((w) => (
 									<li
-										key={index}
+										key={`${w.watered_at}-${w.user_id}`}
 										className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm hover:shadow-lg transition-all duration-200"
 									>
 										<div className="flex justify-between items-start mb-3">

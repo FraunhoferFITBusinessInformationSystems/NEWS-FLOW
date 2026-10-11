@@ -449,9 +449,8 @@ export default function MapComponent() {
 	return (
 		<div className="space-y-4">
 			{mapWateringDebug && mapWateringDebugStats && (
-				<div
+				<section
 					className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-950 font-mono space-y-1 z-20 relative"
-					role="status"
 					aria-label="Debug Infos Bewässerungspins"
 				>
 					<p className="font-sans font-semibold text-sm">
@@ -518,8 +517,8 @@ export default function MapComponent() {
 						)}
 					{mapWateringDebugStats.staleSamples.length > 0 && (
 						<ul className="list-disc pl-4 space-y-0.5">
-							{mapWateringDebugStats.staleSamples.map((s, i) => (
-								<li key={`stale-${i}`}>{s}</li>
+							{mapWateringDebugStats.staleSamples.map((s) => (
+								<li key={s}>{s}</li>
 							))}
 						</ul>
 					)}
@@ -529,8 +528,8 @@ export default function MapComponent() {
 								Bäume mit blauem Punkt (Auszug):
 							</p>
 							<ul className="list-disc pl-4 space-y-0.5">
-								{mapWateringDebugStats.recentSamples.map((s, i) => (
-									<li key={`recent-${i}`}>{s}</li>
+								{mapWateringDebugStats.recentSamples.map((s) => (
+									<li key={s}>{s}</li>
 								))}
 							</ul>
 						</>
@@ -567,8 +566,8 @@ export default function MapComponent() {
 									</tr>
 								</thead>
 								<tbody>
-									{mapWateringDebugDetailRows.map((r, i) => (
-										<tr key={`detail-${i}`} className="align-top">
+									{mapWateringDebugDetailRows.map((r) => (
+										<tr key={`${r.category}-${r.baumId}`} className="align-top">
 											<td className="border border-amber-200 p-1">
 												{r.category}
 											</td>
@@ -610,7 +609,7 @@ export default function MapComponent() {
 							</p>
 						</div>
 					)}
-				</div>
+				</section>
 			)}
 			<div className="relative z-20 p-4 bg-gray-100 rounded-md shadow-md space-y-2">
 				<div className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -726,13 +725,12 @@ export default function MapComponent() {
 				onMapReady={setMap}
 			>
 				<div className="pointer-events-none absolute bottom-2 right-2 z-[1000] max-w-[min(18.5rem,calc(100%-1rem))]">
-					<div
+					<section
 						className={cn(
 							'pointer-events-auto rounded-2xl bg-white shadow-lg text-left text-gray-800',
 							legendMobileOpen ? 'px-4 py-3.5' : 'px-2.5 py-1',
 							'md:px-4 md:py-3.5',
 						)}
-						role="region"
 						aria-label="Legende Kartenmarkierungen"
 					>
 						<button
@@ -841,7 +839,7 @@ export default function MapComponent() {
 								</div>
 							</div>
 						</div>
-					</div>
+					</section>
 				</div>
 			</LeafletMap>
 		</div>

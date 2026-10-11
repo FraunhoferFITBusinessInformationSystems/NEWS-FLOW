@@ -48,10 +48,12 @@ export function SegmentedControl<TValue extends string | boolean>({
 	className,
 }: SegmentedControlProps<TValue>) {
 	return (
-		<div
-			role="group"
+		<fieldset
 			aria-label={label}
-			className={cn('flex items-center gap-2', className)}
+			className={cn(
+				'm-0 flex min-w-0 items-center gap-2 border-0 p-0',
+				className,
+			)}
 		>
 			<span className="text-sm text-gray-700">{label}</span>
 			<div className="inline-flex rounded-md border border-gray-300 p-0.5">
@@ -75,6 +77,6 @@ export function SegmentedControl<TValue extends string | boolean>({
 					);
 				})}
 			</div>
-		</div>
+		</fieldset>
 	);
 }
