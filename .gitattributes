@@ -1,0 +1,4 @@
+# Store text files with LF in the repository and check them out with LF on
+# every platform, so Biome (which formats with LF) sees the same line endings
+# on Windows, macOS and Linux.
+* text=auto eol=lf
