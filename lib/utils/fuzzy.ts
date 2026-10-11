@@ -66,7 +66,7 @@ function minSubstringLevenshtein(
 	item: string,
 	maxEdits: number,
 ): number {
-	let minDist = Infinity;
+	let minDist = Number.POSITIVE_INFINITY;
 	const maxWindow = query.length + maxEdits;
 
 	for (let start = 0; start < item.length; start += 1) {
@@ -149,11 +149,11 @@ export function getFuzzyMatches(
 			}
 		}
 
-		return { item, score: Infinity };
+		return { item, score: Number.POSITIVE_INFINITY };
 	});
 
 	return scored
-		.filter((entry) => entry.score < Infinity)
+		.filter((entry) => entry.score < Number.POSITIVE_INFINITY)
 		.sort((a, b) => a.score - b.score)
 		.slice(0, limit)
 		.map((entry) => entry.item);

@@ -5,7 +5,11 @@
  * Zeigt nur TreeSpecificContent (Zustand, Baumdaten, Notizen, Neue Notiz).
  * SharedSections (Wetter, Bewässerung) werden separat in eigenem Kasten gerendert.
  */
-import type { IstZustandData, SollZustandData, TreeOverview } from '@/lib/types/dashboard';
+import type {
+	IstZustandData,
+	SollZustandData,
+	TreeOverview,
+} from '@/lib/types/dashboard';
 import { useEffect, useState } from 'react';
 import { getUserOrganisation } from '../action';
 import TreeSpecificContent from './TreeSpecificContent';

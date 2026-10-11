@@ -67,7 +67,7 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
 			url.searchParams.delete('refresh');
 			window.history.replaceState({}, '', url.toString());
 
-''			// Refresh user role with longer delay after login
+			(''); // Refresh user role with longer delay after login
 			//setTimeout(() => {
 			//	refreshUserRole();
 			//}, 10);''

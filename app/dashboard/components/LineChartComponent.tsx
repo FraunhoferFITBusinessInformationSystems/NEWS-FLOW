@@ -318,8 +318,7 @@ export default function LineChartComponent({
 		const sortedDates = [...dateSet]
 			.filter(germanDateInMainRange)
 			.sort(
-				(a, b) =>
-					parseGermanDate(a).getTime() - parseGermanDate(b).getTime(),
+				(a, b) => parseGermanDate(a).getTime() - parseGermanDate(b).getTime(),
 			);
 
 		return sortedDates.map((date) => {
@@ -363,7 +362,7 @@ export default function LineChartComponent({
 			for (const [key, value] of Object.entries(row)) {
 				if (value === null) {
 					setShowHint(true);
-				} 
+				}
 			}
 			return cleaned;
 		});
@@ -469,8 +468,7 @@ export default function LineChartComponent({
 		[visibleDepths, mainPeriodSortYear],
 	);
 
-	const chartAreaClassName =
-		'h-[300px] w-full min-h-0 sm:h-auto sm:flex-1';
+	const chartAreaClassName = 'h-[300px] w-full min-h-0 sm:h-auto sm:flex-1';
 
 	return (
 		<div className="flex w-full flex-col sm:h-[400px]">
@@ -500,7 +498,11 @@ export default function LineChartComponent({
 									}
 								/>
 								<span className="inline-flex items-center gap-1 text-black">
-									{key === 'cm30' ? '30 cm' : key === 'cm60' ? '60 cm' : '90 cm'}
+									{key === 'cm30'
+										? '30 cm'
+										: key === 'cm60'
+											? '60 cm'
+											: '90 cm'}
 								</span>
 							</label>
 						))}
@@ -537,185 +539,168 @@ export default function LineChartComponent({
 				</div>
 			) : (
 				<div className={chartAreaClassName}>
-					<ResponsiveContainer
-						width="100%"
-						height="100%"
-					>
-					<ComposedChart
-						data={filteredData}
-						margin={{ top: 20, right: 50, left: 0, bottom: 5 }}
-					>
-						<CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-						<XAxis
-							dataKey="date"
-							type="number"
-							scale="time"
-							domain={['dataMin', 'dataMax']}
-							tickFormatter={(ts: number) =>
-								new Date(ts).toLocaleDateString('de-DE', {
-									day: '2-digit',
-									month: '2-digit',
-								})
-							}
-							tick={{ fontSize: 12, fill: '#4B5563' }}
-						/>
-						<YAxis
-							yAxisId={0}
-							unit=" kPa"
-							tick={{ fontSize: 12, fill: '#4B5563' }}
-							domain={[minY, maxY]}
-							tickFormatter={(value) => Math.round(value).toString()}
-						/>
-						<Tooltip content={tooltipContent} />
-						<Legend
-							verticalAlign="top"
-							align="right"
-							wrapperStyle={{ fontSize: 12 }}
-						/>
-						{visibleDepths.cm30 && dataKeysWithPoints.has('cm30') && (
-							<Line
-								yAxisId={0}
-								type="monotone"
-								dataKey="cm30"
-								stroke={DEPTH_COLORS.cm30}
-								name={`30 cm (${mainPeriodLabel})`}
-								strokeWidth={2.5}
-								dot={false}
-								connectNulls={hasComparisonOverlay}
+					<ResponsiveContainer width="100%" height="100%">
+						<ComposedChart
+							data={filteredData}
+							margin={{ top: 20, right: 50, left: 0, bottom: 5 }}
+						>
+							<CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+							<XAxis
+								dataKey="date"
+								type="number"
+								scale="time"
+								domain={['dataMin', 'dataMax']}
+								tickFormatter={(ts: number) =>
+									new Date(ts).toLocaleDateString('de-DE', {
+										day: '2-digit',
+										month: '2-digit',
+									})
+								}
+								tick={{ fontSize: 12, fill: '#4B5563' }}
 							/>
-						)}
-						{comparisonSortedDesc.map(({ year }) => {
-							const yearIndex =
-								comparisonYearStyleIndex.get(year) ?? 0;
-							const yLabel = formatYearLabel(year);
-							const n = comparisonSorted.length;
-							const stroke = getComparisonLineColor(
-								'cm30',
-								yearIndex,
-								n,
-							);
-							return (
-								visibleDepths.cm30 &&
-								dataKeysWithPoints.has(`y${year}_30`) && (
-									<Line
-										key={`y${year}_30`}
-										yAxisId={0}
-										type="monotone"
-										dataKey={`y${year}_30`}
-										stroke={stroke}
-										name={`30 cm (${yLabel})`}
-										strokeWidth={2}
-										strokeDasharray={COMPARISON_DASH}
-										dot={false}
-										connectNulls
-									/>
-								)
-							);
-						})}
-						{visibleDepths.cm60 && dataKeysWithPoints.has('cm60') && (
-							<Line
+							<YAxis
 								yAxisId={0}
-								type="monotone"
-								dataKey="cm60"
-								stroke={DEPTH_COLORS.cm60}
-								name={`60 cm (${mainPeriodLabel})`}
-								strokeWidth={2.5}
-								dot={false}
-								connectNulls={hasComparisonOverlay}
+								unit=" kPa"
+								tick={{ fontSize: 12, fill: '#4B5563' }}
+								domain={[minY, maxY]}
+								tickFormatter={(value) => Math.round(value).toString()}
 							/>
-						)}
-						{comparisonSortedDesc.map(({ year }) => {
-							const yearIndex =
-								comparisonYearStyleIndex.get(year) ?? 0;
-							const yLabel = formatYearLabel(year);
-							const n = comparisonSorted.length;
-							const stroke = getComparisonLineColor(
-								'cm60',
-								yearIndex,
-								n,
-							);
-							return (
-								visibleDepths.cm60 &&
-								dataKeysWithPoints.has(`y${year}_60`) && (
-									<Line
-										key={`y${year}_60`}
-										yAxisId={0}
-										type="monotone"
-										dataKey={`y${year}_60`}
-										stroke={stroke}
-										name={`60 cm (${yLabel})`}
-										strokeWidth={2}
-										strokeDasharray={COMPARISON_DASH}
-										dot={false}
-										connectNulls
-									/>
-								)
-							);
-						})}
-						{visibleDepths.cm90 && dataKeysWithPoints.has('cm90') && (
-							<Line
-								yAxisId={0}
-								type="monotone"
-								dataKey="cm90"
-								stroke={DEPTH_COLORS.cm90}
-								name={`90 cm (${mainPeriodLabel})`}
-								strokeWidth={2.5}
-								dot={false}
-								connectNulls={hasComparisonOverlay}
+							<Tooltip content={tooltipContent} />
+							<Legend
+								verticalAlign="top"
+								align="right"
+								wrapperStyle={{ fontSize: 12 }}
 							/>
-						)}
-						{comparisonSortedDesc.map(({ year }) => {
-							const yearIndex =
-								comparisonYearStyleIndex.get(year) ?? 0;
-							const yLabel = formatYearLabel(year);
-							const n = comparisonSorted.length;
-							const stroke = getComparisonLineColor(
-								'cm90',
-								yearIndex,
-								n,
-							);
-							return (
-								visibleDepths.cm90 &&
-								dataKeysWithPoints.has(`y${year}_90`) && (
-									<Line
-										key={`y${year}_90`}
-										yAxisId={0}
-										type="monotone"
-										dataKey={`y${year}_90`}
-										stroke={stroke}
-										name={`90 cm (${yLabel})`}
-										strokeWidth={2}
-										strokeDasharray={COMPARISON_DASH}
-										dot={false}
-										connectNulls
-									/>
-								)
-							);
-						})}
-						{showThresholds &&
-							thresholds.map((val, idx) => (
-								<ReferenceLine
-									key={`threshold-${idx}-${val}`}
-									y={val}
+							{visibleDepths.cm30 && dataKeysWithPoints.has('cm30') && (
+								<Line
 									yAxisId={0}
-									isFront
-									ifOverflow="visible"
-									stroke="#9333EA"
-									strokeWidth={3}
-									strokeDasharray="4 4"
-									label={{
-										value: `${val} kPa`,
-										position: 'right',
-										fill: '#7C3AED',
-										fontSize: 12,
-									}}
+									type="monotone"
+									dataKey="cm30"
+									stroke={DEPTH_COLORS.cm30}
+									name={`30 cm (${mainPeriodLabel})`}
+									strokeWidth={2.5}
+									dot={false}
+									connectNulls={hasComparisonOverlay}
 								/>
-							))}
-					</ComposedChart>
+							)}
+							{comparisonSortedDesc.map(({ year }) => {
+								const yearIndex = comparisonYearStyleIndex.get(year) ?? 0;
+								const yLabel = formatYearLabel(year);
+								const n = comparisonSorted.length;
+								const stroke = getComparisonLineColor('cm30', yearIndex, n);
+								return (
+									visibleDepths.cm30 &&
+									dataKeysWithPoints.has(`y${year}_30`) && (
+										<Line
+											key={`y${year}_30`}
+											yAxisId={0}
+											type="monotone"
+											dataKey={`y${year}_30`}
+											stroke={stroke}
+											name={`30 cm (${yLabel})`}
+											strokeWidth={2}
+											strokeDasharray={COMPARISON_DASH}
+											dot={false}
+											connectNulls
+										/>
+									)
+								);
+							})}
+							{visibleDepths.cm60 && dataKeysWithPoints.has('cm60') && (
+								<Line
+									yAxisId={0}
+									type="monotone"
+									dataKey="cm60"
+									stroke={DEPTH_COLORS.cm60}
+									name={`60 cm (${mainPeriodLabel})`}
+									strokeWidth={2.5}
+									dot={false}
+									connectNulls={hasComparisonOverlay}
+								/>
+							)}
+							{comparisonSortedDesc.map(({ year }) => {
+								const yearIndex = comparisonYearStyleIndex.get(year) ?? 0;
+								const yLabel = formatYearLabel(year);
+								const n = comparisonSorted.length;
+								const stroke = getComparisonLineColor('cm60', yearIndex, n);
+								return (
+									visibleDepths.cm60 &&
+									dataKeysWithPoints.has(`y${year}_60`) && (
+										<Line
+											key={`y${year}_60`}
+											yAxisId={0}
+											type="monotone"
+											dataKey={`y${year}_60`}
+											stroke={stroke}
+											name={`60 cm (${yLabel})`}
+											strokeWidth={2}
+											strokeDasharray={COMPARISON_DASH}
+											dot={false}
+											connectNulls
+										/>
+									)
+								);
+							})}
+							{visibleDepths.cm90 && dataKeysWithPoints.has('cm90') && (
+								<Line
+									yAxisId={0}
+									type="monotone"
+									dataKey="cm90"
+									stroke={DEPTH_COLORS.cm90}
+									name={`90 cm (${mainPeriodLabel})`}
+									strokeWidth={2.5}
+									dot={false}
+									connectNulls={hasComparisonOverlay}
+								/>
+							)}
+							{comparisonSortedDesc.map(({ year }) => {
+								const yearIndex = comparisonYearStyleIndex.get(year) ?? 0;
+								const yLabel = formatYearLabel(year);
+								const n = comparisonSorted.length;
+								const stroke = getComparisonLineColor('cm90', yearIndex, n);
+								return (
+									visibleDepths.cm90 &&
+									dataKeysWithPoints.has(`y${year}_90`) && (
+										<Line
+											key={`y${year}_90`}
+											yAxisId={0}
+											type="monotone"
+											dataKey={`y${year}_90`}
+											stroke={stroke}
+											name={`90 cm (${yLabel})`}
+											strokeWidth={2}
+											strokeDasharray={COMPARISON_DASH}
+											dot={false}
+											connectNulls
+										/>
+									)
+								);
+							})}
+							{showThresholds &&
+								thresholds.map((val, idx) => (
+									<ReferenceLine
+										key={`threshold-${idx}-${val}`}
+										y={val}
+										yAxisId={0}
+										isFront
+										ifOverflow="visible"
+										stroke="#9333EA"
+										strokeWidth={3}
+										strokeDasharray="4 4"
+										label={{
+											value: `${val} kPa`,
+											position: 'right',
+											fill: '#7C3AED',
+											fontSize: 12,
+										}}
+									/>
+								))}
+						</ComposedChart>
 					</ResponsiveContainer>
-					{showHint  && (
+					{showHint && (
 						<div className="flex items-center justify-center text-gray-500 italic">
-							Fehlende Linien im Graphen sind auf fehlerhafte Sensorwerte zurückzuführen.
+							Fehlende Linien im Graphen sind auf fehlerhafte Sensorwerte
+							zurückzuführen.
 						</div>
 					)}
 				</div>

@@ -1,6 +1,6 @@
-import L from 'leaflet';
+import type L from 'leaflet';
 import type { ReactNode } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
+import { type Root, createRoot } from 'react-dom/client';
 
 // Binds a Leaflet popup whose content is rendered by React. This replaces
 // react-leaflet's <Popup>: it lazily mounts a React root into the popup's DOM

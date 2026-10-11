@@ -579,10 +579,11 @@ export default function DashboardClient() {
 								<h3 className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
 									<span>Vergleichsjahre:</span>
 									<HelpHint label="Vergleichsjahre" side="bottom">
-										Angeboten werden nur Jahre, für die im selben Kalenderfenster
-										tatsächlich Messdaten vorliegen (vergangene wie kommende). Die
-										gewählten Jahre werden zeitlich auf Ihren aktuellen Zeitraum
-										gelegt und als zusätzliche Linien im Diagramm dargestellt.
+										Angeboten werden nur Jahre, für die im selben
+										Kalenderfenster tatsächlich Messdaten vorliegen (vergangene
+										wie kommende). Die gewählten Jahre werden zeitlich auf Ihren
+										aktuellen Zeitraum gelegt und als zusätzliche Linien im
+										Diagramm dargestellt.
 									</HelpHint>
 								</h3>
 								{comparisonYearOptions.length > 0 ? (
@@ -607,9 +608,9 @@ export default function DashboardClient() {
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
 							<span>{selectedObjekt ? 'Ort ändern:' : 'Ort auswählen:'}</span>
 							<HelpHint label="Ort und Baum wählen" side="bottom">
-								Erst nach Auswahl eines Orts stehen dessen Bäume zur Auswahl. Bei
-								mehreren Bäumen werden die Werte gemeinsam im Diagramm dargestellt
-								und je Baum in eigenen Reitern aufgeschlüsselt; die
+								Erst nach Auswahl eines Orts stehen dessen Bäume zur Auswahl.
+								Bei mehreren Bäumen werden die Werte gemeinsam im Diagramm
+								dargestellt und je Baum in eigenen Reitern aufgeschlüsselt; die
 								Sollwert-Linien zeigen dann den Mittelwert der gewählten Bäume.
 							</HelpHint>
 						</h2>

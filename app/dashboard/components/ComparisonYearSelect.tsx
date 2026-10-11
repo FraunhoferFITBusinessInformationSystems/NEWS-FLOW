@@ -46,7 +46,9 @@ export default function ComparisonYearSelect({
 	};
 
 	if (!isClient) {
-		return <div className="w-full h-[42px] rounded border bg-gray-100 animate-pulse" />;
+		return (
+			<div className="w-full h-[42px] rounded border bg-gray-100 animate-pulse" />
+		);
 	}
 
 	return (

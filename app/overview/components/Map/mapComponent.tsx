@@ -616,12 +616,12 @@ export default function MapComponent() {
 				<div className="flex items-center gap-2 text-sm font-medium text-gray-700">
 					<span>Filter</span>
 					<HelpHint label="Bäume filtern" side="bottom">
-						Die Suche vergleicht unscharf (Tippfehler werden toleriert) und zeigt
-						nur Objekte, die zu den übrigen Filtern passen; wählen Sie ein Objekt,
-						das dadurch wegfällt, wird die Suche zurückgesetzt. Der Filter{' '}
-						<strong>Bewässerungsbedarf</strong> nutzt dieselbe Farblogik wie die
-						Kartennadeln (IST-Wert gegen Sollwert, Grau bei Messungen älter als 2
-						Tage).
+						Die Suche vergleicht unscharf (Tippfehler werden toleriert) und
+						zeigt nur Objekte, die zu den übrigen Filtern passen; wählen Sie ein
+						Objekt, das dadurch wegfällt, wird die Suche zurückgesetzt. Der
+						Filter <strong>Bewässerungsbedarf</strong> nutzt dieselbe Farblogik
+						wie die Kartennadeln (IST-Wert gegen Sollwert, Grau bei Messungen
+						älter als 2 Tage).
 					</HelpHint>
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">

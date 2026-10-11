@@ -1,8 +1,11 @@
 'use server';
 
-import { createClient, getCurrentUserOrganisation } from '@/lib/supabase/server';
-import type { Organisation } from '@/lib/types/user';
+import {
+	createClient,
+	getCurrentUserOrganisation,
+} from '@/lib/supabase/server';
 import { getCurrentUser as getUserCurrent } from '@/lib/supabase/server';
+import type { Organisation } from '@/lib/types/user';
 import { filterInvalidSensorKpaValues } from '@/lib/utils/sensor-data-validation';
 
 type GetFilteredTreeSensorDataParams = {
@@ -61,7 +64,7 @@ export async function getFilteredTreeSensorData({
 	}
 
 	return filterInvalidSensorKpaValues(data ?? []);
-};
+}
 
 /**
  * Resolves organisation (Palmengarten or GFA) for a given objekt from v_soilmoisture_with_mapping.
@@ -123,8 +126,9 @@ export async function getDistinctObjekte(organisation?: Organisation) {
 		throw new Error(error.message);
 	}
 
-	return [...new Set(data.map((item) => item.objekt).filter(Boolean))]
-		.sort((a, b) => (a as string).localeCompare(b as string, 'de')) as string[];
+	return [...new Set(data.map((item) => item.objekt).filter(Boolean))].sort(
+		(a, b) => (a as string).localeCompare(b as string, 'de'),
+	) as string[];
 }
 
 /**
@@ -184,7 +188,9 @@ export async function getLatestSensorValuesPerTree(
 	baumNrs: string[],
 	vonDatum?: string,
 	bisDatum?: string,
-): Promise<Record<string, { cm30: number; cm60: number; cm90: number; date: string }>> {
+): Promise<
+	Record<string, { cm30: number; cm60: number; cm90: number; date: string }>
+> {
 	if (!objekt || !baumNrs?.length) return {};
 	const supabase = await createClient();
 	const sixtyDaysAgo = new Date();
@@ -193,7 +199,9 @@ export async function getLatestSensorValuesPerTree(
 
 	let query = supabase
 		.from('v_soilmoisture_with_mapping')
-		.select('measured_at, kpa_ch1, kpa_ch2, kpa_ch3, resistance_ch1, resistance_ch2, resistance_ch3, resistance_ch4, objekt, baum_nr')
+		.select(
+			'measured_at, kpa_ch1, kpa_ch2, kpa_ch3, resistance_ch1, resistance_ch2, resistance_ch3, resistance_ch4, objekt, baum_nr',
+		)
 		.eq('objekt', objekt)
 		.in('baum_nr', baumNrs)
 		.not('kpa_ch1', 'is', null)
@@ -208,11 +216,14 @@ export async function getLatestSensorValuesPerTree(
 	const { data, error } = await query;
 
 	if (error) return {};
-	
+
 	// Filter invalid kPa values
 	const cleanedData = filterInvalidSensorKpaValues(data ?? []);
-	
-	const result: Record<string, { cm30: number; cm60: number; cm90: number; date: string }> = {};
+
+	const result: Record<
+		string,
+		{ cm30: number; cm60: number; cm90: number; date: string }
+	> = {};
 	const seen = new Set<string>();
 	for (const row of cleanedData) {
 		const bn = row.baum_nr;
@@ -266,7 +277,7 @@ export async function getTreeOverview(objekt: string, baumNummer: string) {
 	}
 
 	return data;
-};
+}
 
 /** Liefert bewaesserung_liter aus bewaesserungsstrategien_pg für ein Objekt (nur Palmengarten). */
 export const getBewaesserungLiterPalmengarten = async (
@@ -325,65 +336,57 @@ export const getTreeWaterings = async (objekt: string) => {
 };
 
 export const getUser = async (user_id: string | undefined) => {
-  if (!user_id) return null; 
+	if (!user_id) return null;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, vorname, nachname')
-    .eq('id', user_id)
-    .single();
+	const supabase = await createClient();
+	const { data, error } = await supabase
+		.from('users')
+		.select('id, vorname, nachname')
+		.eq('id', user_id)
+		.single();
 
-  if (error) throw new Error(error.message);
-  return data;
+	if (error) throw new Error(error.message);
+	return data;
 };
 
-
 export async function addNoteToTree(
-    baum_id: string,
-    note: string,
-    user_id: string,
-    currentTime: string
+	baum_id: string,
+	note: string,
+	user_id: string,
+	currentTime: string,
 ) {
-    if (!baum_id) throw new Error('Baum-ID fehlt');
-    if (!user_id) throw new Error('Benutzer-ID fehlt');
+	if (!baum_id) throw new Error('Baum-ID fehlt');
+	if (!user_id) throw new Error('Benutzer-ID fehlt');
 
-    const supabase = await createClient();
+	const supabase = await createClient();
 
-    const { error } = await supabase
-        .from('baum_notiz')
-        .insert([
-            {
-                baum_id,
-                user_id,
-                notiz: note || '',
-                erstellt_am: currentTime
-            },
-        ]);
+	const { error } = await supabase.from('baum_notiz').insert([
+		{
+			baum_id,
+			user_id,
+			notiz: note || '',
+			erstellt_am: currentTime,
+		},
+	]);
 
-    if (error) {
-        console.error('Fehler beim Hinzufügen der Notiz:', error);
-        throw error;
-    }
+	if (error) {
+		console.error('Fehler beim Hinzufügen der Notiz:', error);
+		throw error;
+	}
 }
 
-export async function deleteNote(noteId: string
-) {
-    if (!noteId) throw new Error('Notiz-ID fehlt');
+export async function deleteNote(noteId: string) {
+	if (!noteId) throw new Error('Notiz-ID fehlt');
 
-    const supabase = await createClient();
+	const supabase = await createClient();
 
-    const { error } = await supabase
-        .from("baum_notiz")
-		.delete()
-		.eq("id", noteId);
+	const { error } = await supabase.from('baum_notiz').delete().eq('id', noteId);
 
-    if (error) {
-        console.error('Fehler beim Löschen der Notiz:', error);
-        throw error;
-    }
+	if (error) {
+		console.error('Fehler beim Löschen der Notiz:', error);
+		throw error;
+	}
 }
-
 
 export type FilteredTreeSensorData = Awaited<
 	ReturnType<typeof getFilteredTreeSensorData>

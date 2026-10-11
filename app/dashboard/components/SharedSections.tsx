@@ -126,9 +126,7 @@ export default function SharedSections({
 										type="button"
 										variant="secondary"
 										size="sm"
-										onClick={() =>
-											setWateringPage((p) => Math.max(p - 1, 1))
-										}
+										onClick={() => setWateringPage((p) => Math.max(p - 1, 1))}
 										disabled={wateringPage === 1}
 										aria-label="Vorherige Seite"
 									>

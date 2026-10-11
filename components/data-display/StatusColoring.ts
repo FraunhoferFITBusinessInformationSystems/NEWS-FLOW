@@ -5,7 +5,7 @@ export function getStatusColor(
 	if (ist == null || ist === undefined || ist === 0) {
 		return 'rgb(128, 128, 128)';
 	}
-	
+
 	if (soll == null || soll === undefined || soll === 0) {
 		return 'rgb(0, 0, 255)';
 	}

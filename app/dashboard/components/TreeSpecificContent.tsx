@@ -484,8 +484,8 @@ export default function TreeSpecificContent({
 						<HelpHint label="Neue Notiz hinzufügen" side="bottom">
 							Die Notiz (bis 2000 Zeichen) wird immer dem Baum zugeordnet, der
 							gerade aktiv ist – bei mehreren ausgewählten Bäumen also dem Baum
-							des geöffneten Reiters. Prüfen Sie daher vor dem Speichern, welcher
-							Reiter aktiv ist.
+							des geöffneten Reiters. Prüfen Sie daher vor dem Speichern,
+							welcher Reiter aktiv ist.
 						</HelpHint>
 					</h3>
 					<form

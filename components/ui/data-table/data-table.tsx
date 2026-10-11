@@ -37,7 +37,9 @@ interface DataTableProps<TData, TValue> {
 	initialSorting?: SortingState;
 	sortingQueryParamKey?: string;
 	persistSortingInQuery?: boolean;
-	csvExportRowMapper?: (row: TData) => Record<string, string | number | boolean | null>;
+	csvExportRowMapper?: (
+		row: TData,
+	) => Record<string, string | number | boolean | null>;
 	csvExportFilename?: string;
 	toolbarTrailing?: React.ReactNode;
 }

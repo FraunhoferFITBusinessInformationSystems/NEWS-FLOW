@@ -18,7 +18,9 @@ export type RawSensorRow = {
  * @param data Raw sensor data from getFilteredTreeSensorData
  * @returns Sorted array of data points per date
  */
-export function transformSensorData(data: RawSensorRow[]): SoilMoistureDataPoint[] {
+export function transformSensorData(
+	data: RawSensorRow[],
+): SoilMoistureDataPoint[] {
 	const grouped: Record<string, RawSensorRow[]> = {};
 
 	for (const entry of data) {
@@ -35,10 +37,10 @@ export function transformSensorData(data: RawSensorRow[]): SoilMoistureDataPoint
 		([date, entries]) => {
 			const avg = (field: keyof RawSensorRow) => {
 				const validValues = entries
-					.map(cur => cur[field])
-					.filter(v => v !== null && v !== undefined && !isNaN(Number(v)))
-					.map(v => Number(v));
-				
+					.map((cur) => cur[field])
+					.filter((v) => v !== null && v !== undefined && !isNaN(Number(v)))
+					.map((v) => Number(v));
+
 				if (validValues.length === 0) return null; // or NaN?
 				return validValues.reduce((a, b) => a + b, 0) / validValues.length;
 			};
@@ -106,7 +108,10 @@ export function formatGermanDate(dateObj: Date): string {
  * @param dateStr ISO date string
  * @param yearDelta Number of years to add (negative to go back)
  */
-export function shiftIsoDateByYears(dateStr: string, yearDelta: number): string {
+export function shiftIsoDateByYears(
+	dateStr: string,
+	yearDelta: number,
+): string {
 	const date = new Date(dateStr);
 	date.setFullYear(date.getFullYear() + yearDelta);
 	return date.toISOString();
@@ -156,7 +161,9 @@ export function getDashboardComparisonMaxProbeYear(baseYear: number): number {
  * Excludes `baseYear` (same ISO window as the main chart — would duplicate the main series).
  * Past and future years: symmetric span around baseYear, clamped to [ABS_MIN_YEAR, maxProbeYear].
  */
-export function getDashboardComparisonCandidateYears(baseYear: number): number[] {
+export function getDashboardComparisonCandidateYears(
+	baseYear: number,
+): number[] {
 	const maxY = getDashboardComparisonMaxProbeYear(baseYear);
 	const years: number[] = [];
 	for (

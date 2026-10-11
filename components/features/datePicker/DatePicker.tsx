@@ -61,7 +61,9 @@ export default function DateRangePicker({
 				type="date"
 				className="border border-gray-300 bg-white p-2.5 rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				value={localStart}
-				onFocus={() => { focusedField.current = 'start'; }}
+				onFocus={() => {
+					focusedField.current = 'start';
+				}}
 				onBlur={() => {
 					focusedField.current = null;
 					if (!startDate) return;
@@ -74,9 +76,12 @@ export default function DateRangePicker({
 					const d = new Date(newStart);
 					if (
 						d.getFullYear() < 2000 ||
-						d.getMonth() + 1 < 1 || d.getMonth() + 1 > 12 ||
-						d.getDate() < 1 || d.getDate() > 31
-					) return;
+						d.getMonth() + 1 < 1 ||
+						d.getMonth() + 1 > 12 ||
+						d.getDate() < 1 ||
+						d.getDate() > 31
+					)
+						return;
 					const startTimestamp = formatForQuery(newStart, false);
 					const endTimestamp = localEnd ? formatForQuery(localEnd, true) : '';
 					if (startTimestamp && endTimestamp) {
@@ -93,7 +98,9 @@ export default function DateRangePicker({
 				type="date"
 				className="border border-gray-300 bg-white p-2.5 rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				value={localEnd}
-				onFocus={() => { focusedField.current = 'end'; }}
+				onFocus={() => {
+					focusedField.current = 'end';
+				}}
 				onBlur={() => {
 					focusedField.current = null;
 					if (!endDate) return;
@@ -106,10 +113,15 @@ export default function DateRangePicker({
 					const d = new Date(newEnd);
 					if (
 						d.getFullYear() < 2000 ||
-						d.getMonth() + 1 < 1 || d.getMonth() + 1 > 12 ||
-						d.getDate() < 1 || d.getDate() > 31
-					) return;
-					const startTimestamp = localStart ? formatForQuery(localStart, false) : '';
+						d.getMonth() + 1 < 1 ||
+						d.getMonth() + 1 > 12 ||
+						d.getDate() < 1 ||
+						d.getDate() > 31
+					)
+						return;
+					const startTimestamp = localStart
+						? formatForQuery(localStart, false)
+						: '';
 					const endTimestamp = formatForQuery(newEnd, true);
 					if (startTimestamp && endTimestamp) {
 						onChange(startTimestamp, endTimestamp);

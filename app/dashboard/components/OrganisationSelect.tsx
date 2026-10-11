@@ -23,7 +23,9 @@ export default function OrganisationSelect({
 
 	return (
 		<div className="flex flex-col gap-2">
-			<label htmlFor="organisation-select" className="text-sm text-gray-600">Organisation:</label>
+			<label htmlFor="organisation-select" className="text-sm text-gray-600">
+				Organisation:
+			</label>
 			<select
 				id="organisation-select"
 				value={value ?? ''}

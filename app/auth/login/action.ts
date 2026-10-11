@@ -3,8 +3,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { getUserRoleAction } from '@/lib/actions/auth'; // added import
-import { getHomeRouteForRole } from '@/lib/utils/route-access';
 import { createClient } from '@/lib/supabase/server';
+import { getHomeRouteForRole } from '@/lib/utils/route-access';
 
 export const ssoSignIn = async () => {
 	const sb = await createClient();

@@ -54,11 +54,19 @@ export function validateCoordinates(
 	}
 
 	if (typeof rechtswert !== 'number' || typeof hochwert !== 'number') {
-		return { valid: false, error: 'Koordinaten müssen Zahlen sein', warning: null };
+		return {
+			valid: false,
+			error: 'Koordinaten müssen Zahlen sein',
+			warning: null,
+		};
 	}
 
 	if (Number.isNaN(rechtswert) || Number.isNaN(hochwert)) {
-		return { valid: false, error: 'Koordinaten sind ungültig (NaN)', warning: null };
+		return {
+			valid: false,
+			error: 'Koordinaten sind ungültig (NaN)',
+			warning: null,
+		};
 	}
 
 	// Technical UTM32N bounds check

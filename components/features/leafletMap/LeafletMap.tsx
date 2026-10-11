@@ -2,8 +2,6 @@
 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Maximize, Minimize } from 'lucide-react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import {
 	MAP_MAX_ZOOM,
@@ -11,6 +9,8 @@ import {
 	OSM_TILE_URL,
 } from '@/lib/leaflet/map-config';
 import { cn } from '@/lib/utils';
+import { Maximize, Minimize } from 'lucide-react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 
 // The single vanilla-Leaflet map container used by every map in the app. It
 // owns map creation, the OpenStreetMap tile layer, resize handling, the
@@ -170,11 +170,7 @@ export default function LeafletMap({
 					aria-label={isFullscreen ? 'Vollbild beenden' : 'Vollbild'}
 					title={isFullscreen ? 'Vollbild beenden' : 'Vollbild'}
 				>
-					{isFullscreen ? (
-						<Minimize aria-hidden />
-					) : (
-						<Maximize aria-hidden />
-					)}
+					{isFullscreen ? <Minimize aria-hidden /> : <Maximize aria-hidden />}
 				</Button>
 			)}
 			{children}

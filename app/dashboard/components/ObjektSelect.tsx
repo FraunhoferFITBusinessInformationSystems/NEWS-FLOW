@@ -59,7 +59,9 @@ export default function ObjektSelect({
 
 	return (
 		<div className="flex flex-col gap-2">
-			<label htmlFor="objekt-select" className="text-sm text-gray-600">Ort:</label>
+			<label htmlFor="objekt-select" className="text-sm text-gray-600">
+				Ort:
+			</label>
 			<Combobox
 				items={options}
 				value={selected}

@@ -17,7 +17,11 @@ export type TreeMapPinColor =
 	| 'orange'
 	| 'grey';
 
-export type TreeMapPinVariant = 'default' | 'recentWatering' | 'sensor' | 'treeControlMap';
+export type TreeMapPinVariant =
+	| 'default'
+	| 'recentWatering'
+	| 'sensor'
+	| 'treeControlMap';
 
 export interface TreeMapIconRegistry {
 	base: Record<TreeMapPinColor, L.Icon>;
@@ -105,12 +109,12 @@ function createSensorDiamondIcon(color: TreeMapPinColor): L.DivIcon {
 	`;
 
 	return new L.DivIcon({
-    className: 'tree-map-sensor-diamond',
-    html,
-    iconSize: [30, 42] as [number, number],
-    iconAnchor: [15, 42] as [number, number],
-    popupAnchor: [0, -38] as [number, number],
-});
+		className: 'tree-map-sensor-diamond',
+		html,
+		iconSize: [30, 42] as [number, number],
+		iconAnchor: [15, 42] as [number, number],
+		popupAnchor: [0, -38] as [number, number],
+	});
 }
 function createTreeControlMapIcon(iconUrl: string): L.Icon {
 	return new L.Icon({
@@ -132,7 +136,9 @@ export function createTreeMapIconRegistry(): TreeMapIconRegistry {
 	const sensor = {} as Record<TreeMapPinColor, L.DivIcon>;
 	const treeControlMap = {} as Record<TreeMapPinColor, L.Icon>;
 
-	for (const color of Object.keys(TREE_MAP_PIN_ICON_URLS) as TreeMapPinColor[]) {
+	for (const color of Object.keys(
+		TREE_MAP_PIN_ICON_URLS,
+	) as TreeMapPinColor[]) {
 		const url = TREE_MAP_PIN_ICON_URLS[color];
 		base[color] = createBaseTreeMapIcon(url);
 		recentWatering[color] = createRecentWateringDivIcon(url);
@@ -178,7 +184,10 @@ export function createStopIcon(position: number): L.DivIcon {
 
 // Squared badge marking a route endpoint (start "S" / depot / end "E"). The
 // letter and color are supplied by the caller.
-export function createRouteEndpointIcon(letter: string, color: string): L.DivIcon {
+export function createRouteEndpointIcon(
+	letter: string,
+	color: string,
+): L.DivIcon {
 	const badge =
 		'<span style="display:flex;align-items:center;justify-content:center;' +
 		`width:30px;height:30px;border-radius:8px;background:${color};` +

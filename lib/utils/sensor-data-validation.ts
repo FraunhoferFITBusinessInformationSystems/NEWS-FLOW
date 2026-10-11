@@ -1,4 +1,4 @@
-import { skip } from "node:test";
+import { skip } from 'node:test';
 
 const RESISTANCE_INVALID_THRESHOLD = 1_000_000;
 
@@ -22,18 +22,20 @@ export function filterInvalidSensorKpaValues<T extends Record<string, unknown>>(
 	const cleanedData = data.map((row) => {
 		const cleaned = { ...row } as Record<string, unknown>;
 
-		Object.entries(KPA_RESISTANCE_MAPPING).forEach(([kpaKey, resistanceKey]) => {
-			const resistance = cleaned[resistanceKey];
-			const kpa = cleaned[kpaKey];
+		Object.entries(KPA_RESISTANCE_MAPPING).forEach(
+			([kpaKey, resistanceKey]) => {
+				const resistance = cleaned[resistanceKey];
+				const kpa = cleaned[kpaKey];
 
-			if (
-				typeof resistance === 'number' &&
-				resistance > RESISTANCE_INVALID_THRESHOLD &&
-				kpa !== null
-			) {
-				cleaned[kpaKey] = null;
-			}
-		});
+				if (
+					typeof resistance === 'number' &&
+					resistance > RESISTANCE_INVALID_THRESHOLD &&
+					kpa !== null
+				) {
+					cleaned[kpaKey] = null;
+				}
+			},
+		);
 		return cleaned as T;
 	});
 	return cleanedData;

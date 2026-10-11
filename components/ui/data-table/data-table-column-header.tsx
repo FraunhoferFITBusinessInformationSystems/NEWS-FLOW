@@ -49,7 +49,10 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
 	if (!column.getCanSort()) {
 		return (
-			<div className={cn('max-w-[11rem] text-left leading-snug', className)} title={title}>
+			<div
+				className={cn('max-w-[11rem] text-left leading-snug', className)}
+				title={title}
+			>
 				{title}
 			</div>
 		);

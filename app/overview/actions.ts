@@ -63,30 +63,31 @@ export const getTreeOverview = async () => {
  * @returns Liste der Bäume mit Sensordaten; nur Einträge mit vollständigen Messwerten kpa_ch1–3.
  * @throws Error, wenn das Supabase-Query fehlschlägt.
  */
-export const getTreeOverviewWithSensors =
-	async (): Promise<TreeOverviewWithSensorRow[]> => {
-		const supabase = await createClient();
+export const getTreeOverviewWithSensors = async (): Promise<
+	TreeOverviewWithSensorRow[]
+> => {
+	const supabase = await createClient();
 
-		const { data: baeumeMitSensorenUndDaten, error } = await supabase
-			.from('v_soilmoisture_latest_earliest_per_sensor')
-			.select('*')
-			.not('kpa_ch1', 'is', null)
-			.not('kpa_ch2', 'is', null)
-			.not('kpa_ch3', 'is', null);
+	const { data: baeumeMitSensorenUndDaten, error } = await supabase
+		.from('v_soilmoisture_latest_earliest_per_sensor')
+		.select('*')
+		.not('kpa_ch1', 'is', null)
+		.not('kpa_ch2', 'is', null)
+		.not('kpa_ch3', 'is', null);
 
-		if (error) {
-			if (isRelationMissingError(error.message)) {
-				console.warn(
-					'getTreeOverviewWithSensors: view v_soilmoisture_latest_earliest_per_sensor missing; using v_soilmoisture_latest_per_sensor (last_watering_at null).',
-				);
-				return fetchTreeOverviewWithSensorsFallback(supabase);
-			}
-			throw new Error(error.message);
+	if (error) {
+		if (isRelationMissingError(error.message)) {
+			console.warn(
+				'getTreeOverviewWithSensors: view v_soilmoisture_latest_earliest_per_sensor missing; using v_soilmoisture_latest_per_sensor (last_watering_at null).',
+			);
+			return fetchTreeOverviewWithSensorsFallback(supabase);
 		}
+		throw new Error(error.message);
+	}
 
-		const cleaned = filterInvalidSensorKpaValues(baeumeMitSensorenUndDaten ?? []);
-		return cleaned as TreeOverviewWithSensorRow[];
-	};
+	const cleaned = filterInvalidSensorKpaValues(baeumeMitSensorenUndDaten ?? []);
+	return cleaned as TreeOverviewWithSensorRow[];
+};
 
 /**
  * Loads sensor IDs that are marked active in `sensors`.
@@ -120,10 +121,7 @@ export async function getTreeOverviewForLiveMap(): Promise<
 			getTreeOverviewWithSensors(),
 			getActiveSensorIds(),
 		]);
-		const filtered = filterTreesForLiveMap(
-			rows,
-			new Set(activeSensorIds),
-		);
+		const filtered = filterTreesForLiveMap(rows, new Set(activeSensorIds));
 		console.log('getTreeOverviewForLiveMap erfolgreich');
 		return filtered;
 	} catch (error) {

@@ -24,7 +24,10 @@ function startOfLocalDay(reference: Date): Date {
 /**
  * Local midnight on the calendar day that is `days` before `startOfDay` (e.g. 01.04. → minus 4 → 28.03. 00:00).
  */
-function subtractCalendarDaysFromStartOfDay(startOfDay: Date, days: number): Date {
+function subtractCalendarDaysFromStartOfDay(
+	startOfDay: Date,
+	days: number,
+): Date {
 	const result = new Date(startOfDay);
 	result.setDate(result.getDate() - days);
 	result.setHours(0, 0, 0, 0);
@@ -36,7 +39,9 @@ function subtractCalendarDaysFromStartOfDay(startOfDay: Date, days: number): Dat
  * 4th calendar day before today, so the window covers today and the four previous days
  * (e.g. heute 01.04.26 → ab 28.03.26 00:00 lokal).
  */
-export function getRecentWateringWindowStart(referenceNow: Date = new Date()): Date {
+export function getRecentWateringWindowStart(
+	referenceNow: Date = new Date(),
+): Date {
 	const todayStart = startOfLocalDay(referenceNow);
 	return subtractCalendarDaysFromStartOfDay(
 		todayStart,
@@ -45,7 +50,9 @@ export function getRecentWateringWindowStart(referenceNow: Date = new Date()): D
 }
 
 /** Short German label for map debug (range from oldest included day through today). */
-export function formatRecentWateringWindowLabelDe(referenceNow: Date = new Date()): string {
+export function formatRecentWateringWindowLabelDe(
+	referenceNow: Date = new Date(),
+): string {
 	const start = getRecentWateringWindowStart(referenceNow);
 	const todayStart = startOfLocalDay(referenceNow);
 	const startStr = start.toLocaleDateString('de-DE', DE_DATE);

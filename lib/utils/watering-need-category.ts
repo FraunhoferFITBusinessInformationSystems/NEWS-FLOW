@@ -44,9 +44,7 @@ export function getWateringNeedCategory(
 	let iconKey: TreeMapPinColor = 'grey';
 
 	const hasSensorData =
-		input.kpa_ch1 != null ||
-		input.kpa_ch2 != null ||
-		input.kpa_ch3 != null;
+		input.kpa_ch1 != null || input.kpa_ch2 != null || input.kpa_ch3 != null;
 
 	if (hasSensorData) {
 		if (isSoilMeasurementStale(input.measured_at)) {

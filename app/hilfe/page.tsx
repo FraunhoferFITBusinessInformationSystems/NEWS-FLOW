@@ -23,92 +23,111 @@ export default function HilfePage() {
 				</h2>
 				<div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
 					<div className="space-y-3">
-												<div>
+						<div>
 							<h3 className="font-semibold text-blue-800">
 								Version 0.9.2 (aktuell)
 							</h3>
 							<p className="text-sm text-blue-700">
 								Mehrere neue Funktionen und Verbesserungen, s. vergangene Mails
 							</p>
-
 						</div>
 						<div>
 							<h3 className="font-semibold text-blue-800">
 								Version 0.9.1 (aktuell)
 							</h3>
 							<p className="text-sm text-blue-700">
-								• Automatische Erkennung neuer Sensoren aus der UDP-Bereitstellung und Übernahme in die Datenbank
+								• Automatische Erkennung neuer Sensoren aus der
+								UDP-Bereitstellung und Übernahme in die Datenbank
 							</p>
 							<p className="text-sm text-blue-700">
-								• Automatischer Download der Sensordaten für neu erkannte Sensoren
+								• Automatischer Download der Sensordaten für neu erkannte
+								Sensoren
 							</p>
 							<p className="text-sm text-blue-700">
-								• Navigationsleiste überarbeitet mit verbesserter Struktur und rollenspezifischer Gruppierung (u. a. Bereich „Administration“)
+								• Navigationsleiste überarbeitet mit verbesserter Struktur und
+								rollenspezifischer Gruppierung (u. a. Bereich „Administration“)
 							</p>
 							<p className="text-sm text-blue-700">
-								• Details und Analysen: Vergleich der Bodenwasserspannung mit entsprechenden Zeiträumen aus Vorjahren möglich
+								• Details und Analysen: Vergleich der Bodenwasserspannung mit
+								entsprechenden Zeiträumen aus Vorjahren möglich
 							</p>
 							<p className="text-sm text-blue-700">
-								• Details und Analysen: Mehrere Bäume können in der Detailansicht gemeinsam angezeigt werden
+								• Details und Analysen: Mehrere Bäume können in der
+								Detailansicht gemeinsam angezeigt werden
 							</p>
 							<p className="text-sm text-blue-700">
-								• Details und Analysen: Bewässerungsempfehlung wird nun direkt in der Detailansicht angezeigt
+								• Details und Analysen: Bewässerungsempfehlung wird nun direkt
+								in der Detailansicht angezeigt
 							</p>
 							<p className="text-sm text-blue-700">
-								• Neue Ansicht „Sensorverwaltung“ mit Zuordnung/Neuzuordnung von Sensoren zu Bäumen sowie Umbenennen und Aktiv-/Inaktiv-Setzen von Sensoren
+								• Neue Ansicht „Sensorverwaltung“ mit Zuordnung/Neuzuordnung von
+								Sensoren zu Bäumen sowie Umbenennen und Aktiv-/Inaktiv-Setzen
+								von Sensoren
 							</p>
 						</div>
 						<div>
-							<h3 className="font-semibold text-blue-800">
-								Version 0.9.0
-							</h3>
+							<h3 className="font-semibold text-blue-800">Version 0.9.0</h3>
 							<p className="text-sm text-blue-700">
 								• Backend: Datenbank überarbeitet und bereinigt
 							</p>
 							<p className="text-sm text-blue-700">
-								• Backend: Regelmäßige Datenbank-Backups zur Datensicherung eingerichtet
+								• Backend: Regelmäßige Datenbank-Backups zur Datensicherung
+								eingerichtet
 							</p>
 							<p className="text-sm text-blue-700">
-								• Backend: Historische Daten (vor Juni 2025) in die Datenbank integriert
+								• Backend: Historische Daten (vor Juni 2025) in die Datenbank
+								integriert
 							</p>
 							<p className="text-sm text-blue-700">
-								• Live-Karte: Sortierung der Baumdetails und der Tabellenbereiche angepasst (z. B. Spielwiese 01, Spielwiese 02), Datum in Baumdetails entfernt
+								• Live-Karte: Sortierung der Baumdetails und der
+								Tabellenbereiche angepasst (z. B. Spielwiese 01, Spielwiese 02),
+								Datum in Baumdetails entfernt
 							</p>
 							<p className="text-sm text-blue-700">
-								• Details und Analysen: Vorfilter für Palmengarten/GFA ergänzt; Feinfilter zeigt entsprechend nur PG- oder GFA-Objekte
+								• Details und Analysen: Vorfilter für Palmengarten/GFA ergänzt;
+								Feinfilter zeigt entsprechend nur PG- oder GFA-Objekte
 							</p>
 							<p className="text-sm text-blue-700">
-								• Details und Analysen: Palmengarten-Einzelbäume um Gattung ergänzt und über Suche auffindbar
+								• Details und Analysen: Palmengarten-Einzelbäume um Gattung
+								ergänzt und über Suche auffindbar
 							</p>
 							<p className="text-sm text-blue-700">
-								• Details und Analysen: Dank historischer Daten sind längere Zeiträume in der Sensordaten-Zeitreihe darstellbar
+								• Details und Analysen: Dank historischer Daten sind längere
+								Zeiträume in der Sensordaten-Zeitreihe darstellbar
 							</p>
 							<p className="text-sm text-blue-700">
-								• Meine Bewässerungen: Archiv zeitlich geordnet und monatlich dargestellt
+								• Meine Bewässerungen: Archiv zeitlich geordnet und monatlich
+								dargestellt
 							</p>
 							<p className="text-sm text-blue-700">
-								• Meine Bewässerungen: Fehlermeldung bei nicht speicherbarer Bewässerung ergänzt
+								• Meine Bewässerungen: Fehlermeldung bei nicht speicherbarer
+								Bewässerung ergänzt
 							</p>
 							<p className="text-sm text-blue-700">
-								• Meine Bewässerungen: Gesamte Leiste anklickbar für Objektdetailansicht; Gießkannensymbole vergrößert und besser anklickbar
+								• Meine Bewässerungen: Gesamte Leiste anklickbar für
+								Objektdetailansicht; Gießkannensymbole vergrößert und besser
+								anklickbar
 							</p>
 							<p className="text-sm text-blue-700">
-								• Meine Bewässerungen: Farbzuordnung angepasst (offene Gänge rot, abgeschlossene Gänge grün)
+								• Meine Bewässerungen: Farbzuordnung angepasst (offene Gänge
+								rot, abgeschlossene Gänge grün)
 							</p>
 							<p className="text-sm text-blue-700">
-								• Bewässerungsplanung: Formulierung des Startzeitpunkts beim Anlegen eines Bewässerungsgangs von „am“ auf „ab“ geändert
+								• Bewässerungsplanung: Formulierung des Startzeitpunkts beim
+								Anlegen eines Bewässerungsgangs von „am“ auf „ab“ geändert
 							</p>
 							<p className="text-sm text-blue-700">
-								• Bewässerungsplanung: Bereich „Unbekannt“ entfernt und durch „sonstige Sensoren“ ersetzt, um Fehlplanungen zu vermeiden
+								• Bewässerungsplanung: Bereich „Unbekannt“ entfernt und durch
+								„sonstige Sensoren“ ersetzt, um Fehlplanungen zu vermeiden
 							</p>
 							<p className="text-sm text-blue-700">
-								• Zusätzlich kleinere UI/UX-Anpassungen und Bug-Fixes (u. a. bessere Darstellung der Bodenwasserspannung, Sortierung der Baumdaten)
+								• Zusätzlich kleinere UI/UX-Anpassungen und Bug-Fixes (u. a.
+								bessere Darstellung der Bodenwasserspannung, Sortierung der
+								Baumdaten)
 							</p>
 						</div>
 						<div>
-							<h3 className="font-semibold text-blue-800">
-								Version 0.8.7
-							</h3>
+							<h3 className="font-semibold text-blue-800">Version 0.8.7</h3>
 							<p className="text-sm text-blue-700">
 								• Notiz Funktion zu Palmengarten und GFA hinzugefügt
 							</p>
@@ -116,26 +135,25 @@ export default function HilfePage() {
 								• Bericht export hinzugefügt
 							</p>
 							<p className="text-sm text-blue-700">
-								• Kleiner Fixes (Sortierungen in "Bewässerungsplanung GFA" und "Meine Bewässerungen", Button-Design in Live‑Karte)
+								• Kleiner Fixes (Sortierungen in "Bewässerungsplanung GFA" und
+								"Meine Bewässerungen", Button-Design in Live‑Karte)
 							</p>
 						</div>
 						<div>
-							<h3 className="font-semibold text-blue-800">
-								Version 0.8.6 
-							</h3>
+							<h3 className="font-semibold text-blue-800">Version 0.8.6</h3>
 							<p className="text-sm text-blue-700">
-								• Erweiterter Zoom zu den Karten (Live-Karte und Meine Bewässerungen) hinzugefügt
+								• Erweiterter Zoom zu den Karten (Live-Karte und Meine
+								Bewässerungen) hinzugefügt
 							</p>
 							<p className="text-sm text-blue-700">
 								• Angepasste Farbgebung in Meine Bewässerungen
 							</p>
 						</div>
 						<div>
-							<h3 className="font-semibold text-blue-800">
-								Version 0.8.5
-							</h3>
+							<h3 className="font-semibold text-blue-800">Version 0.8.5</h3>
 							<p className="text-sm text-blue-700">
-								• Bewässerungsüberwachung für Sachbearbeiter:innen hinzugefügt - Überwachung des Fortschritts von erstellten Bewässerungsgängen
+								• Bewässerungsüberwachung für Sachbearbeiter:innen hinzugefügt -
+								Überwachung des Fortschritts von erstellten Bewässerungsgängen
 							</p>
 							<p className="text-sm text-blue-700">
 								• Detaillierte Fortschrittsanzeige mit Baum- und Objektebene
@@ -144,34 +162,34 @@ export default function HilfePage() {
 								• Navigation erweitert um Monitoring-Bereich
 							</p>
 							<p className="text-sm text-blue-700">
-								• Nur Gärtner:innen können als Bearbeiter:innen für Bewässerungsgänge ausgewählt werden
+								• Nur Gärtner:innen können als Bearbeiter:innen für
+								Bewässerungsgänge ausgewählt werden
 							</p>
 						</div>
 
 						<div>
-							<h3 className="font-semibold text-blue-800">
-								Version 0.8.4
-							</h3>
+							<h3 className="font-semibold text-blue-800">Version 0.8.4</h3>
 							<p className="text-sm text-blue-700">
-								• Verbesserte Wetterprognose-Anzeige unter Verwendung von Daten des Deutschen Wetterdienstes
+								• Verbesserte Wetterprognose-Anzeige unter Verwendung von Daten
+								des Deutschen Wetterdienstes
 							</p>
 							<p className="text-sm text-blue-700">
-								• Erstellung einer regelbasierten Handlungsempfehlung basierend auf der Wetterprognose und aktueller Sensorikdaten in der Detailansicht, Regeln noch weiter in Ausarbeitung
+								• Erstellung einer regelbasierten Handlungsempfehlung basierend
+								auf der Wetterprognose und aktueller Sensorikdaten in der
+								Detailansicht, Regeln noch weiter in Ausarbeitung
 							</p>
 							<p className="text-sm text-blue-700">
-								• Verwendung von dynamischen Schwellenwerten in der Grafik zur Bodenwasserspannung basierend auf den Soll-Werten
+								• Verwendung von dynamischen Schwellenwerten in der Grafik zur
+								Bodenwasserspannung basierend auf den Soll-Werten
 							</p>
-							<p className="text-sm text-blue-700">
-								• Bug-Fixes
-							</p>
+							<p className="text-sm text-blue-700">• Bug-Fixes</p>
 						</div>
 
 						<div>
-							<h3 className="font-semibold text-blue-800">
-								Version 0.8.3
-							</h3>
+							<h3 className="font-semibold text-blue-800">Version 0.8.3</h3>
 							<p className="text-sm text-blue-700">
-								• Daten von West hinzugefügt, inklusive Anlegung von Bewässerungsgängen
+								• Daten von West hinzugefügt, inklusive Anlegung von
+								Bewässerungsgängen
 							</p>
 							<p className="text-sm text-blue-700">
 								• Layout-Neugestaltung: Hilfe-Seite überarbeitet
@@ -249,8 +267,9 @@ export default function HilfePage() {
 					</li>
 
 					<li>
-						<strong>Bewässerungsüberwachung (Sachbearbeiter/Admin):</strong> Überwachung des Fortschritts von erstellten Bewässerungsgängen. 
-						Anzeige offener und abgeschlossener Gänge mit detaillierter 
+						<strong>Bewässerungsüberwachung (Sachbearbeiter/Admin):</strong>{' '}
+						Überwachung des Fortschritts von erstellten Bewässerungsgängen.
+						Anzeige offener und abgeschlossener Gänge mit detaillierter
 						Fortschrittsanzeige pro Objekt und Baum.
 					</li>
 
@@ -289,41 +308,58 @@ export default function HilfePage() {
 				</p>
 				<ul className="list-disc pl-4 sm:pl-6 space-y-2 text-sm sm:text-base">
 					<li>
-						<span className="font-bold text-green-600">🟢 Grün:</span> Kein Handlungsbedarf - Der IST-Wert liegt mindestens 10 % unter dem maximal erlaubten SOLL-Wert. Dies bedeutet, dass der Boden ausreichend feucht ist und kein Handlungsbedarf besteht.
+						<span className="font-bold text-green-600">🟢 Grün:</span> Kein
+						Handlungsbedarf - Der IST-Wert liegt mindestens 10 % unter dem
+						maximal erlaubten SOLL-Wert. Dies bedeutet, dass der Boden
+						ausreichend feucht ist und kein Handlungsbedarf besteht.
 					</li>
 					<li>
-						<span className="font-bold text-yellow-500">🟡 Gelb:</span> Leichter Handlungsbedarf - Der IST-Wert weicht höchstens 20 % vom SOLL ab (mindestens 20 kPa Differenz). Hier sollte man beobachten, ob eine Bewässerung bald nötig wird.
+						<span className="font-bold text-yellow-500">🟡 Gelb:</span> Leichter
+						Handlungsbedarf - Der IST-Wert weicht höchstens 20 % vom SOLL ab
+						(mindestens 20 kPa Differenz). Hier sollte man beobachten, ob eine
+						Bewässerung bald nötig wird.
 					</li>
 					<li>
 						<span className="font-bold text-orange-500">🟠 Orange:</span>{' '}
-						Mittlerer Handlungsbedarf - Die Abweichung des IST-Wertes beträgt höchstens 30 % vom SOLL (mindestens 40 kPa Differenz). In diesem Fall sollte die Bewässerung bald eingeplant werden.
+						Mittlerer Handlungsbedarf - Die Abweichung des IST-Wertes beträgt
+						höchstens 30 % vom SOLL (mindestens 40 kPa Differenz). In diesem
+						Fall sollte die Bewässerung bald eingeplant werden.
 					</li>
 					<li>
-						<span className="font-bold text-red-600">🔴 Rot:</span> Hoher Handlungsbedarf - Die Abweichung ist größer als in den genannten Bereichen. Hier ist sofortige Bewässerung erforderlich, um Schäden zu vermeiden.
+						<span className="font-bold text-red-600">🔴 Rot:</span> Hoher
+						Handlungsbedarf - Die Abweichung ist größer als in den genannten
+						Bereichen. Hier ist sofortige Bewässerung erforderlich, um Schäden
+						zu vermeiden.
 					</li>
 					<li>
 						<span className="font-bold text-gray-500">🔘 Grau:</span>{' '}
-						Sensordaten sind älter als 2 Tage - der Sensor könnte defekt sein oder keine aktuellen Werte übertragen.
+						Sensordaten sind älter als 2 Tage - der Sensor könnte defekt sein
+						oder keine aktuellen Werte übertragen.
 					</li>
 					<li>
-						<span className="font-bold text-blue-600">🔵 Blau:</span> Es sind keine SOLL-Werte für diesen Standort verfügbar.
+						<span className="font-bold text-blue-600">🔵 Blau:</span> Es sind
+						keine SOLL-Werte für diesen Standort verfügbar.
 					</li>
 				</ul>
 				<p className="text-sm sm:text-base italic">
 					In einfachen Worten: Grün = genug Wasser, Gelb = im Auge behalten,
 					Orange = bald gießen, Rot = sofort gießen.
-
 				</p>
-				<p> Beispiele:
+				<p>
+					{' '}
+					Beispiele:
 					<br></br>
-					Ein Standort, der einen Wert von <strong>45 kPa</strong> hat und einen SOLL-Wert von maximal <strong>60 kPa</strong>, wird beispielsweise als{' '}
+					Ein Standort, der einen Wert von <strong>45 kPa</strong> hat und einen
+					SOLL-Wert von maximal <strong>60 kPa</strong>, wird beispielsweise als{' '}
 					<span className="font-bold text-green-600">🟢 Grün</span> angezeigt,
 					da der IST-Wert unter dem SOLL-Wert liegt.
 					<br></br>
 					Ein Standort mit einem IST-Wert von <strong>120 kPa</strong> und einem
 					SOLL-Wert von <strong>90 kPa</strong> wird als{' '}
-					<span className="font-bold text-orange-600">🟠 Orange</span> angezeigt,
-					da der IST-Wert den SOLL-Wert deutlich überschreitet, die Abweichung jedoch noch innerhalb des definierten Orange-Bereichs liegt (unterhalb von 40 kPa).
+					<span className="font-bold text-orange-600">🟠 Orange</span>{' '}
+					angezeigt, da der IST-Wert den SOLL-Wert deutlich überschreitet, die
+					Abweichung jedoch noch innerhalb des definierten Orange-Bereichs liegt
+					(unterhalb von 40 kPa).
 				</p>
 				<p className="text-xs sm:text-sm text-gray-600 italic">
 					Hinweis: Der Wert <strong>201,42</strong> kPa ist das Messmaximum. Er

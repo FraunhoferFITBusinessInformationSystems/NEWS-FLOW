@@ -27,7 +27,12 @@ export type IstZustandData = {
 /** Latest sensor values per tree (for multi-tree view). */
 export type LatestSensorPerTree = Record<
 	string,
-	{ cm30: number | null; cm60: number | null; cm90: number | null; date: string }
+	{
+		cm30: number | null;
+		cm60: number | null;
+		cm90: number | null;
+		date: string;
+	}
 >;
 
 /** Tree overview as returned by getTreeOverview (dashboard action). */

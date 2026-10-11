@@ -7,14 +7,14 @@ import { DataTableColumnHeader } from '@/components/ui/data-table/data-table-col
 import type { TreeMapPinColor } from '@/lib/leaflet/map-icons';
 import { cn } from '@/lib/utils';
 import {
+	WATERING_NEED_LABEL_DE,
 	getWateringNeedCategory,
 	isSoilMeasurementStale,
-	WATERING_NEED_LABEL_DE,
 } from '@/lib/utils/watering-need-category';
 import {
-	createColumnHelper,
 	type ColumnDef,
 	type Row,
+	createColumnHelper,
 } from '@tanstack/react-table';
 import { Info } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -104,7 +104,9 @@ function formatKpa(value: number | null | undefined): string {
 }
 
 function formatSollPart(v: number | null | undefined): string {
-	return v == null || Number.isNaN(Number(v)) ? '—' : String(Math.round(Number(v)));
+	return v == null || Number.isNaN(Number(v))
+		? '—'
+		: String(Math.round(Number(v)));
 }
 
 function formatSollTriple(
@@ -221,8 +223,7 @@ function mapOverviewTableRowToCsvRecord(
 		Sensor: formatSensorCell(row),
 		Gießempfehlung: WATERING_NEED_LABEL_DE[category],
 		Stadtteil: cellText(row.stadtteil),
-		Pflegebereich:
-			row.pflegebereich == null ? '' : String(row.pflegebereich),
+		Pflegebereich: row.pflegebereich == null ? '' : String(row.pflegebereich),
 		Bewässerungsgrund: cellText(row.bewaesserungsgrund),
 	};
 }

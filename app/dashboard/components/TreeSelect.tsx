@@ -94,8 +94,14 @@ export default function TreeSelect({
 					control: (base, state) => ({
 						...base,
 						minHeight: '42px',
-						borderColor: state.isFocused || state.menuIsOpen ? 'rgb(22 163 74)' : 'rgb(209 213 219)',
-						boxShadow: state.isFocused || state.menuIsOpen ? '0 0 0 2px rgb(34 197 94 / 0.4)' : 'none',
+						borderColor:
+							state.isFocused || state.menuIsOpen
+								? 'rgb(22 163 74)'
+								: 'rgb(209 213 219)',
+						boxShadow:
+							state.isFocused || state.menuIsOpen
+								? '0 0 0 2px rgb(34 197 94 / 0.4)'
+								: 'none',
 						cursor: 'pointer',
 					}),
 				}}

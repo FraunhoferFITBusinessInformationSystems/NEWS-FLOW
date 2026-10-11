@@ -35,7 +35,9 @@ interface DataTableToolbarProps<TData> {
 	globalFilterValue: string;
 	setGlobalFilterValue: React.Dispatch<React.SetStateAction<string>>;
 	/** When set, CSV export uses these keys/values instead of flattening raw row objects. */
-	csvExportRowMapper?: (row: TData) => Record<string, string | number | boolean | null>;
+	csvExportRowMapper?: (
+		row: TData,
+	) => Record<string, string | number | boolean | null>;
 	csvExportFilename?: string;
 	/** Rendered to the right of the CSV export button, same toolbar row (e.g. primary actions). */
 	toolbarTrailing?: React.ReactNode;
@@ -135,7 +137,7 @@ export function DataTableToolbar<TData>({
 						Filter können über die einzelnen Spalten gesetzt werden.
 					</p>
 				</div>
-					{/* {filterColumns.map(({ column, label, isDate }) => {
+				{/* {filterColumns.map(({ column, label, isDate }) => {
             if (isDate) {
               return dateFilter({ column, label });
             }
