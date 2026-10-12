@@ -6,21 +6,6 @@ import { getUserRoleAction } from '@/lib/actions/auth'; // added import
 import { createClient } from '@/lib/supabase/server';
 import { getHomeRouteForRole } from '@/lib/utils/route-access';
 
-export const ssoSignIn = async () => {
-	const sb = await createClient();
-	const redirectURL = `${process?.env?.NEXT_PUBLIC_SITE_URL}/auth/callback`;
-
-	const res = await sb.auth.signInWithOAuth({
-		provider: 'azure',
-		options: {
-			scopes: 'email',
-			redirectTo: redirectURL,
-		},
-	});
-
-	redirect(res.data.url ?? '');
-};
-
 export const pwdSignIn = async (username: string, password: string) => {
 	const sb = await createClient();
 
@@ -86,22 +71,3 @@ export const signOut = async () => {
 	await sb.auth.signOut();
 	redirect('/auth/login');
 };
-
-export async function signup(formData: FormData) {
-	const supabase = await createClient();
-
-	const email = formData.get('email') as string;
-	const password = formData.get('password') as string;
-
-	const { error } = await supabase.auth.signUp({
-		email,
-		password,
-	});
-
-	if (error) {
-		redirect('/error');
-	}
-
-	revalidatePath('/', 'layout');
-	redirect('/account');
-}
