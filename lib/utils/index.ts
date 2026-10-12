@@ -11,15 +11,5 @@ export function isPalmengartenTree(bezirk?: string | null): boolean {
 }
 
 // Re-export auth utilities
-export type { NavigationItem, UserRole } from './auth';
+export type { NavigationItem } from './auth';
 export { filterNavigationByRole } from './auth';
-
-// Re-export types and functions from the server actions for backwards compatibility
-export type {
-	StrategieValues,
-	TreeWithTargetValues,
-} from '@/lib/actions/tree-target-values';
-export {
-	getTreeTargetValues,
-	getMultipleTreeTargetValues,
-} from '@/lib/actions/tree-target-values';

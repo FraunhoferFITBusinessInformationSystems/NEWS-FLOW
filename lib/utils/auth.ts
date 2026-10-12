@@ -1,13 +1,7 @@
-export interface UserRole {
-	id: string;
-	name: string;
-}
-
 export interface NavigationItem {
 	href?: string;
 	label: string;
 	roles: readonly string[];
-	icon?: 'help' | 'user';
 	iconOnly?: boolean;
 	children?: { href: string; label: string }[];
 }

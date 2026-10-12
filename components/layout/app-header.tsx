@@ -12,7 +12,7 @@ import {
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { type NavigationItem, cn } from '@/lib/utils';
-import { HelpCircle, LogIn, LogOut, User } from 'lucide-react';
+import { HelpCircle, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 interface AppHeaderProps {
@@ -137,11 +137,6 @@ export function AppHeader({
 																className="size-5 shrink-0 text-green-800"
 																aria-label="Hilfe"
 															/>
-														) : item.icon === 'user' ? (
-															<>
-																<User className="size-4 shrink-0 text-green-800" />
-																{item.label}
-															</>
 														) : (
 															item.label
 														)}
