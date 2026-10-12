@@ -10,18 +10,6 @@ import {
 } from '@/lib/utils/route-access';
 
 export async function updateSession(request: NextRequest) {
-	// === ALLOW CRON JOB BYPASS ===
-	if (
-		(request.nextUrl.pathname.startsWith('/api/fetch-urbanpulse-data') ||
-			request.nextUrl.pathname.startsWith('/api/fetch-weather-data') ||
-			request.nextUrl.pathname.startsWith(
-				'/api/discover-urbanpulse-sensors',
-			)) &&
-		request.headers.get('x-cron-secret') === process.env.CRON_JOB_SECRET
-	) {
-		return NextResponse.next();
-	}
-
 	let supabaseResponse = NextResponse.next({
 		request,
 	});
@@ -73,9 +61,8 @@ export async function updateSession(request: NextRequest) {
 	}
 
 	// Role check. Runs before the page renders, so a user without the required
-	// role never reaches the page and its data is never fetched. API routes
-	// authenticate themselves via the cron secret and are skipped here.
-	if (user && !pathname.startsWith('/api') && !isPublicRoute(pathname)) {
+	// role never reaches the page and its data is never fetched.
+	if (user && !isPublicRoute(pathname)) {
 		// Denied unless the check actively proves otherwise. A lookup that throws
 		// leaves isAllowed false and the request is blocked, instead of continuing
 		// as if the check had passed.

@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 interface UserRoleRow {
-	rollen: { name: string } | { name: string }[] | null;
+	roles: { role_name: string } | { role_name: string }[] | null;
 }
 
 // Reads the role name of a user. Shared by the middleware and by
@@ -21,9 +21,9 @@ export async function getUserRoleByUserId(
 	const { data, error } = await supabase
 		.from('users')
 		.select(`
-      rollen_id,
-      rollen (
-        name
+      role_id,
+      roles (
+        role_name
       )
     `)
 		.eq('id', userId)
@@ -35,9 +35,9 @@ export async function getUserRoleByUserId(
 	}
 
 	const row = data as UserRoleRow | null;
-	if (!row?.rollen) return null;
+	if (!row?.roles) return null;
 
 	// Supabase returns the joined row either as an object or as an array.
-	const rolle = Array.isArray(row.rollen) ? row.rollen[0] : row.rollen;
-	return rolle?.name ?? null;
+	const role = Array.isArray(row.roles) ? row.roles[0] : row.roles;
+	return role?.role_name ?? null;
 }
