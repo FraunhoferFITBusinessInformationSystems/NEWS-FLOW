@@ -12,22 +12,11 @@ export const USER_ROLES = {
 
 export type UserRoleName = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
-// Administration of master data: users, trees, sensors, strategies, POIs.
-export const ADMIN_ROLES: readonly UserRoleName[] = [
-	USER_ROLES.administrator,
-	USER_ROLES.superAdministrator,
-];
-
-// Planning and monitoring of watering rounds.
+// Roles that may open the overview and the dashboard. Mirrored by
+// is_app_planner() in supabase/migrations/00000000000002_rls.sql.
 export const PLANNING_ROLES: readonly UserRoleName[] = [
 	USER_ROLES.officeClerk,
 	USER_ROLES.administrator,
-	USER_ROLES.superAdministrator,
-];
-
-// Execution of watering rounds in the field.
-export const GARDENING_ROLES: readonly UserRoleName[] = [
-	USER_ROLES.gardener,
 	USER_ROLES.superAdministrator,
 ];
 
@@ -62,22 +51,10 @@ interface RouteAccessRule {
 const ROUTE_ACCESS_RULES: readonly RouteAccessRule[] = [
 	{ prefix: '/overview', roles: PLANNING_ROLES },
 	{ prefix: '/dashboard', roles: PLANNING_ROLES },
-	{ prefix: '/wateringrounds', roles: PLANNING_ROLES },
-	{ prefix: '/wateringrounds-palmengarten', roles: PLANNING_ROLES },
-	{ prefix: '/wateringrounds-monitoring', roles: PLANNING_ROLES },
-	{ prefix: '/wateringrounds-user-overview', roles: GARDENING_ROLES },
-	{ prefix: '/admin', roles: ADMIN_ROLES },
-	{ prefix: '/baumdatenpflege', roles: ADMIN_ROLES },
-	{ prefix: '/baumimport', roles: ADMIN_ROLES },
-	{ prefix: '/wateringstrategies', roles: ADMIN_ROLES },
-	{ prefix: '/sensorverwaltung', roles: ADMIN_ROLES },
-	{ prefix: '/waterextractionpoints', roles: ADMIN_ROLES },
-	{ prefix: '/pointofinterests', roles: ADMIN_ROLES },
-	{ prefix: '/ors-test', roles: ADMIN_ROLES },
 ];
 
-// Matches whole path segments, so "/wateringrounds" does not also match
-// "/wateringrounds-monitoring", while "/wateringrounds/123" still matches.
+// Matches whole path segments, so "/overview" does not also match
+// "/overview-archive", while "/overview/123" still matches.
 function matchesPrefix(pathname: string, prefix: string): boolean {
 	return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
@@ -131,8 +108,6 @@ export function isRouteAllowedForRole(
 // it may not see. Always returns a route the role is allowed to open, so no
 // redirect loop can occur.
 export function getHomeRouteForRole(role: string | null): string {
-	if (role === USER_ROLES.gardener) return '/wateringrounds-user-overview';
-
 	if (
 		role === USER_ROLES.officeClerk ||
 		role === USER_ROLES.administrator ||
@@ -141,9 +116,11 @@ export function getHomeRouteForRole(role: string | null): string {
 		return '/overview';
 	}
 
-	// Either no role at all, or a role that exists in the database but is not
-	// mapped here. Both mean the account cannot use the application, so explain
-	// that instead of bouncing the user back to the login form. The page is
-	// public, and the layout still offers the logout button.
+	// Either no role at all, or a role without a route in this build. That
+	// includes the gardener role: it is part of the role model, but its pages
+	// (irrigation rounds in the field) are not part of this edition yet. Both
+	// mean the account cannot use the application, so explain that instead of
+	// bouncing the user back to the login form. The page is public, and the
+	// layout still offers the logout button.
 	return '/no-role';
 }

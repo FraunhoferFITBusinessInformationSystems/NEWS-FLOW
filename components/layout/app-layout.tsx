@@ -5,8 +5,6 @@ import { AppHeader } from '@/components/layout/app-header';
 import { Footer } from '@/components/layout/footer';
 import { type NavigationItem, filterNavigationByRole } from '@/lib/utils';
 import {
-	ADMIN_ROLES,
-	GARDENING_ROLES,
 	PLANNING_ROLES,
 	isRouteAllowedForRole,
 } from '@/lib/utils/route-access';
@@ -65,36 +63,6 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
 			href: '/dashboard',
 			label: 'Details & Analysen',
 			roles: PLANNING_ROLES,
-		},
-		{
-			label: 'Administration',
-			roles: ADMIN_ROLES,
-			children: [
-				{ href: '/admin', label: 'Nutzerverwaltung' },
-				{ href: '/baumdatenpflege', label: 'Baumverwaltung' },
-				{ href: '/wateringstrategies', label: 'Bewässerungsstrategien' },
-				{ href: '/sensorverwaltung', label: 'Sensorverwaltung' },
-				{ href: '/waterextractionpoints', label: 'Wasserentnahmestellen' },
-				{ href: '/pointofinterests', label: 'Points of Interest' },
-			],
-		},
-		{
-			label: 'Bewässerungsplanung',
-			roles: PLANNING_ROLES,
-			children: [
-				{ href: '/wateringrounds', label: 'GFA' },
-				{ href: '/wateringrounds-palmengarten', label: 'PG' },
-			],
-		},
-		{
-			href: '/wateringrounds-monitoring',
-			label: 'Bewässerungsüberwachung',
-			roles: PLANNING_ROLES,
-		},
-		{
-			href: '/wateringrounds-user-overview',
-			label: 'Meine Bewässerungen',
-			roles: GARDENING_ROLES,
 		},
 		{ href: '/hilfe', label: 'Hilfe', iconOnly: true, roles: ['all'] },
 	];
