@@ -78,7 +78,11 @@ export function ForgotPasswordForm() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+				<form
+					className="grid gap-4"
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
+				>
 					<div className="grid gap-2">
 						<Label htmlFor="email">Email</Label>
 						<Input

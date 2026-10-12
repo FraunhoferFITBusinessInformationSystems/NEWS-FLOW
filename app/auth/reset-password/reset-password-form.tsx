@@ -194,7 +194,11 @@ export function ResetPasswordForm() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+				<form
+					className="grid gap-4"
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
+				>
 					<div className="grid gap-2">
 						<Label htmlFor="password">Neues Passwort</Label>
 						<Input

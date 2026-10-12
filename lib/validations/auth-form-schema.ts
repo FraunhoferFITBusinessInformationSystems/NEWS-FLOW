@@ -1,6 +1,22 @@
 import { z } from 'zod';
 
 /**
+ * Schema for the login form. Only checks that both fields are filled in and
+ * that the email is well-formed; whether the credentials are correct is decided
+ * by Supabase Auth.
+ */
+export const loginFormSchema = z.object({
+	email: z
+		.string()
+		.min(1, 'Bitte geben Sie Ihre E-Mail-Adresse ein.')
+		.email('Bitte geben Sie eine gültige E-Mail-Adresse ein.')
+		.trim(),
+	password: z.string().min(1, 'Bitte geben Sie Ihr Passwort ein.'),
+});
+
+export type LoginFormValues = z.infer<typeof loginFormSchema>;
+
+/**
  * Schema for the "Passwort vergessen" form where the user requests a
  * password reset e-mail.
  */

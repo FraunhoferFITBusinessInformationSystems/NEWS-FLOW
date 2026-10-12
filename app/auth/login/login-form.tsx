@@ -1,6 +1,8 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
 
 import { pwdSignIn } from './action';
 
@@ -14,23 +16,28 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import {
+	type LoginFormValues,
+	loginFormSchema,
+} from '@/lib/validations/auth-form-schema';
 
 export function LoginForm() {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const [error, setError] = useState<string | null>(null);
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors, isSubmitting },
+	} = useForm<LoginFormValues>({
+		resolver: zodResolver(loginFormSchema),
+		defaultValues: { email: '', password: '' },
+	});
 
-	async function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		setError(null);
-		setIsSubmitting(true);
-		const result = await pwdSignIn(username, password);
-		// On success the server action redirects, so we only reset on error.
+	async function onSubmit(values: LoginFormValues) {
+		const result = await pwdSignIn(values.email, values.password);
+		// On success the server action redirects, so only a failed sign-in
+		// returns here. The message is shown below the password field.
 		if (result?.error) {
-			setError(result.error);
-			setIsSubmitting(false);
+			setError('root.serverError', { message: result.error });
 		}
 	}
 
@@ -43,17 +50,27 @@ export function LoginForm() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<form className="grid gap-4" onSubmit={handleSubmit}>
+				{/* noValidate: validation messages come from the Zod schema, not from
+				    the browser's own pop-ups. */}
+				<form
+					className="grid gap-4"
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
+				>
 					<div className="grid gap-2">
 						<Label htmlFor="email">Email</Label>
 						<Input
-							required
 							id="email"
-							placeholder="max.mustermann@beispiel.de"
 							type="email"
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
+							placeholder="max.mustermann@beispiel.de"
+							autoComplete="email"
+							{...register('email')}
 						/>
+						{errors.email && (
+							<p className="mt-1 text-xs text-red-500">
+								{errors.email.message}
+							</p>
+						)}
 					</div>
 					<div className="grid gap-2">
 						<div className="flex items-center">
@@ -66,13 +83,21 @@ export function LoginForm() {
 							</Link>
 						</div>
 						<Input
-							required
 							id="password"
 							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
+							autoComplete="current-password"
+							{...register('password')}
 						/>
-						{error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+						{errors.password && (
+							<p className="mt-1 text-xs text-red-500">
+								{errors.password.message}
+							</p>
+						)}
+						{errors.root?.serverError && (
+							<p className="mt-1 text-xs text-red-500">
+								{errors.root.serverError.message}
+							</p>
+						)}
 					</div>
 					<Button className="w-full" type="submit" disabled={isSubmitting}>
 						{isSubmitting ? 'Anmeldung läuft…' : 'Anmelden'}
