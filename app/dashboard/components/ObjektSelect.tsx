@@ -56,7 +56,7 @@ export default function ObjektSelect({
 
 	return (
 		<div className="flex flex-col gap-2">
-			<label htmlFor="objekt-select" className="text-sm text-gray-600">
+			<label htmlFor="site-select" className="text-sm text-gray-600">
 				Ort:
 			</label>
 			<Combobox
@@ -65,8 +65,8 @@ export default function ObjektSelect({
 				onValueChange={handleValueChange}
 			>
 				<ComboboxInput
-					id="objekt-select"
-					name="objekt-select"
+					id="site-select"
+					name="site-select"
 					placeholder="Bitte wählen..."
 					className="w-full border border-gray-300 bg-white p-2.5 rounded-lg h-[42px] cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				/>

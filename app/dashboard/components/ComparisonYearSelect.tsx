@@ -1,16 +1,25 @@
 'use client';
 
-import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
-import Select, { type MultiValue, type ActionMeta } from 'react-select';
+import {
+	Combobox,
+	ComboboxChip,
+	ComboboxChips,
+	ComboboxChipsInput,
+	ComboboxContent,
+	ComboboxEmpty,
+	ComboboxItem,
+	ComboboxList,
+	ComboboxValue,
+	useComboboxAnchor,
+} from '@/components/ui/combobox';
+import type { ComparisonYearOption } from '@/lib/types/dashboard';
+import type { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 
-interface Option {
-	value: number;
-	label: string;
-}
+const MAX_COMPARISON_YEARS = 3;
 
 interface ComparisonYearSelectProps {
-	options: Option[];
+	options: ComparisonYearOption[];
 	selectedYears: number[];
 	onChange: Dispatch<SetStateAction<number[]>>;
 }
@@ -20,38 +29,25 @@ export default function ComparisonYearSelect({
 	selectedYears,
 	onChange,
 }: ComparisonYearSelectProps) {
-	const [isClient, setIsClient] = useState(false);
+	// Positions the dropdown under the whole chip field, not only the text input.
+	const anchor = useComboboxAnchor();
+	const years = options.map((option) => option.value);
+	// Only years that are still offered count as selected.
+	const selected = years.filter((year) => selectedYears.includes(year));
 
-	useEffect(() => {
-		setIsClient(true);
-	}, []);
+	// Chips and list show the label, e.g. "24/25" for a range across New Year.
+	function yearToLabel(year: number): string {
+		return (
+			options.find((option) => option.value === year)?.label ?? String(year)
+		);
+	}
 
-	const normalizedSelected: Option[] = options.filter((option) =>
-		selectedYears.includes(option.value),
-	);
-
-	const handleChange = (
-		newValue: MultiValue<Option>,
-		actionMeta: ActionMeta<Option>,
-	) => {
-		const selected = newValue.map((option) => option.value);
-
-		// Maximal 3 Vergleichsjahre erlauben
-		if (selected.length > 3) {
+	function handleValueChange(values: number[]) {
+		if (values.length > MAX_COMPARISON_YEARS) {
 			toast.error('Sie können maximal 3 Vergleichsjahre auswählen.');
 			return;
 		}
-
-		onChange(selected);
-	};
-
-	if (!isClient) {
-		return (
-			<div className="flex flex-col gap-2">
-				<span className="text-sm text-gray-600">Jahre:</span>
-				<div className="w-full h-[42px] rounded border bg-gray-100 animate-pulse" />
-			</div>
-		);
+		onChange(values);
 	}
 
 	return (
@@ -59,35 +55,47 @@ export default function ComparisonYearSelect({
 			<label htmlFor="comparison-year-select" className="text-sm text-gray-600">
 				Jahre:
 			</label>
-			<Select
-				inputId="comparison-year-select"
-				isMulti
-				options={options}
-				value={normalizedSelected}
-				onChange={handleChange}
-				isDisabled={options.length === 0}
-				className="w-full custom-select"
-				instanceId="comparison-year-select"
-				placeholder="Vergleichsjahre auswählen..."
-				closeMenuOnSelect={false}
-				styles={{
-					control: (base, state) => ({
-						...base,
-						minHeight: '42px',
-						borderColor:
-							state.isFocused || state.menuIsOpen
-								? 'rgb(22 163 74)'
-								: 'rgb(209 213 219)',
-						boxShadow:
-							state.isFocused || state.menuIsOpen
-								? '0 0 0 2px rgb(34 197 94 / 0.4)'
-								: 'none',
-						cursor: 'pointer',
-					}),
-				}}
-			/>
+			<Combobox
+				multiple
+				items={years}
+				value={selected}
+				onValueChange={handleValueChange}
+				itemToStringLabel={yearToLabel}
+				disabled={options.length === 0}
+			>
+				<ComboboxChips
+					ref={anchor}
+					className="w-full min-h-[42px] rounded-lg border-gray-300 bg-white cursor-text hover:border-green-600 hover:bg-green-50/50 focus-within:border-green-600 focus-within:ring-2 focus-within:ring-green-500/40 has-disabled:opacity-50 has-disabled:pointer-events-none transition-colors"
+				>
+					<ComboboxValue>
+						{(values: number[]) => (
+							<>
+								{values.map((year) => (
+									<ComboboxChip key={year}>{yearToLabel(year)}</ComboboxChip>
+								))}
+								<ComboboxChipsInput
+									id="comparison-year-select"
+									placeholder={
+										values.length === 0 ? 'Vergleichsjahre auswählen...' : ''
+									}
+								/>
+							</>
+						)}
+					</ComboboxValue>
+				</ComboboxChips>
+				<ComboboxContent anchor={anchor}>
+					<ComboboxEmpty>Keine Ergebnisse gefunden.</ComboboxEmpty>
+					<ComboboxList>
+						{(year: number) => (
+							<ComboboxItem key={year} value={year}>
+								{yearToLabel(year)}
+							</ComboboxItem>
+						)}
+					</ComboboxList>
+				</ComboboxContent>
+			</Combobox>
 
-			{selectedYears.length >= 3 && (
+			{selectedYears.length >= MAX_COMPARISON_YEARS && (
 				<p className="text-sm text-gray-500">
 					Sie können maximal 3 Vergleichsjahre auswählen.
 				</p>
