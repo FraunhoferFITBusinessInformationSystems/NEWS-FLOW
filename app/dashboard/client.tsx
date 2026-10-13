@@ -464,7 +464,7 @@ export default function DashboardClient() {
 
 	// Render the UI
 	return (
-		<main className="max-w-6xl w-full mr-auto ml-0 pl-4 pr-4 py-8 bg-gray-50 min-h-screen text-left">
+		<div className="w-full px-4 py-8 text-left">
 			<h1 className="text-3xl font-bold text-gray-800 mb-10">
 				Baumdaten Übersicht
 			</h1>
@@ -649,6 +649,6 @@ export default function DashboardClient() {
 					</div>
 				</section>
 			)}
-		</main>
+		</div>
 	);
 }

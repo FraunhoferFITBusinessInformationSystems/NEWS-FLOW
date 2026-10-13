@@ -586,7 +586,7 @@ export default function MapComponent() {
 					)}
 				</section>
 			)}
-			<div className="relative z-20 p-4 bg-gray-100 rounded-md shadow-md space-y-2">
+			<div className="relative z-20 p-6 bg-white rounded-xl shadow border space-y-2">
 				<div className="flex items-center gap-2 text-sm font-medium text-gray-700">
 					<span>Filter</span>
 					<HelpHint label="Bäume filtern" side="bottom">
@@ -613,7 +613,7 @@ export default function MapComponent() {
 						<ComboboxInput
 							placeholder="Suche"
 							aria-label="Bäume nach Objekt suchen"
-							className="w-full h-10 border-2 border-[#006E3F] bg-white px-3 py-2 text-sm rounded-md cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
+							className="w-full h-[42px] border border-gray-300 bg-white px-3 py-2 text-sm rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 						/>
 						<ComboboxContent sideOffset={4} align="start" className="">
 							<ComboboxEmpty>Keine Ergebnisse gefunden.</ComboboxEmpty>
@@ -632,7 +632,7 @@ export default function MapComponent() {
 							setFilterColor(value as AllOrValue<TreeMapPinColor>)
 						}
 					>
-						<SelectTrigger className="w-full text-sm border-2 border-[#006E3F] focus-visible:ring-[#006E3F] bg-white">
+						<SelectTrigger className="w-full h-[42px] text-sm border border-gray-300 bg-white rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus-visible:ring-2 focus-visible:ring-green-500/40 focus-visible:border-green-600 transition-colors">
 							<SelectValue placeholder="Bewässerungsbedarf" />
 						</SelectTrigger>
 						<SelectContent className="z-[1000]">
@@ -660,7 +660,7 @@ export default function MapComponent() {
 							setFilterDistrict(value as AllOrValue<string>)
 						}
 					>
-						<SelectTrigger className="w-full text-sm border-2 border-[#006E3F] focus-visible:ring-[#006E3F] bg-white">
+						<SelectTrigger className="w-full h-[42px] text-sm border border-gray-300 bg-white rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus-visible:ring-2 focus-visible:ring-green-500/40 focus-visible:border-green-600 transition-colors">
 							<SelectValue placeholder="Alle Bezirke" />
 						</SelectTrigger>
 						<SelectContent className="z-[1000]">
@@ -678,7 +678,7 @@ export default function MapComponent() {
 							setFilterIrrigationArea(value as AllOrValue<string>)
 						}
 					>
-						<SelectTrigger className="w-full text-sm border-2 border-[#006E3F] focus-visible:ring-[#006E3F] bg-white">
+						<SelectTrigger className="w-full h-[42px] text-sm border border-gray-300 bg-white rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus-visible:ring-2 focus-visible:ring-green-500/40 focus-visible:border-green-600 transition-colors">
 							<SelectValue placeholder="Alle Bewässerungsbereiche" />
 						</SelectTrigger>
 						<SelectContent className="z-[1000]">
