@@ -6,9 +6,9 @@ export interface WateringNeedCategoryInput {
 	readonly kpa_ch2: number | null | undefined;
 	readonly kpa_ch3: number | null | undefined;
 	readonly measured_at: string | null | undefined;
-	readonly sollwert_30cm: number | null | undefined;
-	readonly sollwert_60cm: number | null | undefined;
-	readonly sollwert_90cm: number | null | undefined;
+	readonly target_30cm: number | null | undefined;
+	readonly target_60cm: number | null | undefined;
+	readonly target_90cm: number | null | undefined;
 }
 
 /**
@@ -51,9 +51,9 @@ export function getWateringNeedCategory(
 			return 'grey';
 		}
 
-		const color30cm = getStatusColor(input.kpa_ch1, input.sollwert_30cm);
-		const color60cm = getStatusColor(input.kpa_ch2, input.sollwert_60cm);
-		const color90cm = getStatusColor(input.kpa_ch3, input.sollwert_90cm);
+		const color30cm = getStatusColor(input.kpa_ch1, input.target_30cm);
+		const color60cm = getStatusColor(input.kpa_ch2, input.target_60cm);
+		const color90cm = getStatusColor(input.kpa_ch3, input.target_90cm);
 
 		if (
 			color30cm === 'rgb(255,0,0)' ||

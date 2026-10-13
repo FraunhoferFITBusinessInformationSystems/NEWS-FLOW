@@ -3,22 +3,19 @@
 import { createClient } from '@/lib/supabase/server';
 import { isPalmengartenTree } from '@/lib/utils';
 
-// Types for strategy data
-export type StrategieValues = {
-	strategie_30cm_max: number | null;
-	strategie_60cm_max: number | null;
-	strategie_90cm_max: number | null;
-	schwellenwert_gelb: number | null;
-	schwellenwert_orange: number | null;
-	schwellenwert_rot: number | null;
-	bewaesserung_liter: number | null;
-};
+/** Row of `irrigation_targets_by_age`, limited to the columns read here. */
+interface IrrigationTargetRow {
+	tree_site_age: number;
+	target_max_30cm: number | null;
+	target_max_60cm: number | null;
+	target_max_90cm: number | null;
+}
 
-export type TreeWithTargetValues = {
-	sollwert_30cm: number | null;
-	sollwert_60cm: number | null;
-	sollwert_90cm: number | null;
-};
+export interface TreeWithTargetValues {
+	target_30cm: number | null;
+	target_60cm: number | null;
+	target_90cm: number | null;
+}
 
 /**
  * Get target values (Sollwerte) for a tree based on its characteristics
@@ -33,9 +30,9 @@ export async function getTreeTargetValues(tree: {
 	const supabase = await createClient();
 
 	const defaultValues: TreeWithTargetValues = {
-		sollwert_30cm: null,
-		sollwert_60cm: null,
-		sollwert_90cm: null,
+		target_30cm: null,
+		target_60cm: null,
+		target_90cm: null,
 	};
 
 	try {
@@ -60,9 +57,9 @@ export async function getTreeTargetValues(tree: {
 			}
 
 			return {
-				sollwert_30cm: data.strategie_30cm_max,
-				sollwert_60cm: data.strategie_60cm_max,
-				sollwert_90cm: data.strategie_90cm_max,
+				target_30cm: data.strategie_30cm_max,
+				target_60cm: data.strategie_60cm_max,
+				target_90cm: data.strategie_90cm_max,
 			};
 		}
 
@@ -84,9 +81,9 @@ export async function getTreeTargetValues(tree: {
 		}
 
 		return {
-			sollwert_30cm: data.strategie_30cm_max,
-			sollwert_60cm: data.strategie_60cm_max,
-			sollwert_90cm: data.strategie_90cm_max,
+			target_30cm: data.strategie_30cm_max,
+			target_60cm: data.strategie_60cm_max,
+			target_90cm: data.strategie_90cm_max,
 		};
 	} catch (error) {
 		console.error('Error fetching tree target values:', error);
@@ -95,103 +92,56 @@ export async function getTreeTargetValues(tree: {
 }
 
 /**
- * Batch function to get target values for multiple trees efficiently
- * Groups trees by type (GFA vs Palmengarten) and fetches strategies in bulk
+ * Batch function to get target values for multiple trees efficiently.
+ * Fetches the targets for all distinct `tree_site_age` values in one query.
+ * Trees without a site age or without a matching target row get null values.
  */
 export async function getMultipleTreeTargetValues<
-	T extends {
-		bezirk?: string | null;
-		standalter?: number | null;
-		objekt?: string | null;
-	},
+	T extends { tree_site_age?: number | null },
 >(trees: T[]): Promise<(T & TreeWithTargetValues)[]> {
 	const supabase = await createClient();
 
-	// Separate trees by type
-	const palmengartenTrees = trees.filter((tree) =>
-		isPalmengartenTree(tree.bezirk),
-	);
-	const gfaTrees = trees.filter((tree) => !isPalmengartenTree(tree.bezirk));
-
-	// Fetch strategies for Palmengarten trees
-	const palmengartenObjekte = [
+	const siteAges = [
 		...new Set(
-			palmengartenTrees
-				.map((t) => t.objekt)
-				.filter((obj): obj is string => obj !== null && obj !== undefined),
-		),
-	];
-	let pgStrategies: Record<string, StrategieValues> = {};
-
-	if (palmengartenObjekte.length > 0) {
-		const { data: pgData, error: pgError } = await supabase
-			.from('bewaesserungsstrategien_pg')
-			.select('*')
-			.in('objekt', palmengartenObjekte);
-
-		if (!pgError && pgData) {
-			pgStrategies = Object.fromEntries(
-				pgData.map((strategy) => [strategy.objekt, strategy]),
-			);
-		}
-	}
-
-	// Fetch strategies for GFA trees
-	const gfaStandalter = [
-		...new Set(
-			gfaTrees
-				.map((t) => t.standalter)
+			trees
+				.map((t) => t.tree_site_age)
 				.filter((age): age is number => age !== null && age !== undefined),
 		),
 	];
-	let gfaStrategies: Record<number, StrategieValues> = {};
+	let targetsBySiteAge: Record<number, IrrigationTargetRow> = {};
 
-	if (gfaStandalter.length > 0) {
-		const { data: gfaData, error: gfaError } = await supabase
-			.from('bewaesserungsstrategien_gfa')
-			.select('*')
-			.in('standalter', gfaStandalter);
+	if (siteAges.length > 0) {
+		const { data, error } = await supabase
+			.from('irrigation_targets_by_age')
+			.select(
+				'tree_site_age, target_max_30cm, target_max_60cm, target_max_90cm',
+			)
+			.in('tree_site_age', siteAges);
 
-		if (!gfaError && gfaData) {
-			gfaStrategies = Object.fromEntries(
-				gfaData.map((strategy) => [strategy.standalter, strategy]),
+		// A failed lookup is not fatal: the trees are still shown, without targets.
+		if (error) {
+			console.error(`Fehler in getMultipleTreeTargetValues: ${error.message}`);
+		} else if (data) {
+			targetsBySiteAge = Object.fromEntries(
+				data.map((target: IrrigationTargetRow) => [
+					target.tree_site_age,
+					target,
+				]),
 			);
 		}
 	}
 
-	// Map trees with their target values
 	return trees.map((tree) => {
-		const defaultValues: TreeWithTargetValues = {
-			sollwert_30cm: null,
-			sollwert_60cm: null,
-			sollwert_90cm: null,
+		const target =
+			tree.tree_site_age !== null && tree.tree_site_age !== undefined
+				? targetsBySiteAge[tree.tree_site_age]
+				: undefined;
+
+		return {
+			...tree,
+			target_30cm: target?.target_max_30cm ?? null,
+			target_60cm: target?.target_max_60cm ?? null,
+			target_90cm: target?.target_max_90cm ?? null,
 		};
-
-		if (isPalmengartenTree(tree.bezirk)) {
-			const strategy = tree.objekt ? pgStrategies[tree.objekt] : null;
-			if (strategy) {
-				return {
-					...tree,
-					sollwert_30cm: strategy.strategie_30cm_max,
-					sollwert_60cm: strategy.strategie_60cm_max,
-					sollwert_90cm: strategy.strategie_90cm_max,
-				};
-			}
-		} else {
-			const strategy =
-				tree.standalter !== null && tree.standalter !== undefined
-					? gfaStrategies[tree.standalter]
-					: null;
-			if (strategy) {
-				return {
-					...tree,
-					sollwert_30cm: strategy.strategie_30cm_max,
-					sollwert_60cm: strategy.strategie_60cm_max,
-					sollwert_90cm: strategy.strategie_90cm_max,
-				};
-			}
-		}
-
-		return { ...tree, ...defaultValues };
 	});
 }

@@ -3,91 +3,36 @@
 import { getMultipleTreeTargetValues } from '@/lib/actions/tree-target-values';
 import type { TreeWithTargetValues } from '@/lib/actions/tree-target-values';
 import { createClient } from '@/lib/supabase/server';
-import type { Database } from '@/lib/supabase/supabase';
+import type { TreeOverviewWithSensorRow } from '@/lib/types/tree-overview';
 import { filterTreesForLiveMap } from '@/lib/utils/live-map-sensors';
 import { filterInvalidSensorKpaValues } from '@/lib/utils/sensor-data-validation';
 
-export type TreeOverviewWithSensorRow =
-	Database['public']['Views']['v_soilmoisture_latest_earliest_per_sensor']['Row'];
-
-function isRelationMissingError(message: string): boolean {
-	return message.includes('does not exist');
-}
-
-async function fetchTreeOverviewWithSensorsFallback(
-	supabase: Awaited<ReturnType<typeof createClient>>,
-): Promise<TreeOverviewWithSensorRow[]> {
-	const { data: rows, error } = await supabase
-		.from('v_soilmoisture_latest_per_sensor')
-		.select('*')
-		.not('kpa_ch1', 'is', null)
-		.not('kpa_ch2', 'is', null)
-		.not('kpa_ch3', 'is', null);
-
-	if (error) {
-		throw new Error(error.message);
-	}
-
-	const cleaned = filterInvalidSensorKpaValues(rows ?? []);
-	return cleaned.map((row) => ({
-		...row,
-		last_watering_at: null,
-		measured_at_earliest: row.measured_at ?? null,
-	})) as TreeOverviewWithSensorRow[];
-}
-
 /**
- * Lädt alle Bäume inklusive zugehörigem Bewässerungsbereich.
+ * Loads all trees with sensors, each with its latest and earliest reading.
  *
- * @returns Liste aller Bäume oder `null`, falls keine vorhanden sind.
- * @throws Error, wenn das Supabase-Query fehlschlägt.
+ * @returns One row per sensor; only rows with complete readings kpa_ch1–3.
+ * @throws Error if the Supabase query fails.
  */
-export const getTreeOverview = async () => {
-	const supabase = await createClient();
-
-	const { data: baeume, error } = await supabase
-		.from('baeume')
-		.select('*, bewaesserungsbereich(*)');
-
-	if (error) {
-		throw new Error(error.message);
-	}
-
-	return baeume;
-};
-
-/**
- * Lädt alle Bäume mit Sensoren und den jeweils neuesten Messwerten inkl. letzter
- * abgeschlossener Bewässerung (`last_watering_at` aus der DB-View).
- *
- * @returns Liste der Bäume mit Sensordaten; nur Einträge mit vollständigen Messwerten kpa_ch1–3.
- * @throws Error, wenn das Supabase-Query fehlschlägt.
- */
-export const getTreeOverviewWithSensors = async (): Promise<
+export async function getTreeOverviewWithSensors(): Promise<
 	TreeOverviewWithSensorRow[]
-> => {
+> {
 	const supabase = await createClient();
 
-	const { data: baeumeMitSensorenUndDaten, error } = await supabase
-		.from('v_soilmoisture_latest_earliest_per_sensor')
+	const { data, error } = await supabase
+		.from('v_soil_moisture_latest_earliest_per_sensor')
 		.select('*')
 		.not('kpa_ch1', 'is', null)
 		.not('kpa_ch2', 'is', null)
 		.not('kpa_ch3', 'is', null);
 
 	if (error) {
-		if (isRelationMissingError(error.message)) {
-			console.warn(
-				'getTreeOverviewWithSensors: view v_soilmoisture_latest_earliest_per_sensor missing; using v_soilmoisture_latest_per_sensor (last_watering_at null).',
-			);
-			return fetchTreeOverviewWithSensorsFallback(supabase);
-		}
+		console.error(`Fehler in getTreeOverviewWithSensors: ${error.message}`);
 		throw new Error(error.message);
 	}
 
-	const cleaned = filterInvalidSensorKpaValues(baeumeMitSensorenUndDaten ?? []);
-	return cleaned as TreeOverviewWithSensorRow[];
-};
+	console.log('getTreeOverviewWithSensors erfolgreich');
+	return filterInvalidSensorKpaValues(data ?? []);
+}
 
 /**
  * Loads sensor IDs that are marked active in `sensors`.
@@ -98,7 +43,7 @@ async function getActiveSensorIds(): Promise<string[]> {
 	const { data, error } = await supabase
 		.from('sensors')
 		.select('id')
-		.eq('active', true);
+		.eq('is_active', true);
 
 	if (error) {
 		console.error(`Fehler in getActiveSensorIds: ${error.message}`);
@@ -111,7 +56,7 @@ async function getActiveSensorIds(): Promise<string[]> {
 
 /**
  * Same data as `getTreeOverviewWithSensors`, but excludes trees linked to
- * manually deactivated sensors (`sensors.active = false`). Used only by the Live map.
+ * manually deactivated sensors (`sensors.is_active = false`). Used only by the Live map.
  */
 export async function getTreeOverviewForLiveMap(): Promise<
 	TreeOverviewWithSensorRow[]
@@ -131,16 +76,13 @@ export async function getTreeOverviewForLiveMap(): Promise<
 	}
 }
 
-export type TreeOverview = Awaited<ReturnType<typeof getTreeOverview>>;
-export type FirstTreeOverview = TreeOverview[0];
 export type TreeOverviewWithSensors = TreeOverviewWithSensorRow[];
-export type FirstTreeOverviewWithSensors = TreeOverviewWithSensors[0];
 
 export type OverviewTableRow = TreeOverviewWithSensorRow & TreeWithTargetValues;
 
 /**
- * Loads sensor overview rows for the table tab (same view as the map) plus strategy
- * target values (Sollwerte) for Gießempfehlung parity with the map.
+ * Loads sensor overview rows for the table tab (same view as the map) plus the
+ * target values, so the watering recommendation matches the map.
  */
 export async function getOverviewTableData(): Promise<OverviewTableRow[]> {
 	try {
@@ -154,56 +96,3 @@ export async function getOverviewTableData(): Promise<OverviewTableRow[]> {
 		throw error;
 	}
 }
-
-/**
- * Lädt alle Bewässerungsstrategien aus der Tabelle `bewaesserungsstrategien_gfa`.
- *
- * @returns Liste der Strategien oder `null`, falls keine vorhanden sind.
- * @throws Error, wenn das Supabase-Query fehlschlägt.
- */
-export const fetchStrategieTabelle = async () => {
-	const supabase = await createClient();
-
-	const { data, error } = await supabase
-		.from('bewaesserungsstrategien_gfa')
-		.select('*');
-
-	if (error) {
-		throw new Error(error.message);
-	}
-
-	return data;
-};
-
-export type SensorStatusData = {
-	readonly measured_at: string;
-	readonly kpa_ch1: number;
-	readonly kpa_ch2: number;
-	readonly kpa_ch3: number;
-	readonly kpa_ch4: number;
-};
-
-/**
- * Holt alle verfügbaren Sensormessungen zu einem Baum.
- *
- * @param baumId ID des Baumes.
- * @returns Liste der Messungen oder `null`, wenn ein Fehler auftritt.
- */
-export const getSensorDataByBaumId = async (
-	baumId: string,
-): Promise<SensorStatusData[] | null> => {
-	const supabase = await createClient();
-
-	const { data, error } = await supabase
-		.from('v_soilmoisture_with_mapping')
-		.select('measured_at, kpa_ch1, kpa_ch2, kpa_ch3, kpa_ch4')
-		.eq('baum_id', baumId)
-		.order('measured_at', { ascending: false });
-
-	if (error) {
-		console.error('Fehler beim Abrufen der Sensordaten:', error);
-		return null;
-	}
-
-	return data;
-};

@@ -134,21 +134,6 @@ function formatDateTimeDe(value: string | null | undefined): string {
 	});
 }
 
-function formatDateDe(value: string | null | undefined): string {
-	if (value == null || String(value).trim() === '') {
-		return '—';
-	}
-	const d = new Date(value);
-	if (Number.isNaN(d.getTime())) {
-		return '—';
-	}
-	return d.toLocaleDateString('de-DE', {
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-	});
-}
-
 function wateringNeedBadgeClassName(category: TreeMapPinColor): string {
 	const map: Record<TreeMapPinColor, string> = {
 		green:
@@ -192,39 +177,32 @@ function mapOverviewTableRowToCsvRecord(
 		kpa_ch2: row.kpa_ch2,
 		kpa_ch3: row.kpa_ch3,
 		measured_at: row.measured_at,
-		sollwert_30cm: row.sollwert_30cm,
-		sollwert_60cm: row.sollwert_60cm,
-		sollwert_90cm: row.sollwert_90cm,
+		target_30cm: row.target_30cm,
+		target_60cm: row.target_60cm,
+		target_90cm: row.target_90cm,
 	});
 
 	return {
-		id: row.id ?? '',
-		baum_id: row.baum_id ?? '',
-		Bereich: cellText(row.objekt),
-		Baum: cellText(row.baum_nr),
-		'Gattung/Art': cellText(row.gattung_art),
-		Bezirk: cellText(row.bezirk),
-		Bewässerungsbereich: cellText(row.bewaesserungsbereich_name),
-		'Bereich (BB)': cellText(row.bewaesserungsbereich_bereich),
-		Standalter: row.standalter == null ? '' : String(row.standalter),
-		Entwicklungsphase: cellText(row.entwicklungsphase),
+		baum_id: row.tree_id ?? '',
+		Bereich: cellText(row.site),
+		Baum: cellText(row.tree_number),
+		'Gattung/Art': cellText(row.type_species),
+		Bezirk: cellText(row.district),
+		Bewässerungsbereich: cellText(row.irrigation_area_name),
+		Standalter: row.tree_site_age == null ? '' : String(row.tree_site_age),
 		'Letzte Messung': measuredFormatted,
 		'Messung veraltet': staleLabel,
 		'kPa 30 cm': formatKpa(row.kpa_ch1),
 		'kPa 60 cm': formatKpa(row.kpa_ch2),
 		'kPa 90 cm': formatKpa(row.kpa_ch3),
 		'Sollwerte kPa (30/60/90)': formatSollTriple(
-			row.sollwert_30cm,
-			row.sollwert_60cm,
-			row.sollwert_90cm,
+			row.target_30cm,
+			row.target_60cm,
+			row.target_90cm,
 		),
-		'Letzte Bewässerung': formatDateDe(row.last_watering_at),
 		sensor_id: row.sensor_id ?? '',
 		Sensor: formatSensorCell(row),
 		Gießempfehlung: WATERING_NEED_LABEL_DE[category],
-		Stadtteil: cellText(row.stadtteil),
-		Pflegebereich: row.pflegebereich == null ? '' : String(row.pflegebereich),
-		Bewässerungsgrund: cellText(row.bewaesserungsgrund),
 	};
 }
 
@@ -238,9 +216,9 @@ export function TreeList({ rows }: TreeListProps) {
 			header: '',
 			cell: ({ row }) => {
 				const original = row.original;
-				const id = original.baum_id ?? '';
-				const objekt = original.objekt ?? '';
-				const baum = original.baum_nr ?? '';
+				const id = original.tree_id ?? '';
+				const site = original.site ?? '';
+				const treeNumber = original.tree_number ?? '';
 				return (
 					<Button
 						variant="outline"
@@ -248,7 +226,7 @@ export function TreeList({ rows }: TreeListProps) {
 						className="shrink-0 gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 text-sm hover:bg-muted"
 						onClick={() =>
 							router.push(
-								`/dashboard?id=${id}&objekt=${encodeURIComponent(objekt)}&baum=${encodeURIComponent(baum)}`,
+								`/dashboard?id=${id}&objekt=${encodeURIComponent(site)}&baum=${encodeURIComponent(treeNumber)}`,
 							)
 						}
 					>
@@ -258,7 +236,7 @@ export function TreeList({ rows }: TreeListProps) {
 				);
 			},
 		}),
-		columnHelper.accessor('objekt', {
+		columnHelper.accessor('site', {
 			cell: (m) => cellText(m.getValue()),
 			sortingFn: sortGermanTextEmptyLast,
 			header: ({ column }) => (
@@ -272,7 +250,7 @@ export function TreeList({ rows }: TreeListProps) {
 				return value.includes(row.getValue(id));
 			},
 		}),
-		columnHelper.accessor('baum_nr', {
+		columnHelper.accessor('tree_number', {
 			cell: (m) => cellText(m.getValue()),
 			sortingFn: sortGermanTextEmptyLast,
 			header: ({ column }) => (
@@ -286,7 +264,7 @@ export function TreeList({ rows }: TreeListProps) {
 				return value.includes(row.getValue(id));
 			},
 		}),
-		columnHelper.accessor('bezirk', {
+		columnHelper.accessor('district', {
 			cell: (m) => cellText(m.getValue()),
 			sortingFn: sortGermanTextEmptyLast,
 			header: ({ column }) => (
@@ -307,9 +285,9 @@ export function TreeList({ rows }: TreeListProps) {
 					kpa_ch2: row.kpa_ch2,
 					kpa_ch3: row.kpa_ch3,
 					measured_at: row.measured_at,
-					sollwert_30cm: row.sollwert_30cm,
-					sollwert_60cm: row.sollwert_60cm,
-					sollwert_90cm: row.sollwert_90cm,
+					target_30cm: row.target_30cm,
+					target_60cm: row.target_60cm,
+					target_90cm: row.target_90cm,
 				}),
 			{
 				id: 'giessbedarf',
@@ -392,9 +370,9 @@ export function TreeList({ rows }: TreeListProps) {
 			cell: ({ row }) => (
 				<span className="tabular-nums whitespace-nowrap">
 					{formatSollTriple(
-						row.original.sollwert_30cm,
-						row.original.sollwert_60cm,
-						row.original.sollwert_90cm,
+						row.original.target_30cm,
+						row.original.target_60cm,
+						row.original.target_90cm,
 					)}
 				</span>
 			),
@@ -430,21 +408,7 @@ export function TreeList({ rows }: TreeListProps) {
 				return value.includes(row.getValue(id));
 			},
 		}),
-		columnHelper.accessor('last_watering_at', {
-			cell: (info) => formatDateDe(info.getValue() as string | null),
-			sortingFn: sortIsoDateEmptyLast,
-			header: ({ column }) => (
-				<DataTableColumnHeader
-					column={column}
-					title="Letzte Bewässerung"
-					isFilterable={true}
-				/>
-			),
-			filterFn: (row, id, value) => {
-				return value.includes(row.getValue(id));
-			},
-		}),
-		columnHelper.accessor('gattung_art', {
+		columnHelper.accessor('type_species', {
 			cell: (m) => cellText(m.getValue()),
 			sortingFn: sortGermanTextEmptyLast,
 			header: ({ column }) => (
@@ -458,7 +422,7 @@ export function TreeList({ rows }: TreeListProps) {
 				return value.includes(row.getValue(id));
 			},
 		}),
-		columnHelper.accessor('bewaesserungsbereich_name', {
+		columnHelper.accessor('irrigation_area_name', {
 			cell: (m) => cellText(m.getValue()),
 			sortingFn: sortGermanTextEmptyLast,
 			header: ({ column }) => (
@@ -472,21 +436,7 @@ export function TreeList({ rows }: TreeListProps) {
 				return value.includes(row.getValue(id));
 			},
 		}),
-		columnHelper.accessor('bewaesserungsbereich_bereich', {
-			cell: (m) => cellText(m.getValue()),
-			sortingFn: sortGermanTextEmptyLast,
-			header: ({ column }) => (
-				<DataTableColumnHeader
-					column={column}
-					title="Bereich (BB)"
-					isFilterable={true}
-				/>
-			),
-			filterFn: (row, id, value) => {
-				return value.includes(row.getValue(id));
-			},
-		}),
-		columnHelper.accessor('standalter', {
+		columnHelper.accessor('tree_site_age', {
 			cell: (m) => {
 				const v = m.getValue();
 				return v == null ? '—' : String(v);
@@ -496,65 +446,6 @@ export function TreeList({ rows }: TreeListProps) {
 				<DataTableColumnHeader
 					column={column}
 					title="Standalter"
-					isFilterable={true}
-				/>
-			),
-			filterFn: (row, id, value) => {
-				return value.includes(row.getValue(id));
-			},
-		}),
-		columnHelper.accessor('entwicklungsphase', {
-			cell: (m) => cellText(m.getValue()),
-			sortingFn: sortGermanTextEmptyLast,
-			header: ({ column }) => (
-				<DataTableColumnHeader
-					column={column}
-					title="Entwicklungsphase"
-					isFilterable={true}
-				/>
-			),
-			filterFn: (row, id, value) => {
-				return value.includes(row.getValue(id));
-			},
-		}),
-		columnHelper.accessor('stadtteil', {
-			cell: (m) => cellText(m.getValue()),
-			sortingFn: sortGermanTextEmptyLast,
-			header: ({ column }) => (
-				<DataTableColumnHeader
-					column={column}
-					title="Stadtteil"
-					isFilterable={true}
-				/>
-			),
-			filterFn: (row, id, value) => {
-				return value.includes(row.getValue(id));
-			},
-		}),
-		columnHelper.accessor('pflegebereich', {
-			cell: (m) => {
-				const v = m.getValue();
-				return v == null ? '—' : String(v);
-			},
-			sortingFn: sortNumberEmptyLast,
-			header: ({ column }) => (
-				<DataTableColumnHeader
-					column={column}
-					title="Pflegebereich"
-					isFilterable={true}
-				/>
-			),
-			filterFn: (row, id, value) => {
-				return value.includes(row.getValue(id));
-			},
-		}),
-		columnHelper.accessor('bewaesserungsgrund', {
-			cell: (m) => cellText(m.getValue()),
-			sortingFn: sortGermanTextEmptyLast,
-			header: ({ column }) => (
-				<DataTableColumnHeader
-					column={column}
-					title="Bewässerungsgrund"
 					isFilterable={true}
 				/>
 			),
@@ -600,8 +491,8 @@ export function TreeList({ rows }: TreeListProps) {
 			data={rows}
 			columns={columns}
 			initialSorting={[
-				{ id: 'objekt', desc: false },
-				{ id: 'baum_nr', desc: false },
+				{ id: 'site', desc: false },
+				{ id: 'tree_number', desc: false },
 			]}
 			sortingQueryParamKey="overviewTableSorting"
 			persistSortingInQuery={false}
