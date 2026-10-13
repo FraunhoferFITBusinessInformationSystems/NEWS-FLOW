@@ -20,10 +20,8 @@ export function exportToCSV<T extends object>(data: T[], filename: string) {
 					}
 
 					if (typeof value === 'string') {
-						value = value.replace(/"/g, '""'); // escape double quotes
-						if (value.match(/([",\n])/)) {
-							value = `"${value}"`;
-						}
+						const escaped = value.replace(/"/g, '""'); // escape double quotes
+						value = escaped.match(/([",\n])/) ? `"${escaped}"` : escaped;
 					}
 
 					return value ?? '';
