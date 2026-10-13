@@ -8,20 +8,17 @@ import {
 	ComboboxItem,
 	ComboboxList,
 } from '@/components/ui/combobox';
-import type { Organisation } from '@/lib/types/user';
 import { useEffect, useRef, useState } from 'react';
-import { getDistinctObjekte } from '../action';
+import { getDistinctSites } from '../action';
 
 interface ObjektSelectProps {
 	onChange: (value: string) => void;
 	selectedStreetObjekt?: string;
-	organisation?: Organisation;
 }
 
 export default function ObjektSelect({
 	onChange,
 	selectedStreetObjekt,
-	organisation,
 }: ObjektSelectProps) {
 	const [options, setOptions] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string | null>(null);
@@ -30,9 +27,9 @@ export default function ObjektSelect({
 	const onChangeRef = useRef(onChange);
 	onChangeRef.current = onChange;
 
-	// Fetch options when organisation changes
+	// Fetch options on mount and when the preselected site changes
 	useEffect(() => {
-		getDistinctObjekte(organisation).then((data) => {
+		getDistinctSites().then((data) => {
 			setOptions(data);
 
 			// Reset selection if the current selection is not available in new options
@@ -50,7 +47,7 @@ export default function ObjektSelect({
 				return currentSelected;
 			});
 		});
-	}, [organisation, selectedStreetObjekt]);
+	}, [selectedStreetObjekt]);
 
 	const handleValueChange = (value: string | null) => {
 		setSelected(value);
@@ -66,7 +63,6 @@ export default function ObjektSelect({
 				items={options}
 				value={selected}
 				onValueChange={handleValueChange}
-				disabled={!organisation}
 			>
 				<ComboboxInput
 					id="objekt-select"

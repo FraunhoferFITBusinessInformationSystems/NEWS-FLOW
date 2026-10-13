@@ -1,6 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import type { Organisation } from '../types/user';
 
 export async function createClient() {
 	const cookieStore = await cookies();
@@ -57,23 +56,4 @@ export const getCurrentSession = async () => {
 	}
 
 	return { data, error: null };
-};
-
-// Get current user's organization - shared utility function
-export const getCurrentUserOrganisation = async (): Promise<Organisation> => {
-	const supabase = await createClient();
-
-	const { data: user, error: userError } = await supabase.auth.getUser();
-	if (userError || !user.user) throw new Error('Nicht authentifiziert');
-
-	const { data: profile, error: profileError } = await supabase
-		.from('users')
-		.select('organisation')
-		.eq('id', user.user.id)
-		.single();
-
-	if (profileError || !profile)
-		throw new Error('Benutzerprofil nicht gefunden');
-
-	return profile.organisation as Organisation;
 };

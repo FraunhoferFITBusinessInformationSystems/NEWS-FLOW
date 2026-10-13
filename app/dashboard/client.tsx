@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LineChartComponent from './components/LineChartComponent';
 import ObjektSelect from './components/ObjektSelect';
-import OrganisationSelect from './components/OrganisationSelect';
 import TreeComponent from './components/TreeComponent';
 import './styles.css';
 import DateRangePicker from '@/components/features/datePicker/DatePicker';
@@ -18,10 +17,10 @@ import type {
 	ComparisonYearOption,
 	LatestSensorPerTree,
 	SoilMoistureDataPoint,
+	SoilMoistureReading,
 	SollZustandData,
 	TreeOverview,
 } from '@/lib/types/dashboard';
-import type { Organisation } from '@/lib/types/user';
 import {
 	formatDate,
 	getDashboardComparisonCandidateYears,
@@ -31,30 +30,16 @@ import {
 	shiftIsoDateByYears,
 	transformSensorData,
 } from '@/lib/utils/dashboard';
-import type { FilteredTreeSensorData } from './action';
-import {
-	getFilteredTreeSensorData,
-	getOrganisationByObjekt,
-	getTreeOverview,
-	getUserOrganisation,
-} from './action';
+import { getFilteredTreeSensorData, getTreeOverview } from './action';
 import ComparisonYearSelect from './components/ComparisonYearSelect';
-import SharedSections from './components/SharedSections';
 import TreeSelect from './components/TreeSelect';
 import TreeSpecificContent from './components/TreeSpecificContent';
 
 export default function DashboardClient() {
 	const searchParams = useSearchParams();
-	const selectedTreeId = searchParams.get('id');
 	const selectedStreetObjekt = searchParams.get('objekt');
 	const selectedBaumNumber = searchParams.get('baum');
 
-	const [treeId, setTreeId] = useState<string | undefined>(
-		selectedTreeId ?? undefined,
-	);
-	const [selectedOrganisation, setSelectedOrganisation] = useState<
-		Organisation | undefined
-	>();
 	const [startDate, setStartDate] = useState<string | undefined>();
 	const [endDate, setEndDate] = useState<string | undefined>();
 	const [manuallySetDate, setManuallySetDate] = useState(false);
@@ -68,7 +53,6 @@ export default function DashboardClient() {
 	const [sollZustandDataPerTree, setSollZustandDataPerTree] = useState<
 		Record<string, SollZustandData>
 	>({});
-	const [userOrg, setUserOrg] = useState<string>('');
 	const [sollZustandData, setSollZustandData] = useState<
 		SollZustandData | undefined
 	>();
@@ -81,32 +65,6 @@ export default function DashboardClient() {
 	const [comparisonDataByYear, setComparisonDataByYear] = useState<
 		Record<number, SoilMoistureDataPoint[]>
 	>({});
-
-	// Fetch user organisation on mount and pre-select
-	// If objekt is provided in URL, determine organisation from it
-	useEffect(() => {
-		const initOrganisation = async () => {
-			try {
-				// If objekt is provided in URL, determine organisation from it
-				if (selectedStreetObjekt) {
-					const orgFromObjekt =
-						await getOrganisationByObjekt(selectedStreetObjekt);
-					if (orgFromObjekt) {
-						setSelectedOrganisation(orgFromObjekt);
-						return;
-					}
-				}
-				// Otherwise, use user's default organisation
-				const userOrg = await getUserOrganisation();
-				setSelectedOrganisation(userOrg);
-			} catch (err) {
-				console.error('Error fetching organisation:', err);
-				// Default to undefined, user can still select manually
-			}
-		};
-
-		initOrganisation();
-	}, [selectedStreetObjekt]);
 
 	const objektSetCount = useRef(0); // Tracks how many times the object has been changed
 
@@ -121,14 +79,14 @@ export default function DashboardClient() {
 			.then((targetValues) => {
 				// Only set data if all values are available
 				if (
-					targetValues.sollwert_30cm !== null &&
-					targetValues.sollwert_60cm !== null &&
-					targetValues.sollwert_90cm !== null
+					targetValues.target_30cm !== null &&
+					targetValues.target_60cm !== null &&
+					targetValues.target_90cm !== null
 				) {
 					const changedData: SollZustandData = {
-						cm30: targetValues.sollwert_30cm,
-						cm60: targetValues.sollwert_60cm,
-						cm90: targetValues.sollwert_90cm,
+						cm30: targetValues.target_30cm,
+						cm60: targetValues.target_60cm,
+						cm90: targetValues.target_90cm,
 					};
 					setSollZustandData(changedData);
 				} else {
@@ -153,11 +111,6 @@ export default function DashboardClient() {
 			setSelectedTree(undefined);
 		}
 	}, [selectedBaumNumber]);
-
-	// Fetch user organisation (für SharedSections / Multi-Tree)
-	useEffect(() => {
-		getUserOrganisation().then(setUserOrg);
-	}, []);
 
 	// Fetch tree overview(s): Single = 1 Overview, Multi = alle Overviews
 	useEffect(() => {
@@ -186,11 +139,6 @@ export default function DashboardClient() {
 		}
 	}, [selectedObjekt, selectedTree]);
 
-	// Set selected tree ID (used for profile, not multi-selection)
-	useEffect(() => {
-		if (selectedTreeId) setTreeId(selectedTreeId);
-	}, [selectedTreeId]);
-
 	// Set selected object from URL param
 	useEffect(() => {
 		if (selectedStreetObjekt) {
@@ -206,13 +154,6 @@ export default function DashboardClient() {
 			setSelectedTree(undefined);
 		}
 	}, [selectedObjekt]);
-
-	// Reset objekt and tree when organisation changes
-	const handleOrganisationChange = (org: Organisation) => {
-		setSelectedOrganisation(org);
-		setSelectedObjekt(undefined);
-		setSelectedTree(undefined);
-	};
 
 	// If no date range selected, use default range (last 30 days)
 	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedObjekt is the trigger: the default range is applied when the object changes. startDate and endDate are deliberately not dependencies, otherwise clearing a date in the picker would immediately refill it.
@@ -243,17 +184,17 @@ export default function DashboardClient() {
 			.then((treesWithTargets) => {
 				const map: Record<string, SollZustandData> = {};
 				for (const t of treesWithTargets) {
-					const key = t.baum ?? t.baum_nr ?? null;
+					const key = t.tree_number;
 					if (
 						key &&
-						t.sollwert_30cm != null &&
-						t.sollwert_60cm != null &&
-						t.sollwert_90cm != null
+						t.target_30cm != null &&
+						t.target_60cm != null &&
+						t.target_90cm != null
 					) {
 						map[key] = {
-							cm30: t.sollwert_30cm,
-							cm60: t.sollwert_60cm,
-							cm90: t.sollwert_90cm,
+							cm30: t.target_30cm,
+							cm60: t.target_60cm,
+							cm90: t.target_90cm,
 						};
 					}
 				}
@@ -330,12 +271,12 @@ export default function DashboardClient() {
 			return;
 
 		getFilteredTreeSensorData({
-			baum: selectedTree,
-			objekt: selectedObjekt,
-			vonDatum: startDate,
-			bisDatum: endDate,
+			treeNumbers: selectedTree,
+			site: selectedObjekt,
+			fromDate: startDate,
+			toDate: endDate,
 		})
-			.then((data: FilteredTreeSensorData) => {
+			.then((data: SoilMoistureReading[]) => {
 				const transformed = transformSensorData(data ?? []);
 				setChartData(transformed);
 			})
@@ -362,10 +303,10 @@ export default function DashboardClient() {
 				const results = await Promise.all(
 					selectedTree.map(async (baumNr) => {
 						const data = await getFilteredTreeSensorData({
-							baum: [baumNr],
-							objekt: selectedObjekt,
-							vonDatum: startDate,
-							bisDatum: endDate,
+							treeNumbers: [baumNr],
+							site: selectedObjekt,
+							fromDate: startDate,
+							toDate: endDate,
 						});
 						const transformed = transformSensorData(data);
 						if (transformed.length === 0) return null;
@@ -448,10 +389,10 @@ export default function DashboardClient() {
 
 					try {
 						const data = await getFilteredTreeSensorData({
-							baum: selectedTree,
-							objekt: selectedObjekt,
-							vonDatum: compareStart,
-							bisDatum: compareEnd,
+							treeNumbers: selectedTree,
+							site: selectedObjekt,
+							fromDate: compareStart,
+							toDate: compareEnd,
 						});
 						const transformed = transformSensorData(data ?? []);
 						// Same rule as main chart: only offer years with at least one daily point
@@ -559,49 +500,31 @@ export default function DashboardClient() {
 						)}
 					</div>
 
-					{/* Organisation Selection */}
+					{/* Comparison years */}
 					<div className="flex flex-col w-full">
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
-							<span>Organisation:</span>
-							<HelpHint label="Organisation wählen" side="bottom">
-								Die Organisation wird beim Öffnen automatisch aus dem
-								aufgerufenen Objekt oder Ihrer Standardorganisation vorbelegt.
-								Wechseln Sie sie manuell, werden die bisherige Ort- und
-								Baumauswahl verworfen.
+							<span>Vergleichsjahre:</span>
+							<HelpHint label="Vergleichsjahre" side="bottom">
+								Angeboten werden nur Jahre, für die im selben Kalenderfenster
+								tatsächlich Messdaten vorliegen (vergangene wie kommende). Die
+								gewählten Jahre werden zeitlich auf Ihren aktuellen Zeitraum
+								gelegt und als zusätzliche Linien im Diagramm dargestellt.
 							</HelpHint>
 						</h2>
-						<div className="mt-0">
-							<OrganisationSelect
-								value={selectedOrganisation}
-								onChange={handleOrganisationChange}
+						{!isComparisonEligible ? (
+							<p className="text-sm text-gray-500 italic">
+								Nur für Zeiträume bis zu einem Jahr verfügbar.
+							</p>
+						) : comparisonYearOptions.length > 0 ? (
+							<ComparisonYearSelect
+								options={comparisonYearOptions}
+								selectedYears={selectedComparisonYears}
+								onChange={setSelectedComparisonYears}
 							/>
-						</div>
-						{isComparisonEligible && (
-							<div className="mt-3">
-								<h3 className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
-									<span>Vergleichsjahre:</span>
-									<HelpHint label="Vergleichsjahre" side="bottom">
-										Angeboten werden nur Jahre, für die im selben
-										Kalenderfenster tatsächlich Messdaten vorliegen (vergangene
-										wie kommende). Die gewählten Jahre werden zeitlich auf Ihren
-										aktuellen Zeitraum gelegt und als zusätzliche Linien im
-										Diagramm dargestellt.
-									</HelpHint>
-								</h3>
-								{comparisonYearOptions.length > 0 ? (
-									<>
-										<ComparisonYearSelect
-											options={comparisonYearOptions}
-											selectedYears={selectedComparisonYears}
-											onChange={setSelectedComparisonYears}
-										/>
-									</>
-								) : (
-									<p className="text-sm text-gray-500 italic">
-										Keine Vergleichsdaten vorhanden.
-									</p>
-								)}
-							</div>
+						) : (
+							<p className="text-sm text-gray-500 italic">
+								Keine Vergleichsdaten vorhanden.
+							</p>
 						)}
 					</div>
 
@@ -620,7 +543,6 @@ export default function DashboardClient() {
 							<ObjektSelect
 								selectedStreetObjekt={selectedObjekt}
 								onChange={setSelectedObjekt}
-								organisation={selectedOrganisation}
 							/>
 						</div>
 						<div className="mt-2">
@@ -648,109 +570,84 @@ export default function DashboardClient() {
 				</section>
 			</div>
 
-			{/* Baumübersicht: Box 1 = baumspezifisch, Box 2 = global (Wetter, Bewässerung) */}
+			{/* Tree overview: one tree directly, several trees as tabs */}
 			{selectedObjekt && selectedTree && selectedTree.length >= 1 && (
-				<>
-					<section className="mt-10">
-						<h2 className="text-2xl font-semibold text-gray-800 mb-4">
-							Baumübersicht: {selectedObjekt}
-						</h2>
-						<div className="bg-white border rounded-xl shadow p-6">
-							{selectedTree.length === 1 && treeOverview ? (
-								<TreeComponent
-									treeId={
-										treeId ?? treeOverview.baum_id ?? treeOverview.baum_nr ?? ''
-									}
-									istZustandData={
-										istZustandData
-											? {
-													cm30: istZustandData.cm30,
-													cm60: istZustandData.cm60,
-													cm90: istZustandData.cm90,
-												}
-											: undefined
-									}
-									sollZustandData={sollZustandData}
-									lastData={
-										chartData?.length
-											? parseGermanDate(chartData[chartData.length - 1].date)
-											: undefined
-									}
-									treeOverview={treeOverview}
-								/>
-							) : treeOverviews.length > 1 ? (
-								<Tabs defaultValue="0" className="w-full">
-									<TabsList className="flex w-full overflow-x-auto h-auto flex-wrap gap-1 bg-gray-100 p-1">
-										{treeOverviews.map((overview, idx) => {
-											const baumNr =
-												overview.baum ?? overview.baum_nr ?? `baum-${idx}`;
-											const label = `Baum ${baumNr}`;
-											return (
-												<TabsTrigger
-													key={`${overview.baum_id ?? baumNr}-${idx}`}
-													value={String(idx)}
-													className="shrink-0 data-[state=active]:bg-green-700 data-[state=active]:text-white"
-												>
-													{label}
-												</TabsTrigger>
-											);
-										})}
-									</TabsList>
+				<section className="mt-10">
+					<h2 className="text-2xl font-semibold text-gray-800 mb-4">
+						Baumübersicht: {selectedObjekt}
+					</h2>
+					<div className="bg-white border rounded-xl shadow p-6">
+						{selectedTree.length === 1 && treeOverview ? (
+							<TreeComponent
+								treeId={treeOverview.tree_id ?? ''}
+								istZustandData={
+									istZustandData
+										? {
+												cm30: istZustandData.cm30,
+												cm60: istZustandData.cm60,
+												cm90: istZustandData.cm90,
+											}
+										: undefined
+								}
+								sollZustandData={sollZustandData}
+								lastData={
+									chartData?.length
+										? parseGermanDate(chartData[chartData.length - 1].date)
+										: undefined
+								}
+								treeOverview={treeOverview}
+							/>
+						) : treeOverviews.length > 1 ? (
+							<Tabs defaultValue="0" className="w-full">
+								<TabsList className="flex w-full overflow-x-auto h-auto flex-wrap gap-1 bg-gray-100 p-1">
 									{treeOverviews.map((overview, idx) => {
-										const baumNr =
-											overview.baum ?? overview.baum_nr ?? `baum-${idx}`;
-										const rawIst = latestSensorPerTree[baumNr];
-										const istData = rawIst
-											? {
-													cm30: rawIst.cm30,
-													cm60: rawIst.cm60,
-													cm90: rawIst.cm90,
-												}
-											: undefined;
-										const sollData = sollZustandDataPerTree[baumNr];
-										const lastData = rawIst?.date
-											? parseGermanDate(rawIst.date)
-											: undefined;
+										const baumNr = overview.tree_number ?? `baum-${idx}`;
+										const label = `Baum ${baumNr}`;
 										return (
-											<TabsContent
-												key={`${overview.baum_id ?? baumNr}-${idx}`}
+											<TabsTrigger
+												key={`${overview.tree_id ?? baumNr}-${idx}`}
 												value={String(idx)}
-												className="mt-4"
+												className="shrink-0 data-[state=active]:bg-green-700 data-[state=active]:text-white"
 											>
-												<TreeSpecificContent
-													treeId={overview.baum_id ?? overview.baum_nr ?? ''}
-													treeOverview={overview}
-													istZustandData={istData}
-													sollZustandData={sollData}
-													lastData={lastData}
-													userOrg={userOrg}
-												/>
-											</TabsContent>
+												{label}
+											</TabsTrigger>
 										);
 									})}
-								</Tabs>
-							) : null}
-						</div>
-					</section>
-
-					{/* Eigenes Kasten: Wettervorhersage + Letzte Bewässerung (nicht baumspezifisch) */}
-					<section className="mt-6">
-						<h2 className="text-2xl font-semibold text-gray-800 mb-4">
-							Wetter & Bewässerung
-						</h2>
-						<div className="bg-white border rounded-xl shadow p-6">
-							<SharedSections
-								bezirk={(treeOverview ?? treeOverviews[0])?.bezirk ?? ''}
-								objekt={
-									(treeOverview ?? treeOverviews[0])?.objekt ??
-									selectedObjekt ??
-									''
-								}
-								userOrg={userOrg}
-							/>
-						</div>
-					</section>
-				</>
+								</TabsList>
+								{treeOverviews.map((overview, idx) => {
+									const baumNr = overview.tree_number ?? `baum-${idx}`;
+									const rawIst = latestSensorPerTree[baumNr];
+									const istData = rawIst
+										? {
+												cm30: rawIst.cm30,
+												cm60: rawIst.cm60,
+												cm90: rawIst.cm90,
+											}
+										: undefined;
+									const sollData = sollZustandDataPerTree[baumNr];
+									const lastData = rawIst?.date
+										? parseGermanDate(rawIst.date)
+										: undefined;
+									return (
+										<TabsContent
+											key={`${overview.tree_id ?? baumNr}-${idx}`}
+											value={String(idx)}
+											className="mt-4"
+										>
+											<TreeSpecificContent
+												treeId={overview.tree_id ?? ''}
+												treeOverview={overview}
+												istZustandData={istData}
+												sollZustandData={sollData}
+												lastData={lastData}
+											/>
+										</TabsContent>
+									);
+								})}
+							</Tabs>
+						) : null}
+					</div>
+				</section>
 			)}
 		</main>
 	);

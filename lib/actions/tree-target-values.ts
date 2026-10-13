@@ -1,7 +1,6 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { isPalmengartenTree } from '@/lib/utils';
 
 /** Row of `irrigation_targets_by_age`, limited to the columns read here. */
 interface IrrigationTargetRow {
@@ -18,77 +17,45 @@ export interface TreeWithTargetValues {
 }
 
 /**
- * Get target values (Sollwerte) for a tree based on its characteristics
- * - For GFA trees (bezirk !== 'Palmengarten'): uses standalter from bewaesserungsstrategien_gfa
- * - For Palmengarten trees (bezirk === 'Palmengarten'): uses objekt from bewaesserungsstrategien_pg
+ * Get the target values for one tree from `irrigation_targets_by_age` via its
+ * `tree_site_age`. Trees without a site age or without a matching target row
+ * get null values.
  */
 export async function getTreeTargetValues(tree: {
-	bezirk?: string | null;
-	standalter?: number | null;
-	objekt?: string | null;
+	tree_site_age?: number | null;
 }): Promise<TreeWithTargetValues> {
-	const supabase = await createClient();
-
 	const defaultValues: TreeWithTargetValues = {
 		target_30cm: null,
 		target_60cm: null,
 		target_90cm: null,
 	};
 
-	try {
-		if (isPalmengartenTree(tree.bezirk)) {
-			// Palmengarten tree - use objekt to look up in bewaesserungsstrategien_pg
-			if (!tree.objekt) {
-				console.warn('Palmengarten tree missing objekt field');
-				return defaultValues;
-			}
-
-			const { data, error } = await supabase
-				.from('bewaesserungsstrategien_pg')
-				.select('strategie_30cm_max, strategie_60cm_max, strategie_90cm_max')
-				.eq('objekt', tree.objekt)
-				.single();
-
-			if (error) {
-				console.warn(
-					`No strategy found for Palmengarten objekt: ${tree.objekt}`,
-				);
-				return defaultValues;
-			}
-
-			return {
-				target_30cm: data.strategie_30cm_max,
-				target_60cm: data.strategie_60cm_max,
-				target_90cm: data.strategie_90cm_max,
-			};
-		}
-
-		// GFA tree - use standalter to look up in bewaesserungsstrategien_gfa
-		if (tree.standalter === null || tree.standalter === undefined) {
-			console.warn('GFA tree missing standalter field');
-			return defaultValues;
-		}
-
-		const { data, error } = await supabase
-			.from('bewaesserungsstrategien_gfa')
-			.select('strategie_30cm_max, strategie_60cm_max, strategie_90cm_max')
-			.eq('standalter', tree.standalter)
-			.single();
-
-		if (error) {
-			console.warn(`No strategy found for GFA standalter: ${tree.standalter}`);
-			return defaultValues;
-		}
-
-		return {
-			target_30cm: data.strategie_30cm_max,
-			target_60cm: data.strategie_60cm_max,
-			target_90cm: data.strategie_90cm_max,
-		};
-	} catch (error) {
-		console.error('Error fetching tree target values:', error);
+	if (tree.tree_site_age === null || tree.tree_site_age === undefined) {
 		return defaultValues;
 	}
+
+	const supabase = await createClient();
+
+	const { data, error } = await supabase
+		.from('irrigation_targets_by_age')
+		.select('target_max_30cm, target_max_60cm, target_max_90cm')
+		.eq('tree_site_age', tree.tree_site_age)
+		.maybeSingle();
+
+	// A failed lookup is not fatal: the tree is still shown, without targets.
+	if (error) {
+		console.error(`Fehler in getTreeTargetValues: ${error.message}`);
+		return defaultValues;
+	}
+	if (!data) {
+		return defaultValues;
+	}
+
+	return {
+		target_30cm: data.target_max_30cm,
+		target_60cm: data.target_max_60cm,
+		target_90cm: data.target_max_90cm,
+	};
 }
 
 /**

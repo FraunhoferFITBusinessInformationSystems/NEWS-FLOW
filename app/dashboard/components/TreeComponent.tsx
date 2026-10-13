@@ -1,17 +1,14 @@
 'use client';
 
 /**
- * TreeComponent: Wrapper für Single-Tree-Ansicht.
- * Zeigt nur TreeSpecificContent (Zustand, Baumdaten, Notizen, Neue Notiz).
- * SharedSections (Wetter, Bewässerung) werden separat in eigenem Kasten gerendert.
+ * TreeComponent: wrapper for the single-tree view.
+ * Shows TreeSpecificContent (state, tree data, notes, new note).
  */
 import type {
 	IstZustandData,
 	SollZustandData,
 	TreeOverview,
 } from '@/lib/types/dashboard';
-import { useEffect, useState } from 'react';
-import { getUserOrganisation } from '../action';
 import TreeSpecificContent from './TreeSpecificContent';
 
 interface TreeComponentProps {
@@ -29,12 +26,6 @@ export default function TreeComponent({
 	lastData,
 	treeOverview,
 }: TreeComponentProps) {
-	const [userOrg, setUserOrg] = useState('');
-
-	useEffect(() => {
-		getUserOrganisation().then(setUserOrg);
-	}, []);
-
 	if (!treeOverview) return null;
 
 	return (
@@ -45,7 +36,6 @@ export default function TreeComponent({
 				istZustandData={istZustandData}
 				sollZustandData={sollZustandData}
 				lastData={lastData}
-				userOrg={userOrg}
 			/>
 		</div>
 	);
