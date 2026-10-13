@@ -4,7 +4,7 @@
 
 import type { SoilMoistureDataPoint } from '@/lib/types/dashboard';
 
-/** Raw sensor row from v_soilmoisture_with_mapping (fields used by transformSensorData). */
+/** Raw sensor row from v_soil_moisture_readings_mapped (fields used by transformSensorData). */
 export type RawSensorRow = {
 	measured_at: string;
 	kpa_ch1: number | null;
