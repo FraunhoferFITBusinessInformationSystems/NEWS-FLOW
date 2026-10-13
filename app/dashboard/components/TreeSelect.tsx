@@ -1,8 +1,9 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import Select, { type MultiValue, type ActionMeta } from 'react-select';
-import { getDistinctBaumIdsByObjekt } from '../action';
+import { getDistinctTreeNumbersBySite } from '../action';
 
 interface TreeSelectProps {
 	objekt: string | undefined;
@@ -29,7 +30,7 @@ export default function TreeSelect({
 
 	useEffect(() => {
 		if (objekt) {
-			getDistinctBaumIdsByObjekt(objekt).then((data) => {
+			getDistinctTreeNumbersBySite(objekt).then((data) => {
 				const newOptions = data.map((id) => ({
 					value: id, // Keep as string since data is now string[]
 					label: id, // Keep as string since data is now string[]
@@ -111,14 +112,15 @@ export default function TreeSelect({
 			/>
 
 			<div className="flex items-center justify-between">
-				<button
+				<Button
 					type="button"
+					variant="outline"
+					size="sm"
 					onClick={handleSelectAll}
-					className={`px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 
-            ${allSelected ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}`}
+					disabled={!objekt || options.length === 0}
 				>
 					{allSelected ? 'Alle abwählen' : 'Alle auswählen'}
-				</button>
+				</Button>
 			</div>
 		</div>
 	);

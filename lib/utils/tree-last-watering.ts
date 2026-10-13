@@ -96,8 +96,8 @@ export function hasRecordedLastWatering(
 }
 
 /**
- * `last_watering_at` from `v_soilmoisture_latest_earliest_per_sensor_copy`. Blue dot when set and
- * inside the same window as {@link getRecentWateringWindowStart}.
+ * `recently_irrigated_at` from `v_soil_moisture_latest_earliest_per_sensor`. Blue dot when set and
+ * inside the same window as {@link getRecentWateringWindowStart}. Always null in this build.
  */
 export function isRecentCompletedWateringAt(
 	lastWateringAt: string | null | undefined,

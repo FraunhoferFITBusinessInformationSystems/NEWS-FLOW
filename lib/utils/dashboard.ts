@@ -4,14 +4,17 @@
 
 import type { SoilMoistureDataPoint } from '@/lib/types/dashboard';
 
-/** Raw sensor row from v_soil_moisture_readings_mapped (fields used by transformSensorData). */
-export type RawSensorRow = {
+/**
+ * Raw sensor row from v_soil_moisture_readings_mapped, limited to the fields
+ * transformSensorData reads. Rows with more fields (e.g. SoilMoistureReading)
+ * are accepted as they are.
+ */
+export interface RawSensorRow {
 	measured_at: string;
 	kpa_ch1: number | null;
 	kpa_ch2: number | null;
 	kpa_ch3: number | null;
-	[key: string]: unknown;
-};
+}
 
 /**
  * Groups sensor rows by date (DD.MM.YYYY) and returns averaged kPa per depth.
@@ -35,7 +38,7 @@ export function transformSensorData(
 
 	const result: SoilMoistureDataPoint[] = Object.entries(grouped).map(
 		([date, entries]) => {
-			const avg = (field: keyof RawSensorRow) => {
+			const avg = (field: 'kpa_ch1' | 'kpa_ch2' | 'kpa_ch3') => {
 				const validValues = entries
 					.map((cur) => cur[field])
 					.filter(

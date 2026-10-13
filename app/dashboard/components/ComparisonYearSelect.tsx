@@ -47,13 +47,20 @@ export default function ComparisonYearSelect({
 
 	if (!isClient) {
 		return (
-			<div className="w-full h-[42px] rounded border bg-gray-100 animate-pulse" />
+			<div className="flex flex-col gap-2">
+				<span className="text-sm text-gray-600">Jahre:</span>
+				<div className="w-full h-[42px] rounded border bg-gray-100 animate-pulse" />
+			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-1">
+		<div className="flex flex-col gap-2">
+			<label htmlFor="comparison-year-select" className="text-sm text-gray-600">
+				Jahre:
+			</label>
 			<Select
+				inputId="comparison-year-select"
 				isMulti
 				options={options}
 				value={normalizedSelected}
@@ -81,7 +88,7 @@ export default function ComparisonYearSelect({
 			/>
 
 			{selectedYears.length >= 3 && (
-				<p className="text-sm text-gray-500 mt-1">
+				<p className="text-sm text-gray-500">
 					Sie können maximal 3 Vergleichsjahre auswählen.
 				</p>
 			)}

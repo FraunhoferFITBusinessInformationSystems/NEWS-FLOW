@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+/** Earliest selectable date (YYYY-MM-DD); no readings exist before it. */
+const MIN_DATE = '2000-01-01';
+
 interface Props {
 	startDate?: string;
 	endDate?: string;
@@ -41,6 +44,13 @@ export default function DateRangePicker({
 	const [localEnd, setLocalEnd] = useState(formatForInput(endDate));
 	const focusedField = useRef<'start' | 'end' | null>(null);
 
+	// Readings cannot lie in the future, so today is the latest selectable date.
+	// A max with a four-digit year also stops the browser from accepting longer
+	// years. Start and end limit each other, so start can never be after end.
+	const today = formatForInput(new Date().toISOString());
+	const maxStart = localEnd || today;
+	const minEnd = localStart || MIN_DATE;
+
 	useEffect(() => {
 		if (focusedField.current === 'start' || !startDate) return;
 		setLocalStart(formatForInput(startDate));
@@ -59,6 +69,8 @@ export default function DateRangePicker({
 			<input
 				id="start-date"
 				type="date"
+				min={MIN_DATE}
+				max={maxStart}
 				className="border border-gray-300 bg-white p-2.5 rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				value={localStart}
 				onFocus={() => {
@@ -73,15 +85,8 @@ export default function DateRangePicker({
 					const newStart = e.target.value;
 					if (!newStart) return;
 					setLocalStart(newStart);
-					const d = new Date(newStart);
-					if (
-						d.getFullYear() < 2000 ||
-						d.getMonth() + 1 < 1 ||
-						d.getMonth() + 1 > 12 ||
-						d.getDate() < 1 ||
-						d.getDate() > 31
-					)
-						return;
+					// YYYY-MM-DD strings compare correctly as text.
+					if (newStart < MIN_DATE || newStart > maxStart) return;
 					const startTimestamp = formatForQuery(newStart, false);
 					const endTimestamp = localEnd ? formatForQuery(localEnd, true) : '';
 					if (startTimestamp && endTimestamp) {
@@ -96,6 +101,8 @@ export default function DateRangePicker({
 			<input
 				id="end-date"
 				type="date"
+				min={minEnd}
+				max={today}
 				className="border border-gray-300 bg-white p-2.5 rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				value={localEnd}
 				onFocus={() => {
@@ -110,15 +117,7 @@ export default function DateRangePicker({
 					const newEnd = e.target.value;
 					if (!newEnd) return;
 					setLocalEnd(newEnd);
-					const d = new Date(newEnd);
-					if (
-						d.getFullYear() < 2000 ||
-						d.getMonth() + 1 < 1 ||
-						d.getMonth() + 1 > 12 ||
-						d.getDate() < 1 ||
-						d.getDate() > 31
-					)
-						return;
+					if (newEnd < minEnd || newEnd > today) return;
 					const startTimestamp = localStart
 						? formatForQuery(localStart, false)
 						: '';
