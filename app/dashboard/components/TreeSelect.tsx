@@ -55,7 +55,7 @@ export default function TreeSelect({
 	return (
 		<div className="flex flex-col gap-2">
 			<label htmlFor="tree-select" className="text-sm text-gray-600">
-				Baum:
+				Baum-Nr.:
 			</label>
 			<Combobox
 				multiple
