@@ -35,9 +35,9 @@ function subtractCalendarDaysFromStartOfDay(
 }
 
 /**
- * Inclusive lower bound for “kürzlich bewässert” (blauer Punkt): local midnight on the
+ * Inclusive lower bound for "recently irrigated" (blue dot): local midnight on the
  * 4th calendar day before today, so the window covers today and the four previous days
- * (e.g. heute 01.04.26 → ab 28.03.26 00:00 lokal).
+ * (e.g. today 01.04.26 → from 28.03.26 00:00 local time).
  */
 export function getRecentWateringWindowStart(
 	referenceNow: Date = new Date(),

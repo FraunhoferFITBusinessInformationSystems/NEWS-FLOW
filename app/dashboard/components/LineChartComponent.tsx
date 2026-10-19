@@ -29,7 +29,7 @@ interface LineChartComponentProps {
 	comparisonSeries?: ComparisonSeriesItem[];
 }
 
-/** Hauptserie (ohne Vergleich): ursprüngliche Farben beibehalten. */
+/** Main series (without comparison): keeps the original colours. */
 const DEPTH_COLORS = {
 	cm30: '#3B82F6',
 	cm60: '#10B981',
@@ -37,24 +37,24 @@ const DEPTH_COLORS = {
 } as const;
 
 /**
- * Vergleichslinien: feste Farbfamilie pro Mess-Tiefe. Wir verwenden ausschließlich
- * bereits im Projekt genutzte Vergleichsfarben (ohne die Hauptserienfarben) und ordnen
- * sie als 4-stufigen Verlauf von dunkel → hell an. Die eigentliche Zuordnung pro Jahr
- * erfolgt dynamisch in Abhängigkeit von der Anzahl gewählter Vergleichsjahre.
+ * Comparison lines: a fixed colour family per measuring depth. Only comparison
+ * colours already used in the project are used (none of the main series
+ * colours), arranged as a 4-step gradient from dark to light. Which step a year
+ * gets depends on the number of selected comparison years.
  */
 const COMPARISON_DEPTH_GRADIENT_COLORS: Record<
 	DepthKey,
 	readonly [string, string, string, string]
 > = {
-	// 30 cm: bestehende Vergleichs-Blautöne, ohne Überschneidung mit der Hauptserie
+	// 30 cm: blue comparison shades, none shared with the main series
 	cm30: ['#1E3A8A', '#0369A1', '#38BDF8', '#2DD4BF'],
-	// 60 cm: bestehende Vergleichs-Grüntöne, ohne Überschneidung mit der Hauptserie
+	// 60 cm: green comparison shades, none shared with the main series
 	cm60: ['#14532D', '#15803D', '#65A30D', '#A3E635'],
-	// 90 cm: bestehende Warmtöne, ohne Überschneidung mit der Hauptserie
+	// 90 cm: warm shades, none shared with the main series
 	cm90: ['#DC2626', '#EA580C', '#EC4899', '#FB7185'],
 };
 
-/** Einheitliche Strichelung für alle Vergleichslinien — Farbe ist Hauptunterscheidung. */
+/** Same dash pattern for all comparison lines; colour is what tells them apart. */
 const COMPARISON_DASH = '6 4' as const;
 
 type DepthKey = keyof typeof DEPTH_COLORS;
@@ -67,30 +67,31 @@ function getComparisonLineColor(
 	const palette = COMPARISON_DEPTH_GRADIENT_COLORS[depthKey];
 	const totalYears = Math.max(1, Math.min(comparisonYearCount, 4));
 
-	// Ältestes Jahr soll innerhalb der genutzten Stufen den hellsten, das jüngste den
-	// dunkelsten Ton bekommen. Die hellste Stufe (Index 3) wird nur bei >= 4 Jahren benutzt.
+	// Within the steps in use, the oldest year gets the lightest shade and the
+	// newest the darkest. The lightest step (index 3) is only used from 4 years on.
 	let indexFromOldest: number;
 	switch (totalYears) {
 		case 1: {
-			// Nur der dunkelste Ton.
+			// Only the darkest shade.
 			indexFromOldest = 0;
 			break;
 		}
 		case 2: {
-			// Zwei dunklere Töne.
+			// The two darker shades.
 			const mapping = [1, 0] as const;
 			indexFromOldest = mapping[yearIndex] ?? mapping[mapping.length - 1];
 			break;
 		}
 		case 3: {
-			// Drei Töne, aber noch nicht der allerdhellste:
-			// nutzen Stufen 0–2 und verteilen hell → dunkel.
+			// Three shades, but not yet the lightest one:
+			// steps 0–2, from light to dark.
 			const mapping = [2, 1, 0] as const;
 			indexFromOldest = mapping[yearIndex] ?? mapping[mapping.length - 1];
 			break;
 		}
 		default: {
-			// Ab 4 Jahren: voller Verlauf (Index 0–3), ältestes = hellstes (3), jüngstes = dunkelstes (0).
+			// From 4 years on: full gradient (index 0–3), oldest = lightest (3),
+			// newest = darkest (0).
 			const mapping = [3, 2, 1, 0] as const;
 			const safeIndex =
 				yearIndex >= mapping.length ? mapping.length - 1 : yearIndex;
@@ -111,8 +112,9 @@ function depthKeyFromDataKey(dataKey: string | undefined): DepthKey | null {
 }
 
 /**
- * Tooltip/Legende-Logik: 30 → 60 → 90, innerhalb jeder Tiefe nach Kalenderjahr absteigend
- * (Hauptserie nutzt dasselbe Sortierjahr wie der gewählte Hauptzeitraum).
+ * Sort order for tooltip and legend: 30 → 60 → 90, and within each depth by
+ * calendar year, descending (the main series sorts by the year of the selected
+ * main period).
  */
 function tooltipSeriesSortKey(
 	dataKey: string,
@@ -129,7 +131,7 @@ function tooltipSeriesSortKey(
 	return [99, 0];
 }
 
-/** Einmal pro merged chart table: welche dataKeys haben mindestens einen endlichen Zahlenwert. */
+/** Computed once per merged chart table: the dataKeys with at least one finite number. */
 function buildDataKeysWithPoints(rows: Record<string, unknown>[]): Set<string> {
 	const s = new Set<string>();
 	for (const row of rows) {
@@ -150,8 +152,9 @@ const defaultVisibleDepths: VisibleDepths = {
 };
 
 /**
- * Gleiche Struktur wie Recharts-Standard-Tooltip (DefaultTooltipContent), plus Filter/Sortierung
- * nach sichtbaren Tiefen — für Hauptserie und Vergleich identisch.
+ * Same structure as the default Recharts tooltip (DefaultTooltipContent), plus
+ * filtering and sorting by visible depths; identical for main series and
+ * comparison.
  */
 function SoilMoistureTooltipBody(
 	props: TooltipProps<number, string> & {
@@ -285,7 +288,7 @@ export default function LineChartComponent({
 		[startDate, endDate],
 	);
 
-	/** Sortierte Vergleichsjahre für stabile Farben / Legende. */
+	/** Sorted comparison years, so colours and legend stay stable. */
 	const comparisonSorted = useMemo(
 		() => [...comparisonSeries].sort((a, b) => a.year - b.year),
 		[comparisonSeries],
@@ -394,13 +397,16 @@ export default function LineChartComponent({
 		return formatYearLabel(y, isCrossYearRange);
 	}, [startDate, isCrossYearRange]);
 
-	/** Gleiches Basisjahr wie die Hauptserie-Bezeichnung — für Tooltip-Sortierung nach Jahr. */
+	/** Same base year as the main series label; used to sort the tooltip by year. */
 	const mainPeriodSortYear = useMemo(() => {
 		if (!startDate) return new Date().getFullYear();
 		return new Date(startDate).getFullYear();
 	}, [startDate]);
 
-	/** Nur für Render-Reihenfolge (Legende): Vergleichsjahre absteigend — Farben/Merge nutzen weiter ascending. */
+	/**
+	 * Render order only (legend): comparison years descending. Colours and the
+	 * data merge still use ascending order.
+	 */
 	const comparisonSortedDesc = useMemo(
 		() => [...comparisonSorted].sort((a, b) => b.year - a.year),
 		[comparisonSorted],

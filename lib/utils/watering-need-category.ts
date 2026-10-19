@@ -35,8 +35,8 @@ export const WATERING_NEED_LABEL_DE: Record<TreeMapPinColor, string> = {
 };
 
 /**
- * Derives the same map pin color / Bewässerungsbedarf category as the overview map
- * (`assignIcon` in mapComponent): sensor age (2 calendar days), then worst depth vs. Soll.
+ * Derives the same map pin color / irrigation need category as the overview map
+ * (`assignIcon` in mapComponent): sensor age (2 calendar days), then worst depth vs. target.
  */
 export function getWateringNeedCategory(
 	input: WateringNeedCategoryInput,

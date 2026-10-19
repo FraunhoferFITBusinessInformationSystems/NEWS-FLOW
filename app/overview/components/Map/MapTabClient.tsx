@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
-// Dynamischer Import von Leaflet mit deaktiviertem SSR
+// Leaflet needs `window`, so the map is imported dynamically without SSR
 const MapComponent = dynamic(() => import('./mapComponent'), { ssr: false });
 
 export default function MapTabClient() {
