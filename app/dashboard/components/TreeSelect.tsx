@@ -17,36 +17,36 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import { getDistinctTreeNumbersBySite } from '../action';
 
 interface TreeSelectProps {
-	objekt: string | undefined;
+	site: string | undefined;
 	onChange: Dispatch<SetStateAction<string[] | undefined>>;
-	selectedBaum?: string[];
+	selectedTrees?: string[];
 }
 
 export default function TreeSelect({
-	objekt,
+	site,
 	onChange,
-	selectedBaum = [],
+	selectedTrees = [],
 }: TreeSelectProps) {
 	const [options, setOptions] = useState<string[]>([]);
 	// Positions the dropdown under the whole chip field, not only the text input.
 	const anchor = useComboboxAnchor();
 
 	useEffect(() => {
-		if (objekt) {
-			getDistinctTreeNumbersBySite(objekt).then(setOptions);
+		if (site) {
+			getDistinctTreeNumbersBySite(site).then(setOptions);
 		} else {
 			setOptions([]);
 			onChange([]);
 		}
-	}, [objekt, onChange]);
+	}, [site, onChange]);
 
 	// Only tree numbers that exist for the current site count as selected.
-	const selectedTreeNumbers = options.filter((treeNumber) =>
-		selectedBaum.includes(treeNumber),
+	const validSelectedTrees = options.filter((treeNumber) =>
+		selectedTrees.includes(treeNumber),
 	);
-	const isDisabled = !objekt || options.length === 0;
+	const isDisabled = !site || options.length === 0;
 	const allSelected =
-		selectedTreeNumbers.length === options.length && options.length > 0;
+		validSelectedTrees.length === options.length && options.length > 0;
 
 	function handleSelectAll() {
 		onChange(allSelected ? [] : options);
@@ -60,7 +60,7 @@ export default function TreeSelect({
 			<Combobox
 				multiple
 				items={options}
-				value={selectedTreeNumbers}
+				value={validSelectedTrees}
 				onValueChange={(values: string[]) => onChange(values)}
 				disabled={isDisabled}
 			>

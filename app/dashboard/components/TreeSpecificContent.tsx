@@ -32,8 +32,8 @@ import {
 } from '../action';
 
 import type {
-	IstZustandData,
-	SollZustandData,
+	CurrentValues,
+	TargetValues,
 	TreeNote,
 	TreeOverview,
 } from '@/lib/types/dashboard';
@@ -41,8 +41,8 @@ import type {
 interface TreeSpecificContentProps {
 	treeId: string;
 	treeOverview: TreeOverview;
-	istZustandData?: IstZustandData;
-	sollZustandData?: SollZustandData;
+	currentValues?: CurrentValues;
+	targetValues?: TargetValues;
 	lastData?: Date;
 }
 
@@ -69,8 +69,8 @@ function InfoPair({
 export default function TreeSpecificContent({
 	treeId,
 	treeOverview,
-	istZustandData,
-	sollZustandData,
+	currentValues,
+	targetValues,
 	lastData,
 }: TreeSpecificContentProps) {
 	const depths = [30, 60, 90];
@@ -116,7 +116,7 @@ export default function TreeSpecificContent({
 
 	return (
 		<div className="space-y-6 min-w-0 flex-shrink-0 w-full">
-			{/* Zustand */}
+			{/* Current vs. target state */}
 			<div>
 				<h3 className="text-2xl font-bold mb-5 text-green-900 flex items-center gap-2">
 					<Droplet className="w-6 h-6 text-green-700" />
@@ -133,10 +133,10 @@ export default function TreeSpecificContent({
 						</thead>
 						<tbody>
 							{depths.map((depth, index) => {
-								const key = `cm${depth}` as keyof SollZustandData;
-								const ist = istZustandData?.[key];
-								const soll = sollZustandData?.[key];
-								const bgColor = getStatusColor(ist, soll);
+								const key = `cm${depth}` as keyof TargetValues;
+								const current = currentValues?.[key];
+								const target = targetValues?.[key];
+								const bgColor = getStatusColor(current, target);
 								return (
 									<tr key={depth} className="text-white font-medium">
 										<td
@@ -149,15 +149,15 @@ export default function TreeSpecificContent({
 											className="px-4 py-2"
 											style={{ backgroundColor: bgColor }}
 										>
-											{ist !== undefined && ist !== null
-												? `${ist.toFixed(1)}`
+											{current !== undefined && current !== null
+												? `${current.toFixed(1)}`
 												: 'n/a'}
 										</td>
 										<td
 											className={`px-4 py-2 ${index === 0 ? 'rounded-tr-xl' : ''} ${index === depths.length - 1 ? 'rounded-br-xl' : ''}`}
 											style={{ backgroundColor: bgColor }}
 										>
-											{soll ? `${soll}` : '–'}
+											{target ? `${target}` : '–'}
 										</td>
 									</tr>
 								);
@@ -178,7 +178,7 @@ export default function TreeSpecificContent({
 				)}
 			</div>
 
-			{/* Baumdaten */}
+			{/* Tree data */}
 			<div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 shadow-inner">
 				<h3 className="text-2xl font-bold mb-6 text-green-900 flex items-center gap-2">
 					<TreeDeciduous className="w-6 h-6 text-green-700" />
@@ -193,7 +193,7 @@ export default function TreeSpecificContent({
 						/>
 						<InfoPair
 							icon={<Home className="text-green-600 w-4 h-4" />}
-							label="Objekt"
+							label="Ort"
 							value={treeOverview.site ?? '–'}
 						/>
 						<InfoPair

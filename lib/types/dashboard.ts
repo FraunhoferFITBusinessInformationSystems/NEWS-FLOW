@@ -10,15 +10,15 @@ export type SoilMoistureDataPoint = {
 	cm90: number | null;
 };
 
-/** Target (Soll) values per depth in kPa. */
-export type SollZustandData = {
+/** Target values per depth in kPa. */
+export type TargetValues = {
 	cm30: number;
 	cm60: number;
 	cm90: number;
 };
 
-/** Actual (Ist) sensor values per depth in kPa — individual depths may be null when sensor data is missing. */
-export type IstZustandData = {
+/** Current sensor values per depth in kPa — individual depths may be null when sensor data is missing. */
+export type CurrentValues = {
 	cm30: number | null;
 	cm60: number | null;
 	cm90: number | null;

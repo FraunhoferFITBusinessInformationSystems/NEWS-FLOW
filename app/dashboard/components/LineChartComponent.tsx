@@ -3,7 +3,7 @@
 import type {
 	ComparisonSeriesItem,
 	SoilMoistureDataPoint,
-	SollZustandData,
+	TargetValues,
 } from '@/lib/types/dashboard';
 import { parseGermanDate } from '@/lib/utils/dashboard';
 import { useCallback, useMemo, useState } from 'react';
@@ -25,7 +25,7 @@ interface LineChartComponentProps {
 	data: SoilMoistureDataPoint[];
 	startDate?: string;
 	endDate?: string;
-	sollZustandData?: SollZustandData;
+	targetValues?: TargetValues;
 	comparisonSeries?: ComparisonSeriesItem[];
 }
 
@@ -249,7 +249,7 @@ export default function LineChartComponent({
 	data,
 	startDate,
 	endDate,
-	sollZustandData,
+	targetValues,
 	comparisonSeries = [],
 }: LineChartComponentProps) {
 	const [showThresholds, setShowThresholds] = useState(true);
@@ -257,9 +257,9 @@ export default function LineChartComponent({
 		useState<VisibleDepths>(defaultVisibleDepths);
 
 	const thresholds = useMemo(() => {
-		if (!sollZustandData) return [];
-		return Object.values(sollZustandData);
-	}, [sollZustandData]);
+		if (!targetValues) return [];
+		return Object.values(targetValues);
+	}, [targetValues]);
 
 	const filterByDateRange = useCallback(
 		(arr: SoilMoistureDataPoint[]) => {

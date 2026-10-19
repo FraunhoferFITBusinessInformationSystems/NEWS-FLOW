@@ -380,7 +380,7 @@ export default function MapComponent() {
 						type="button"
 						onClick={() =>
 							router.push(
-								`/dashboard?id=${tree.tree_id}&objekt=${encodeURIComponent(tree.site ?? '')}&baum=${encodeURIComponent(tree.tree_number ?? '')}`,
+								`/dashboard?site=${encodeURIComponent(tree.site ?? '')}&trees=${encodeURIComponent(tree.tree_number ?? '')}`,
 							)
 						}
 						className="mt-2 block w-full rounded-lg bg-green-600 px-4 py-2 text-white text-sm font-medium hover:bg-green-700 active:bg-green-800 transition shadow-md hover:shadow-lg"

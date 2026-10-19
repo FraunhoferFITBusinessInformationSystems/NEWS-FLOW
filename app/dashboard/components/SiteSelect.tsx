@@ -11,15 +11,15 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { getDistinctSites } from '../action';
 
-interface ObjektSelectProps {
+interface SiteSelectProps {
 	onChange: (value: string) => void;
-	selectedStreetObjekt?: string;
+	selectedSite?: string;
 }
 
-export default function ObjektSelect({
+export default function SiteSelect({
 	onChange,
-	selectedStreetObjekt,
-}: ObjektSelectProps) {
+	selectedSite,
+}: SiteSelectProps) {
 	const [options, setOptions] = useState<string[]>([]);
 	const [selected, setSelected] = useState<string | null>(null);
 
@@ -39,15 +39,15 @@ export default function ObjektSelect({
 					setTimeout(() => onChangeRef.current(''), 0);
 					return null;
 				}
-				// Wenn ein Objekt vorausgewählt werden soll und auch verfügbar ist
-				if (selectedStreetObjekt && data.includes(selectedStreetObjekt)) {
-					setTimeout(() => onChangeRef.current(selectedStreetObjekt), 0);
-					return selectedStreetObjekt;
+				// Preselect the requested site if it is available
+				if (selectedSite && data.includes(selectedSite)) {
+					setTimeout(() => onChangeRef.current(selectedSite), 0);
+					return selectedSite;
 				}
 				return currentSelected;
 			});
 		});
-	}, [selectedStreetObjekt]);
+	}, [selectedSite]);
 
 	const handleValueChange = (value: string | null) => {
 		setSelected(value);

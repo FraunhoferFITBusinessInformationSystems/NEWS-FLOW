@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LineChartComponent from './components/LineChartComponent';
-import ObjektSelect from './components/ObjektSelect';
+import SiteSelect from './components/SiteSelect';
 import TreeComponent from './components/TreeComponent';
 import './styles.css';
 import DateRangePicker from '@/components/features/datePicker/DatePicker';
@@ -18,7 +18,7 @@ import type {
 	LatestSensorPerTree,
 	SoilMoistureDataPoint,
 	SoilMoistureReading,
-	SollZustandData,
+	TargetValues,
 	TreeOverview,
 } from '@/lib/types/dashboard';
 import {
@@ -37,25 +37,23 @@ import TreeSpecificContent from './components/TreeSpecificContent';
 
 export default function DashboardClient() {
 	const searchParams = useSearchParams();
-	const selectedStreetObjekt = searchParams.get('objekt');
-	const selectedBaumNumber = searchParams.get('baum');
+	const siteParam = searchParams.get('site');
+	const treesParam = searchParams.get('trees');
 
 	const [startDate, setStartDate] = useState<string | undefined>();
 	const [endDate, setEndDate] = useState<string | undefined>();
 	const [manuallySetDate, setManuallySetDate] = useState(false);
-	const [selectedObjekt, setSelectedObjekt] = useState<string | undefined>();
+	const [selectedSite, setSelectedSite] = useState<string | undefined>();
 	const [selectedTree, setSelectedTree] = useState<string[] | undefined>();
 	const [chartData, setChartData] = useState<SoilMoistureDataPoint[]>([]);
 	const [treeOverview, setTreeOverview] = useState<TreeOverview | null>(null);
 	const [treeOverviews, setTreeOverviews] = useState<TreeOverview[]>([]);
 	const [latestSensorPerTree, setLatestSensorPerTree] =
 		useState<LatestSensorPerTree>({});
-	const [sollZustandDataPerTree, setSollZustandDataPerTree] = useState<
-		Record<string, SollZustandData>
+	const [targetValuesPerTree, setTargetValuesPerTree] = useState<
+		Record<string, TargetValues>
 	>({});
-	const [sollZustandData, setSollZustandData] = useState<
-		SollZustandData | undefined
-	>();
+	const [targetValues, setTargetValues] = useState<TargetValues | undefined>();
 	const [comparisonYearOptions, setComparisonYearOptions] = useState<
 		ComparisonYearOption[]
 	>([]);
@@ -66,59 +64,58 @@ export default function DashboardClient() {
 		Record<number, SoilMoistureDataPoint[]>
 	>({});
 
-	const objektSetCount = useRef(0); // Tracks how many times the object has been changed
+	const siteChangeCount = useRef(0); // Tracks how many times the site has been changed
 
-	// Most recent chart entry (aggregiert über Zeitraum)
-	const istZustandData =
+	// Most recent chart entry (aggregated over the selected trees)
+	const currentValues =
 		chartData.length > 0 ? chartData[chartData.length - 1] : undefined;
 
 	useEffect(() => {
 		if (!treeOverview) return;
 
 		getTreeTargetValues(treeOverview)
-			.then((targetValues) => {
+			.then((treeTargets) => {
 				// Only set data if all values are available
 				if (
-					targetValues.target_30cm !== null &&
-					targetValues.target_60cm !== null &&
-					targetValues.target_90cm !== null
+					treeTargets.target_30cm !== null &&
+					treeTargets.target_60cm !== null &&
+					treeTargets.target_90cm !== null
 				) {
-					const changedData: SollZustandData = {
-						cm30: targetValues.target_30cm,
-						cm60: targetValues.target_60cm,
-						cm90: targetValues.target_90cm,
-					};
-					setSollZustandData(changedData);
+					setTargetValues({
+						cm30: treeTargets.target_30cm,
+						cm60: treeTargets.target_60cm,
+						cm90: treeTargets.target_90cm,
+					});
 				} else {
-					setSollZustandData(undefined);
+					setTargetValues(undefined);
 				}
 			})
 			.catch((err: unknown) => {
 				console.error('Error loading tree target values:', err);
-				setSollZustandData(undefined);
+				setTargetValues(undefined);
 			});
 	}, [treeOverview]);
 
-	// Read selected trees from URL query string (e.g. baum=1,2,3)
+	// Read selected trees from URL query string (e.g. trees=1,2,3)
 	useEffect(() => {
-		if (selectedBaumNumber) {
-			const baumNrs = selectedBaumNumber
+		if (treesParam) {
+			const treeNumbers = treesParam
 				.split(',')
 				.map((s) => s.trim())
 				.filter((s) => s.length > 0);
-			setSelectedTree(baumNrs);
+			setSelectedTree(treeNumbers);
 		} else {
 			setSelectedTree(undefined);
 		}
-	}, [selectedBaumNumber]);
+	}, [treesParam]);
 
-	// Fetch tree overview(s): Single = 1 Overview, Multi = alle Overviews
+	// Fetch tree overview(s): one overview for a single tree, all overviews for several
 	useEffect(() => {
-		if (!selectedObjekt || !selectedTree || selectedTree.length === 0) return;
+		if (!selectedSite || !selectedTree || selectedTree.length === 0) return;
 
 		if (selectedTree.length === 1) {
 			setTreeOverviews([]);
-			getTreeOverview(selectedObjekt, selectedTree[0])
+			getTreeOverview(selectedSite, selectedTree[0])
 				.then(setTreeOverview)
 				.catch((err) => {
 					console.error('Error loading tree profile:', err);
@@ -127,7 +124,9 @@ export default function DashboardClient() {
 		} else {
 			setTreeOverview(null);
 			Promise.all(
-				selectedTree.map((baumNr) => getTreeOverview(selectedObjekt, baumNr)),
+				selectedTree.map((treeNumber) =>
+					getTreeOverview(selectedSite, treeNumber),
+				),
 			)
 				.then((overviews) =>
 					setTreeOverviews(overviews.filter((o) => o != null)),
@@ -137,52 +136,52 @@ export default function DashboardClient() {
 					setTreeOverviews([]);
 				});
 		}
-	}, [selectedObjekt, selectedTree]);
+	}, [selectedSite, selectedTree]);
 
-	// Set selected object from URL param
+	// Set selected site from URL param
 	useEffect(() => {
-		if (selectedStreetObjekt) {
-			setSelectedObjekt(selectedStreetObjekt);
+		if (siteParam) {
+			setSelectedSite(siteParam);
 		}
-	}, [selectedStreetObjekt]);
+	}, [siteParam]);
 
-	// Track how often object was changed — after 3x reset selected tree
-	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedObjekt is the trigger (run on every object change), not a value read inside the effect. Removing it would run the effect only once.
+	// Track how often the site was changed — after 3x reset selected tree
+	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedSite is the trigger (run on every site change), not a value read inside the effect. Removing it would run the effect only once.
 	useEffect(() => {
-		objektSetCount.current += 1;
-		if (objektSetCount.current > 3) {
+		siteChangeCount.current += 1;
+		if (siteChangeCount.current > 3) {
 			setSelectedTree(undefined);
 		}
-	}, [selectedObjekt]);
+	}, [selectedSite]);
 
 	// If no date range selected, use default range (last 30 days)
-	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedObjekt is the trigger: the default range is applied when the object changes. startDate and endDate are deliberately not dependencies, otherwise clearing a date in the picker would immediately refill it.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: selectedSite is the trigger: the default range is applied when the site changes. startDate and endDate are deliberately not dependencies, otherwise clearing a date in the picker would immediately refill it.
 	useEffect(() => {
 		if (!startDate || !endDate) {
 			const { start, end } = getDefaultDateRange();
 			setStartDate(start);
 			setEndDate(end);
 		}
-	}, [selectedObjekt]);
+	}, [selectedSite]);
 
-	// Keine Bäume: alles zurücksetzen
+	// No trees selected: reset everything
 	useEffect(() => {
 		if (!selectedTree || selectedTree.length === 0) {
 			setChartData([]);
 			setTreeOverview(null);
 			setTreeOverviews([]);
 			setLatestSensorPerTree({});
-			setSollZustandDataPerTree({});
+			setTargetValuesPerTree({});
 		}
 	}, [selectedTree]);
 
-	// Soll-Zustand pro Baum (Multi-Tree): bei mehreren gewählten Bäumen, sobald Overviews da sind
+	// Target values per tree (multi-tree view), as soon as the overviews are loaded
 	useEffect(() => {
 		if (!selectedTree || selectedTree.length <= 1) return;
 		if (treeOverviews.length === 0) return;
 		getMultipleTreeTargetValues(treeOverviews)
 			.then((treesWithTargets) => {
-				const map: Record<string, SollZustandData> = {};
+				const map: Record<string, TargetValues> = {};
 				for (const t of treesWithTargets) {
 					const key = t.tree_number;
 					if (
@@ -198,25 +197,25 @@ export default function DashboardClient() {
 						};
 					}
 				}
-				setSollZustandDataPerTree(map);
+				setTargetValuesPerTree(map);
 			})
-			.catch(() => setSollZustandDataPerTree({}));
+			.catch(() => setTargetValuesPerTree({}));
 	}, [selectedTree, treeOverviews]);
 
 	/**
-	 * Schwellenwerte für das Liniendiagramm:
-	 * – ein Baum: wie bisher aus getTreeTargetValues → sollZustandData
-	 * – mehrere Bäume: treeOverview ist null, sollZustandData wird nicht gesetzt;
-	 *   Sollwerte liegen nur in sollZustandDataPerTree → für die Chart aggregieren (Mittelwert).
+	 * Target lines for the line chart:
+	 * – one tree: targetValues from getTreeTargetValues
+	 * – several trees: treeOverview is null and targetValues is not set; the
+	 *   targets only exist in targetValuesPerTree, so the chart shows their mean.
 	 */
-	const lineChartSollZustandData = useMemo((): SollZustandData | undefined => {
+	const chartTargetValues = useMemo((): TargetValues | undefined => {
 		if (!selectedTree || selectedTree.length === 0) return undefined;
 		if (selectedTree.length === 1) {
-			return sollZustandData;
+			return targetValues;
 		}
-		const parts: SollZustandData[] = [];
-		for (const baumNr of selectedTree) {
-			const s = sollZustandDataPerTree[baumNr];
+		const parts: TargetValues[] = [];
+		for (const treeNumber of selectedTree) {
+			const s = targetValuesPerTree[treeNumber];
 			if (
 				s &&
 				Number.isFinite(s.cm30) &&
@@ -233,7 +232,7 @@ export default function DashboardClient() {
 			cm60: parts.reduce((acc, p) => acc + p.cm60, 0) / n,
 			cm90: parts.reduce((acc, p) => acc + p.cm90, 0) / n,
 		};
-	}, [selectedTree, sollZustandData, sollZustandDataPerTree]);
+	}, [selectedTree, targetValues, targetValuesPerTree]);
 
 	const isComparisonEligible = useMemo(() => {
 		if (!startDate || !endDate) return false;
@@ -252,19 +251,19 @@ export default function DashboardClient() {
 	}, [isComparisonEligible]);
 
 	useEffect(() => {
-		if (!selectedObjekt || !selectedTree || selectedTree.length === 0) {
+		if (!selectedSite || !selectedTree || selectedTree.length === 0) {
 			setComparisonYearOptions([]);
 			setSelectedComparisonYears([]);
 			setComparisonDataByYear({});
 		}
-	}, [selectedObjekt, selectedTree]);
+	}, [selectedSite, selectedTree]);
 
 	// Fetch and transform sensor data when all filters are set
 	useEffect(() => {
 		if (
 			!startDate ||
 			!endDate ||
-			!selectedObjekt ||
+			!selectedSite ||
 			!selectedTree ||
 			selectedTree.length === 0
 		)
@@ -272,7 +271,7 @@ export default function DashboardClient() {
 
 		getFilteredTreeSensorData({
 			treeNumbers: selectedTree,
-			site: selectedObjekt,
+			site: selectedSite,
 			fromDate: startDate,
 			toDate: endDate,
 		})
@@ -284,15 +283,15 @@ export default function DashboardClient() {
 				console.error('Error loading sensor data:', err);
 				setChartData([]);
 			});
-	}, [startDate, endDate, selectedObjekt, selectedTree]);
+	}, [startDate, endDate, selectedSite, selectedTree]);
 
-	// Latest sensor values pro Baum (Multi-Tree) – gleiche Logik wie Single-Tree,
-	// aber pro Baum separat berechnet.
+	// Latest sensor values per tree (multi-tree view): same logic as the
+	// single-tree view, but computed for each tree separately.
 	useEffect(() => {
 		if (
 			!startDate ||
 			!endDate ||
-			!selectedObjekt ||
+			!selectedSite ||
 			!selectedTree ||
 			selectedTree.length <= 1
 		)
@@ -301,10 +300,10 @@ export default function DashboardClient() {
 		const loadPerTree = async () => {
 			try {
 				const results = await Promise.all(
-					selectedTree.map(async (baumNr) => {
+					selectedTree.map(async (treeNumber) => {
 						const data = await getFilteredTreeSensorData({
-							treeNumbers: [baumNr],
-							site: selectedObjekt,
+							treeNumbers: [treeNumber],
+							site: selectedSite,
 							fromDate: startDate,
 							toDate: endDate,
 						});
@@ -312,7 +311,7 @@ export default function DashboardClient() {
 						if (transformed.length === 0) return null;
 						const last = transformed[transformed.length - 1];
 						return {
-							baumNr,
+							treeNumber,
 							cm30: last.cm30,
 							cm60: last.cm60,
 							cm90: last.cm90,
@@ -332,7 +331,7 @@ export default function DashboardClient() {
 				> = {};
 				for (const res of results) {
 					if (!res) continue;
-					map[res.baumNr] = {
+					map[res.treeNumber] = {
 						cm30: res.cm30,
 						cm60: res.cm60,
 						cm90: res.cm90,
@@ -346,7 +345,7 @@ export default function DashboardClient() {
 		};
 
 		loadPerTree();
-	}, [startDate, endDate, selectedObjekt, selectedTree]);
+	}, [startDate, endDate, selectedSite, selectedTree]);
 
 	// Load comparison data: same relative ISO window per calendar year (past & future)
 	useEffect(() => {
@@ -354,7 +353,7 @@ export default function DashboardClient() {
 			!isComparisonEligible ||
 			!startDate ||
 			!endDate ||
-			!selectedObjekt ||
+			!selectedSite ||
 			!selectedTree ||
 			selectedTree.length === 0
 		)
@@ -390,7 +389,7 @@ export default function DashboardClient() {
 					try {
 						const data = await getFilteredTreeSensorData({
 							treeNumbers: selectedTree,
-							site: selectedObjekt,
+							site: selectedSite,
 							fromDate: compareStart,
 							toDate: compareEnd,
 						});
@@ -440,7 +439,7 @@ export default function DashboardClient() {
 			isCancelled = true;
 			clearTimeout(timeoutId);
 		};
-	}, [isComparisonEligible, startDate, endDate, selectedObjekt, selectedTree]);
+	}, [isComparisonEligible, startDate, endDate, selectedSite, selectedTree]);
 
 	const comparisonSeries = useMemo(() => {
 		if (!isComparisonEligible || selectedComparisonYears.length === 0)
@@ -469,7 +468,7 @@ export default function DashboardClient() {
 				Baumdaten Übersicht
 			</h1>
 			<div className="space-y-6 text-left">
-				{/* Date, Objekt, Tree selection */}
+				{/* Date, site and tree selection */}
 				<section className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow border items-start justify-items-start w-full">
 					<div className="flex flex-col w-full">
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
@@ -528,10 +527,10 @@ export default function DashboardClient() {
 						)}
 					</div>
 
-					{/* Objekt + Tree Selection */}
+					{/* Site and tree selection */}
 					<div className="flex flex-col w-full">
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
-							<span>{selectedObjekt ? 'Ort ändern:' : 'Ort auswählen:'}</span>
+							<span>{selectedSite ? 'Ort ändern:' : 'Ort auswählen:'}</span>
 							<HelpHint label="Ort und Baum wählen" side="bottom">
 								Erst nach Auswahl eines Orts stehen dessen Bäume zur Auswahl.
 								Bei mehreren Bäumen werden die Werte gemeinsam im Diagramm
@@ -540,16 +539,16 @@ export default function DashboardClient() {
 							</HelpHint>
 						</h2>
 						<div className="mt-0">
-							<ObjektSelect
-								selectedStreetObjekt={selectedObjekt}
-								onChange={setSelectedObjekt}
+							<SiteSelect
+								selectedSite={selectedSite}
+								onChange={setSelectedSite}
 							/>
 						</div>
 						<div className="mt-2">
 							<TreeSelect
-								objekt={selectedObjekt}
+								site={selectedSite}
 								onChange={setSelectedTree}
-								selectedBaum={selectedTree}
+								selectedTrees={selectedTree}
 							/>
 						</div>
 					</div>
@@ -564,32 +563,32 @@ export default function DashboardClient() {
 						data={chartData}
 						startDate={startDate}
 						endDate={endDate}
-						sollZustandData={lineChartSollZustandData}
+						targetValues={chartTargetValues}
 						comparisonSeries={comparisonSeries}
 					/>
 				</section>
 			</div>
 
 			{/* Tree overview: one tree directly, several trees as tabs */}
-			{selectedObjekt && selectedTree && selectedTree.length >= 1 && (
+			{selectedSite && selectedTree && selectedTree.length >= 1 && (
 				<section className="mt-10">
 					<h2 className="text-2xl font-semibold text-gray-800 mb-4">
-						Baumübersicht: {selectedObjekt}
+						Baumübersicht: {selectedSite}
 					</h2>
 					<div className="bg-white border rounded-xl shadow p-6">
 						{selectedTree.length === 1 && treeOverview ? (
 							<TreeComponent
 								treeId={treeOverview.tree_id ?? ''}
-								istZustandData={
-									istZustandData
+								currentValues={
+									currentValues
 										? {
-												cm30: istZustandData.cm30,
-												cm60: istZustandData.cm60,
-												cm90: istZustandData.cm90,
+												cm30: currentValues.cm30,
+												cm60: currentValues.cm60,
+												cm90: currentValues.cm90,
 											}
 										: undefined
 								}
-								sollZustandData={sollZustandData}
+								targetValues={targetValues}
 								lastData={
 									chartData?.length
 										? parseGermanDate(chartData[chartData.length - 1].date)
@@ -601,11 +600,11 @@ export default function DashboardClient() {
 							<Tabs defaultValue="0" className="w-full">
 								<TabsList className="flex w-full overflow-x-auto h-auto flex-wrap gap-1 bg-gray-100 p-1">
 									{treeOverviews.map((overview, idx) => {
-										const baumNr = overview.tree_number ?? `baum-${idx}`;
-										const label = `Baum ${baumNr}`;
+										const treeNumber = overview.tree_number ?? `tree-${idx}`;
+										const label = `Baum ${treeNumber}`;
 										return (
 											<TabsTrigger
-												key={`${overview.tree_id ?? baumNr}-${idx}`}
+												key={`${overview.tree_id ?? treeNumber}-${idx}`}
 												value={String(idx)}
 												className="shrink-0 data-[state=active]:bg-green-700 data-[state=active]:text-white"
 											>
@@ -615,30 +614,30 @@ export default function DashboardClient() {
 									})}
 								</TabsList>
 								{treeOverviews.map((overview, idx) => {
-									const baumNr = overview.tree_number ?? `baum-${idx}`;
-									const rawIst = latestSensorPerTree[baumNr];
-									const istData = rawIst
+									const treeNumber = overview.tree_number ?? `tree-${idx}`;
+									const latestReading = latestSensorPerTree[treeNumber];
+									const currentData = latestReading
 										? {
-												cm30: rawIst.cm30,
-												cm60: rawIst.cm60,
-												cm90: rawIst.cm90,
+												cm30: latestReading.cm30,
+												cm60: latestReading.cm60,
+												cm90: latestReading.cm90,
 											}
 										: undefined;
-									const sollData = sollZustandDataPerTree[baumNr];
-									const lastData = rawIst?.date
-										? parseGermanDate(rawIst.date)
+									const targetData = targetValuesPerTree[treeNumber];
+									const lastData = latestReading?.date
+										? parseGermanDate(latestReading.date)
 										: undefined;
 									return (
 										<TabsContent
-											key={`${overview.tree_id ?? baumNr}-${idx}`}
+											key={`${overview.tree_id ?? treeNumber}-${idx}`}
 											value={String(idx)}
 											className="mt-4"
 										>
 											<TreeSpecificContent
 												treeId={overview.tree_id ?? ''}
 												treeOverview={overview}
-												istZustandData={istData}
-												sollZustandData={sollData}
+												currentValues={currentData}
+												targetValues={targetData}
 												lastData={lastData}
 											/>
 										</TabsContent>

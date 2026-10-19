@@ -1,50 +1,47 @@
 export function getStatusColor(
-	ist: number | null | undefined,
-	soll: number | null | undefined,
+	current: number | null | undefined,
+	target: number | null | undefined,
 ): string {
-	if (ist == null || ist === undefined || ist === 0) {
+	if (current == null || current === undefined || current === 0) {
 		return 'rgb(128, 128, 128)';
 	}
 
-	if (soll == null || soll === undefined || soll === 0) {
+	if (target == null || target === undefined || target === 0) {
 		return 'rgb(0, 0, 255)';
 	}
 
-	const abweichung = Math.abs(ist - soll);
-	const abweichungProzent = Math.abs((ist - soll) / soll) * 100;
+	const deviation = Math.abs(current - target);
 
 	let r = 0;
 	let g = 0;
 	let b = 0;
 
-	// Grün: Der IST-Wert liegt mindestens 10 % unter dem maximal erlaubten SOLL-Wert
-	if (ist <= soll * 0.9) {
+	// Green: the current value is at least 10 % below the maximum allowed target
+	if (current <= target * 0.9) {
 		r = 0;
 		g = 200;
-		b = 0; // Grün
+		b = 0;
 	}
 
-	// Gelb: Der IST-Wert weicht höchstens 20 % vom SOLL ab (mindestens 20 kPa Differenz)
-	// Use the LARGER of: 20% of SOLL OR 20 kPa absolute
-	else if (abweichung <= Math.max(soll * 0.2, 20)) {
+	// Yellow: deviation of at most 20 % of the target or 20 kPa, whichever is larger
+	else if (deviation <= Math.max(target * 0.2, 20)) {
 		r = 255;
 		g = 204;
-		b = 0; // Gelb
+		b = 0;
 	}
 
-	// Orange: Die Abweichung beträgt höchstens 30 % vom SOLL (mindestens 40 kPa Differenz)
-	// Use the LARGER of: 30% of SOLL OR 40 kPa absolute
-	else if (abweichung <= Math.max(soll * 0.3, 40)) {
+	// Orange: deviation of at most 30 % of the target or 40 kPa, whichever is larger
+	else if (deviation <= Math.max(target * 0.3, 40)) {
 		r = 255;
 		g = 128;
-		b = 0; // Orange
+		b = 0;
 	}
 
-	// Rot: Die Abweichung ist größer als in den genannten Bereichen
+	// Red: deviation larger than in the ranges above
 	else {
 		r = 255;
 		g = 0;
-		b = 0; // Rot
+		b = 0;
 	}
 
 	return `rgb(${r},${g},${b})`;

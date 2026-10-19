@@ -216,7 +216,6 @@ export function TreeList({ rows }: TreeListProps) {
 			header: '',
 			cell: ({ row }) => {
 				const original = row.original;
-				const id = original.tree_id ?? '';
 				const site = original.site ?? '';
 				const treeNumber = original.tree_number ?? '';
 				return (
@@ -226,7 +225,7 @@ export function TreeList({ rows }: TreeListProps) {
 						className="shrink-0 gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 text-sm hover:bg-muted"
 						onClick={() =>
 							router.push(
-								`/dashboard?id=${id}&objekt=${encodeURIComponent(site)}&baum=${encodeURIComponent(treeNumber)}`,
+								`/dashboard?site=${encodeURIComponent(site)}&trees=${encodeURIComponent(treeNumber)}`,
 							)
 						}
 					>

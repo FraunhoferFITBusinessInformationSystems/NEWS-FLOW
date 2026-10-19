@@ -5,24 +5,24 @@
  * Shows TreeSpecificContent (state, tree data, notes, new note).
  */
 import type {
-	IstZustandData,
-	SollZustandData,
+	CurrentValues,
+	TargetValues,
 	TreeOverview,
 } from '@/lib/types/dashboard';
 import TreeSpecificContent from './TreeSpecificContent';
 
 interface TreeComponentProps {
 	treeId: string;
-	istZustandData?: IstZustandData;
-	sollZustandData?: SollZustandData;
+	currentValues?: CurrentValues;
+	targetValues?: TargetValues;
 	lastData?: Date | undefined;
 	treeOverview?: TreeOverview | null;
 }
 
 export default function TreeComponent({
 	treeId,
-	istZustandData,
-	sollZustandData,
+	currentValues,
+	targetValues,
 	lastData,
 	treeOverview,
 }: TreeComponentProps) {
@@ -33,8 +33,8 @@ export default function TreeComponent({
 			<TreeSpecificContent
 				treeId={treeId}
 				treeOverview={treeOverview}
-				istZustandData={istZustandData}
-				sollZustandData={sollZustandData}
+				currentValues={currentValues}
+				targetValues={targetValues}
 				lastData={lastData}
 			/>
 		</div>
