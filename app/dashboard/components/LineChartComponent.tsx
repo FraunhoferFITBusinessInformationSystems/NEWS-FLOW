@@ -253,7 +253,6 @@ export default function LineChartComponent({
 	comparisonSeries = [],
 }: LineChartComponentProps) {
 	const [showThresholds, setShowThresholds] = useState(true);
-	const [showHint, setShowHint] = useState(false);
 	const [visibleDepths, setVisibleDepths] =
 		useState<VisibleDepths>(defaultVisibleDepths);
 
@@ -364,17 +363,15 @@ export default function LineChartComponent({
 		[mergedData],
 	);
 
-	useMemo(() => {
-		return filteredData.map((row) => {
-			const cleaned: Record<string, unknown> = {};
-			for (const [key, value] of Object.entries(row)) {
-				if (value === null) {
-					setShowHint(true);
-				}
-			}
-			return cleaned;
-		});
-	}, [filteredData]);
+	// True when at least one value in the chart data is missing; shows the hint
+	// below the chart. Derived from the data, so it also resets.
+	const showHint = useMemo(
+		() =>
+			filteredData.some((row) =>
+				Object.values(row).some((value) => value === null),
+			),
+		[filteredData],
+	);
 
 	const dataKeysWithPoints = useMemo(
 		() => buildDataKeysWithPoints(filteredData),
