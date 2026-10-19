@@ -8,11 +8,9 @@ each tree and shows the result on a map and in detailed charts.
 This repository contains the open-source edition of NEWS FLOW, developed by
 [Fraunhofer FIT](https://www.fit.fraunhofer.de/).
 
-> **Status: work in progress.** The code is being ported from the original
-> project to a new, English database schema. Until that port is finished, the
-> login works but every signed-in page ends on the error page, because the
-> application code still queries the old table names. The database schema
-> itself is complete and can already be set up locally.
+> **Note:** There is no demo data yet. After the setup below, login, the
+> overview and the dashboard work, but they stay empty until sensor readings
+> are added to the database.
 
 ## Features
 
