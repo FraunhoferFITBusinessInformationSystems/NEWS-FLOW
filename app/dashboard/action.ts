@@ -101,7 +101,10 @@ export async function getDistinctSites(): Promise<string[]> {
 }
 
 /**
- * Returns the distinct tree numbers of a site.
+ * Returns the distinct tree numbers of a site that have at least one reading,
+ * including trees whose sensor is inactive. Uses
+ * v_soil_moisture_latest_earliest_per_sensor (one row per sensor) to avoid
+ * hitting PostgREST's row limit on the full readings view.
  *
  * @returns Tree numbers sorted numerically where possible, otherwise alphabetically.
  * @throws Error if the Supabase query fails.
@@ -112,7 +115,7 @@ export async function getDistinctTreeNumbersBySite(
 	const supabase = await createClient();
 
 	const { data, error } = await supabase
-		.from('v_soil_moisture_readings_mapped')
+		.from('v_soil_moisture_latest_earliest_per_sensor')
 		.select('tree_number')
 		.eq('site', site)
 		.not('tree_number', 'is', null);
