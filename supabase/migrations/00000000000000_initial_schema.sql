@@ -75,7 +75,7 @@ comment on table public.trees is
 comment on column public.trees.tree_number is
 	'Tree number as used by the owning organisation, unique only within a site.';
 comment on column public.trees.site is
-	'Street or park the tree stands in. Shown as "Ort" in the UI.';
+	'Street or park the tree stands in. Shown as "Objekt" in the UI.';
 comment on column public.trees.type_species is
 	'Genus and species of the tree.';
 comment on column public.trees.northing is

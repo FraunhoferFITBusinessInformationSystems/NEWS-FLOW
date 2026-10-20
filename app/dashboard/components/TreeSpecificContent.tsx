@@ -193,7 +193,7 @@ export default function TreeSpecificContent({
 						/>
 						<InfoPair
 							icon={<Home className="text-green-600 w-4 h-4" />}
-							label="Ort"
+							label="Objekt"
 							value={treeOverview.site ?? '–'}
 						/>
 						<InfoPair

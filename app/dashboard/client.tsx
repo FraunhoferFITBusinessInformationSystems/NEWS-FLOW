@@ -530,9 +530,11 @@ export default function DashboardClient() {
 					{/* Site and tree selection */}
 					<div className="flex flex-col w-full">
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
-							<span>{selectedSite ? 'Ort ändern:' : 'Ort auswählen:'}</span>
-							<HelpHint label="Ort und Baum wählen" side="bottom">
-								Erst nach Auswahl eines Orts stehen dessen Bäume zur Auswahl.
+							<span>
+								{selectedSite ? 'Objekt ändern:' : 'Objekt auswählen:'}
+							</span>
+							<HelpHint label="Objekt und Baum wählen" side="bottom">
+								Erst nach Auswahl eines Objekts stehen dessen Bäume zur Auswahl.
 								Bei mehreren Bäumen werden die Werte gemeinsam im Diagramm
 								dargestellt und je Baum in eigenen Reitern aufgeschlüsselt; die
 								Sollwert-Linien zeigen dann den Mittelwert der gewählten Bäume.

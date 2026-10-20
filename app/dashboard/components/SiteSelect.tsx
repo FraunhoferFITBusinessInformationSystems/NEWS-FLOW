@@ -57,7 +57,7 @@ export default function SiteSelect({
 	return (
 		<div className="flex flex-col gap-2">
 			<label htmlFor="site-select" className="text-sm text-gray-600">
-				Ort:
+				Objekt:
 			</label>
 			<Combobox
 				items={options}
