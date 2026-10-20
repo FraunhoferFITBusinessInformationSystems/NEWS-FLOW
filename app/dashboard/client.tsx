@@ -470,6 +470,34 @@ export default function DashboardClient() {
 			<div className="space-y-6 text-left">
 				{/* Date, site and tree selection */}
 				<section className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow border items-start justify-items-start w-full">
+					{/* Site and tree selection */}
+					<div className="flex flex-col w-full">
+						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
+							<span>
+								{selectedSite ? 'Objekt ändern:' : 'Objekt auswählen:'}
+							</span>
+							<HelpHint label="Objekt und Baum wählen" side="bottom">
+								Erst nach Auswahl eines Objekts stehen dessen Bäume zur Auswahl.
+								Bei mehreren Bäumen werden die Werte gemeinsam im Diagramm
+								dargestellt und je Baum in eigenen Reitern aufgeschlüsselt; die
+								Sollwert-Linien zeigen dann den Mittelwert der gewählten Bäume.
+							</HelpHint>
+						</h2>
+						<div className="mt-0">
+							<SiteSelect
+								selectedSite={selectedSite}
+								onChange={setSelectedSite}
+							/>
+						</div>
+						<div className="mt-2">
+							<TreeSelect
+								site={selectedSite}
+								onChange={setSelectedTree}
+								selectedTrees={selectedTree}
+							/>
+						</div>
+					</div>
+					{/*Date selection*/}
 					<div className="flex flex-col w-full">
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
 							<span>Zeitraum wählen:</span>
@@ -498,7 +526,6 @@ export default function DashboardClient() {
 							</p>
 						)}
 					</div>
-
 					{/* Comparison years */}
 					<div className="flex flex-col w-full">
 						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
@@ -526,36 +553,7 @@ export default function DashboardClient() {
 							</p>
 						)}
 					</div>
-
-					{/* Site and tree selection */}
-					<div className="flex flex-col w-full">
-						<h2 className="flex items-center gap-2 text-lg font-medium text-gray-700 mb-2">
-							<span>
-								{selectedSite ? 'Objekt ändern:' : 'Objekt auswählen:'}
-							</span>
-							<HelpHint label="Objekt und Baum wählen" side="bottom">
-								Erst nach Auswahl eines Objekts stehen dessen Bäume zur Auswahl.
-								Bei mehreren Bäumen werden die Werte gemeinsam im Diagramm
-								dargestellt und je Baum in eigenen Reitern aufgeschlüsselt; die
-								Sollwert-Linien zeigen dann den Mittelwert der gewählten Bäume.
-							</HelpHint>
-						</h2>
-						<div className="mt-0">
-							<SiteSelect
-								selectedSite={selectedSite}
-								onChange={setSelectedSite}
-							/>
-						</div>
-						<div className="mt-2">
-							<TreeSelect
-								site={selectedSite}
-								onChange={setSelectedTree}
-								selectedTrees={selectedTree}
-							/>
-						</div>
-					</div>
 				</section>
-
 				{/* Line Chart */}
 				<section
 					className="bg-white border rounded-xl shadow p-6"
@@ -570,7 +568,6 @@ export default function DashboardClient() {
 					/>
 				</section>
 			</div>
-
 			{/* Tree overview: one tree directly, several trees as tabs */}
 			{selectedSite && selectedTree && selectedTree.length >= 1 && (
 				<section className="mt-10">
