@@ -1,5 +1,3 @@
-'use server';
-
 import { HelpHint } from '@/components/ui/help-hint';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getOverviewTableData } from './actions';
