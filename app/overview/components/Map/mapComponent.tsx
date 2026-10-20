@@ -355,8 +355,10 @@ export default function MapComponent() {
 			}).addTo(layer);
 			bindReactPopup(
 				marker,
-				<div className="p-2 text-body-small space-y-1">
-					<h2 className="text-heading-5 mb-2">🌳 Baumdetails</h2>
+				<div className="p-2 text-sm space-y-1">
+					<h2 className="text-base font-semibold leading-tight mb-2 pb-2 border-b border-gray-200">
+						🌳 Baumdetails
+					</h2>
 					<div>
 						<strong>Objekt:</strong> {tree.site}
 					</div>
@@ -398,7 +400,7 @@ export default function MapComponent() {
 
 	if (isLoading || !treeMapIcons) {
 		return (
-			<div className="text-center py-10 text-body-small text-muted-foreground">
+			<div className="text-center py-10 text-sm text-muted-foreground">
 				Lädt...
 			</div>
 		);

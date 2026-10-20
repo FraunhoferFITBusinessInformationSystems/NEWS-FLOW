@@ -71,7 +71,7 @@ export default function DateRangePicker({
 				type="date"
 				min={MIN_DATE}
 				max={maxStart}
-				className="border border-gray-300 bg-white p-2.5 rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
+				className="border border-gray-300 bg-white px-2.5 py-2 h-[42px] rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				value={localStart}
 				onFocus={() => {
 					focusedField.current = 'start';
@@ -103,7 +103,7 @@ export default function DateRangePicker({
 				type="date"
 				min={minEnd}
 				max={today}
-				className="border border-gray-300 bg-white p-2.5 rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
+				className="border border-gray-300 bg-white px-2.5 py-2 h-[42px] rounded-lg cursor-pointer hover:border-green-600 hover:bg-green-50/50 focus:ring-2 focus:ring-green-500/40 focus:border-green-600 transition-colors"
 				value={localEnd}
 				onFocus={() => {
 					focusedField.current = 'end';
