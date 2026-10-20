@@ -8,10 +8,6 @@ each tree and shows the result on a map and in detailed charts.
 This repository contains the open-source edition of NEWS FLOW, developed by
 [Fraunhofer FIT](https://www.fit.fraunhofer.de/).
 
-> **Note:** There is no demo data yet. After the setup below, login, the
-> overview and the dashboard work, but they stay empty until sensor readings
-> are added to the database.
-
 ## Features
 
 - **Overview** (`/overview`): live map and table of all trees with sensors,
@@ -62,8 +58,11 @@ npx supabase start
 
 The first start downloads the Docker images and takes a few minutes. It then
 creates the database from the migrations in `supabase/migrations/`: tables,
-views, row level security policies and the four application roles. The tables
-start empty.
+views, row level security policies and the four application roles. It then
+loads fictional demo data from `supabase/seed.sql` (see [Demo data](#demo-data)).
+
+If your local database was created before the demo data existed, load it with
+`npx supabase db reset` (this deletes all other data).
 
 At the end, the command prints the local URLs and keys. Show them again at any
 time with `npx supabase status`.
@@ -83,9 +82,16 @@ Copy `.env.example` to `.env.local` and fill in the values:
 not start.** Never put the service role key into `.env.local`; the application
 does not use it.
 
-### 4. Create the first user
+### 4. Sign in
 
-Logins are created by an administrator; there is no self-registration.
+The demo data includes a login with the role `Sachbearbeiter:in`:
+
+| Email | Password |
+|---|---|
+| `demo@example.com` | `demo1234` |
+
+To create a login of your own, follow the steps below. Logins are created by
+an administrator; there is no self-registration.
 
 1. Open Supabase Studio at `http://127.0.0.1:54323`.
 2. Go to **Authentication → Users → Add user → Create new user**, enter an
@@ -114,6 +120,48 @@ Open `http://localhost:3000` and sign in.
 If file changes are not picked up (for example in containers, on network
 drives or in some VM setups), use `npm run dev:polling` instead.
 
+## Demo data
+
+`supabase/seed.sql` fills the local database with fictional data, so every
+page can be tried out right after the setup:
+
+- a login `demo@example.com` / `demo1234` with the role `Sachbearbeiter:in`
+- four sites (Lindenallee, Am Stadtpark, Kastanienweg, Platanenring) with five
+  trees each; trees 1 to 4 have a sensor, tree 5 has none and therefore does
+  not appear on the overview or the dashboard
+- two readings per day on the 30, 60 and 90 cm depths, from 1 January two
+  years ago until the day of the reset, with seasonal drying cycles
+- irrigation targets for site ages 1 to 10
+- two notes on Lindenallee tree 2
+
+The dates are relative to the day of the reset, so the latest readings are
+always current. Run `npx supabase db reset` to bring them up to date again.
+
+### Special cases
+
+Some sensors deliberately carry incomplete or unusual data, so the filters and
+UI states can be tested. Sensor ids follow the pattern `DEMO-<site>-<tree>`.
+
+| Sensor | Site and tree | Data | Where to see it |
+|---|---|---|---|
+| `DEMO-LA-02` | Lindenallee 2 | 60 cm channel invalid (resistance above 1,000,000 Ω) from 1 to 20 July of every year and from 14 to 10 days ago | Dashboard: gaps in the chart and the gap hint |
+| `DEMO-SP-01` | Am Stadtpark 1 | 30 cm channel invalid for the last 3 days | Overview: pin colour derived from 60 and 90 cm only |
+| `DEMO-SP-03` | Am Stadtpark 3 | No readings for the last 5 days | Overview: grey pin (reading older than 2 days) |
+| `DEMO-KW-02` | Kastanienweg 2 | About 5 % of the readings lack the 90 cm value (not in the last 7 days) | Dashboard: these readings are left out |
+| `DEMO-KW-04` | Kastanienweg 4 | Sensor switched off (`is_active = false`) | Overview: missing on the live map, listed in the table |
+| `DEMO-PR-04` | Platanenring 4 | Site age 15, no matching irrigation target | Overview: blue pin (no irrigation strategy) |
+
+### Removing the demo data
+
+To start with your own data, run `supabase/scripts/remove-demo-data.sql` in
+the SQL editor of Supabase Studio. It deletes the demo rows only: they are
+recognised by their ids (prefix `d0000000-0000-4000-` for the login,
+irrigation areas and trees, `DEMO-` for sensors), so your own rows stay.
+Irrigation targets are removed only while they still hold the demo values.
+
+`npx supabase db reset` loads the demo data again. To stop that, set
+`enabled = false` under `[db.seed]` in `supabase/config.toml`.
+
 ## Useful commands
 
 | Command | What it does |
@@ -126,7 +174,7 @@ drives or in some VM setups), use `npm run dev:polling` instead.
 | `npm run typecheck` | Checks the TypeScript types |
 | `npm run db:types` | Generates `lib/supabase/supabase.ts` from the local database |
 | `npx supabase status` | Shows the local URLs and keys |
-| `npx supabase db reset` | Rebuilds the local database from the migrations (deletes all data) |
+| `npx supabase db reset` | Rebuilds the local database from the migrations and reloads the [demo data](#demo-data) (deletes all other data) |
 | `npx supabase stop` | Stops the local Supabase stack |
 
 Emails sent by the local stack (for example password reset links) are not
@@ -151,6 +199,8 @@ lib/
 providers/           React context providers
 supabase/
   migrations/        Database schema, views and row level security
+  scripts/           SQL scripts run by hand (removing the demo data)
+  seed.sql           Fictional demo data for local development
   config.toml        Local Supabase configuration
 ```
 
