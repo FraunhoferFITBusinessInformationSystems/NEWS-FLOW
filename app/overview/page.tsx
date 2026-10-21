@@ -1,8 +1,8 @@
 import { HelpHint } from '@/components/ui/help-hint';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { fetchOverviewTableData } from './actions';
-import MapTabClient from './components/Map/MapTabClient';
-import { TreeList } from './components/Table/baumliste';
+import { fetchOverviewTableData } from './action';
+import MapTabClient from './components/map/map-tab-client';
+import { TreeList } from './components/table/tree-list';
 
 /**
  * Page /overview with a map tab and a table tab. Server component: loads the

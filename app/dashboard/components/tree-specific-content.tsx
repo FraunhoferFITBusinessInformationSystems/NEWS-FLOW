@@ -1,6 +1,6 @@
 'use client';
 
-import { getStatusColor } from '@/components/data-display/StatusColoring';
+import { getStatusColor } from '@/components/data-display/status-coloring';
 import { Button } from '@/components/ui/button';
 import { HelpHint } from '@/components/ui/help-hint';
 import type { TreeNoteFormValues } from '@/lib/validations/tree-note';

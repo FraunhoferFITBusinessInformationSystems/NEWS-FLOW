@@ -2,11 +2,11 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import LineChartComponent from './components/LineChartComponent';
-import SiteSelect from './components/SiteSelect';
-import TreeComponent from './components/TreeComponent';
+import LineChartComponent from './components/line-chart-component';
+import SiteSelect from './components/site-select';
+import TreeComponent from './components/tree-component';
 import './styles.css';
-import DateRangePicker from '@/components/features/datePicker/DatePicker';
+import DateRangePicker from '@/components/features/date-picker/date-range-picker';
 import { HelpHint } from '@/components/ui/help-hint';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -31,9 +31,9 @@ import {
 	transformSensorData,
 } from '@/lib/utils/dashboard';
 import { getFilteredTreeSensorData, getTreeOverview } from './action';
-import ComparisonYearSelect from './components/ComparisonYearSelect';
-import TreeSelect from './components/TreeSelect';
-import TreeSpecificContent from './components/TreeSpecificContent';
+import ComparisonYearSelect from './components/comparison-year-select';
+import TreeSelect from './components/tree-select';
+import TreeSpecificContent from './components/tree-specific-content';
 
 /**
  * Client component with the dashboard's filters, chart and tree details. It

@@ -181,7 +181,7 @@ These rules are applied in the application, not in the database:
 - **Colour per tree.** The overview colours a tree by the worst of its three
   depths compared with the targets. The thresholds are described on the help
   page (`/hilfe`) and implemented in
-  `components/data-display/StatusColoring.ts`.
+  `components/data-display/status-coloring.ts`.
 
 ## Demo data
 

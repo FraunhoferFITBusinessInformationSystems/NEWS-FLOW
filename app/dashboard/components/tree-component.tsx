@@ -5,7 +5,7 @@ import type {
 	TargetValues,
 	TreeOverview,
 } from '@/lib/types/dashboard';
-import TreeSpecificContent from './TreeSpecificContent';
+import TreeSpecificContent from './tree-specific-content';
 
 interface TreeComponentProps {
 	treeId: string;

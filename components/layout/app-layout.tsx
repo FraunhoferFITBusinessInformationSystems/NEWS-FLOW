@@ -9,7 +9,7 @@ import {
 	PLANNING_ROLES,
 	isRouteAllowedForRole,
 } from '@/lib/utils/route-access';
-import { UserRoleProvider, useUserRole } from '@/providers/UserRoleContext';
+import { UserRoleProvider, useUserRole } from '@/providers/user-role-context';
 import { usePathname } from 'next/navigation';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';

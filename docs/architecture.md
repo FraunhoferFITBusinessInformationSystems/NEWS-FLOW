@@ -13,7 +13,7 @@ security, see [security-auth-rls.md](security-auth-rls.md).
 | Application frame (providers, header, main, footer, route gate) | `components/layout/app-layout.tsx` |
 | Header and navigation | `components/layout/app-header.tsx`, `components/layout/mobile-nav.tsx` |
 | Roles and route rules, the single source of truth | `lib/utils/route-access.ts` |
-| Session and role on the client | `providers/UserRoleContext.tsx`, `lib/actions/auth.ts` |
+| Session and role on the client | `providers/user-role-context.tsx`, `lib/actions/auth.ts` |
 | Role lookup shared by middleware and server actions | `lib/supabase/user-role.ts` |
 | Supabase clients | `lib/supabase/server.ts` (server), `lib/supabase/client.ts` (browser) |
 | Middleware | `middleware.ts`, `lib/supabase/middleware.ts` |
@@ -106,10 +106,10 @@ own.
 - shadcn/ui components in `components/ui/`, including the data table with
   sorting and filters kept in the URL (`components/ui/data-table/`).
 - Maps use plain Leaflet through one shared container,
-  `components/features/leafletMap/LeafletMap.tsx`. The map component is
+  `components/features/leaflet-map/leaflet-map.tsx`. The map component is
   loaded with `next/dynamic` and `ssr: false`, because Leaflet needs the
   browser. Tile source, zoom limits and the default centre are set in
   `lib/leaflet/map-config.ts`.
-- Charts use Recharts (`app/dashboard/components/LineChartComponent.tsx`).
+- Charts use Recharts (`app/dashboard/components/line-chart-component.tsx`).
 
 

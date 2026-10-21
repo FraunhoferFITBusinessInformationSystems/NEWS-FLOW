@@ -1,4 +1,4 @@
-import { getStatusColor } from '@/components/data-display/StatusColoring';
+import { getStatusColor } from '@/components/data-display/status-coloring';
 import type { TreeMapPinColor } from '@/lib/types/map';
 
 /**
@@ -41,7 +41,7 @@ export const WATERING_NEED_LABEL_DE: Record<TreeMapPinColor, string> = {
 
 /**
  * Derives the same map pin color / irrigation need category as the overview map
- * (`assignIcon` in mapComponent): sensor age (2 calendar days), then worst depth vs. target.
+ * (`assignIcon` in map-component.tsx): sensor age (2 calendar days), then worst depth vs. target.
  */
 export function getWateringNeedCategory(
 	input: WateringNeedCategoryInput,

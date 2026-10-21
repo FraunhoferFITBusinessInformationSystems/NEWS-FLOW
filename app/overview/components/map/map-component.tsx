@@ -1,11 +1,11 @@
 'use client';
 
-import LeafletMap from '@/components/features/leafletMap/LeafletMap';
+import LeafletMap from '@/components/features/leaflet-map/leaflet-map';
 import { getMultipleTreeTargetValues } from '@/lib/actions/tree-target-values';
 import { utmToWgs84 } from '@/lib/utils/coordinates';
 import L from 'leaflet';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { fetchTreeOverviewForLiveMap } from '../../actions';
+import { fetchTreeOverviewForLiveMap } from '../../action';
 import './../../styles.css';
 import {
 	Combobox,
