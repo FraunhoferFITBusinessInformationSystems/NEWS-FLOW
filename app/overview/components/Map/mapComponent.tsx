@@ -701,7 +701,8 @@ export default function MapComponent() {
 				className="z-10 rounded-lg overflow-hidden border"
 				onMapReady={setMap}
 			>
-				<div className="pointer-events-none absolute bottom-2 right-2 z-[1000] max-w-[min(18.5rem,calc(100%-1rem))]">
+				{/* Sits above Leaflet's attribution bar, which needs to stay visible */}
+				<div className="pointer-events-none absolute bottom-5 right-1 z-[1000] max-w-[min(18.5rem,calc(100%-1rem))]">
 					<section
 						className={cn(
 							'pointer-events-auto rounded-2xl bg-white shadow-lg text-left text-gray-800',

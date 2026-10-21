@@ -207,6 +207,14 @@ The password reset email also has to be set up by hand: under
 default English email, whose link only works in the browser that requested
 the reset.
 
+The maps load their tiles from the OpenStreetMap tile servers. They are a
+free, best-effort service without availability guarantees, and heavy use can
+be blocked without notice. That is fine for a small number of users; for a
+larger deployment, use a tile provider of your own (`OSM_TILE_URL` in
+`lib/leaflet/map-config.ts`) and follow the
+[OSM tile usage policy](https://operations.osmfoundation.org/policies/tiles/)
+in the meantime.
+
 ## Project structure
 
 ```

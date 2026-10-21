@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { Button } from '@/components/ui/button';
 import {
 	MAP_MAX_ZOOM,
+	OSM_MAX_NATIVE_ZOOM,
 	OSM_TILE_ATTRIBUTION,
 	OSM_TILE_URL,
 } from '@/lib/leaflet/map-config';
@@ -68,7 +69,7 @@ export default function LeafletMap({
 		L.tileLayer(OSM_TILE_URL, {
 			attribution: OSM_TILE_ATTRIBUTION,
 			maxZoom: MAP_MAX_ZOOM,
-			maxNativeZoom: MAP_MAX_ZOOM,
+			maxNativeZoom: OSM_MAX_NATIVE_ZOOM,
 		}).addTo(map);
 
 		if (initialView) {
