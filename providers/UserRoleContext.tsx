@@ -2,7 +2,7 @@
 
 import { getAuthStateAction } from '@/lib/actions/auth';
 import { ANONYMOUS_AUTH_STATE, type AuthState } from '@/lib/types/auth';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import {
 	createContext,
 	useCallback,
@@ -32,7 +32,6 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isInitialized, setIsInitialized] = useState(false);
 	const searchParams = useSearchParams();
-	const router = useRouter();
 
 	const refreshUserRole = useCallback(async () => {
 		setIsLoading(true);
@@ -72,10 +71,6 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
 			url.searchParams.delete('refresh');
 			window.history.replaceState({}, '', url.toString());
 
-			(''); // Refresh user role with longer delay after login
-			//setTimeout(() => {
-			//	refreshUserRole();
-			//}, 10);''
 			refreshUserRole();
 		}
 	}, [searchParams, refreshUserRole, isInitialized]);

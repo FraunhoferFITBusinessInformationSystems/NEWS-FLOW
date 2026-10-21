@@ -39,7 +39,7 @@ export async function createClient() {
  * Returns the signed-in user, validated against Supabase Auth. Returns the
  * error instead of throwing, so callers can treat "no user" as a normal case.
  */
-export const getCurrentUser = async () => {
+export async function getCurrentUser() {
 	const supabase = await createClient();
 
 	const { data, error } = await supabase.auth.getUser();
@@ -50,13 +50,13 @@ export const getCurrentUser = async () => {
 	}
 
 	return { data, error: null };
-};
+}
 
 /**
  * Returns the session from the request cookies without validating it against
  * Supabase Auth. Use getCurrentUser for anything that decides about access.
  */
-export const getCurrentSession = async () => {
+export async function getCurrentSession() {
 	const supabase = await createClient();
 
 	const { data, error } = await supabase.auth.getSession();
@@ -67,4 +67,4 @@ export const getCurrentSession = async () => {
 	}
 
 	return { data, error: null };
-};
+}

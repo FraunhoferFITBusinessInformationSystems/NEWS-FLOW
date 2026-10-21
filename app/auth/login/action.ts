@@ -2,11 +2,11 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { getUserRoleAction } from '@/lib/actions/auth'; // added import
+import { getUserRoleAction } from '@/lib/actions/auth';
 import { createClient } from '@/lib/supabase/server';
 import { getHomeRouteForRole } from '@/lib/utils/route-access';
 
-export const pwdSignIn = async (username: string, password: string) => {
+export async function pwdSignIn(username: string, password: string) {
 	const sb = await createClient();
 
 	const { data: user, error } = await sb.auth.signInWithPassword({
@@ -63,11 +63,11 @@ export const pwdSignIn = async (username: string, password: string) => {
 
 	// refresh=true makes UserRoleProvider refetch the role after the redirect.
 	redirect(`${target}?refresh=true`);
-};
+}
 
-export const signOut = async () => {
+export async function signOut() {
 	const sb = await createClient();
 
 	await sb.auth.signOut();
 	redirect('/auth/login');
-};
+}

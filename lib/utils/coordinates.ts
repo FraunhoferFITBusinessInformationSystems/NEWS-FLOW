@@ -10,26 +10,27 @@ const UTM32N_NORTHING_MIN = 0;
 const UTM32N_NORTHING_MAX = 10000000;
 
 /**
- * Converts UTM32N coordinates (Rechtswert/Hochwert) to WGS84 (longitude/latitude).
- * Returns null if the input coordinates are technically invalid.
+ * Converts UTM32N coordinates (easting/northing in metres) to WGS84
+ * (longitude/latitude). Returns null if the input coordinates are technically
+ * invalid.
  */
 export function utmToWgs84(
-	rechtswert: number,
-	hochwert: number,
+	easting: number,
+	northing: number,
 ): { longitude: number; latitude: number } | null {
 	if (
-		typeof rechtswert !== 'number' ||
-		typeof hochwert !== 'number' ||
-		Number.isNaN(rechtswert) ||
-		Number.isNaN(hochwert) ||
-		rechtswert < UTM32N_EASTING_MIN ||
-		rechtswert > UTM32N_EASTING_MAX ||
-		hochwert < UTM32N_NORTHING_MIN ||
-		hochwert > UTM32N_NORTHING_MAX
+		typeof easting !== 'number' ||
+		typeof northing !== 'number' ||
+		Number.isNaN(easting) ||
+		Number.isNaN(northing) ||
+		easting < UTM32N_EASTING_MIN ||
+		easting > UTM32N_EASTING_MAX ||
+		northing < UTM32N_NORTHING_MIN ||
+		northing > UTM32N_NORTHING_MAX
 	) {
 		return null;
 	}
 
-	const [longitude, latitude] = proj4(UTM32N, 'WGS84', [rechtswert, hochwert]);
+	const [longitude, latitude] = proj4(UTM32N, 'WGS84', [easting, northing]);
 	return { longitude, latitude };
 }
