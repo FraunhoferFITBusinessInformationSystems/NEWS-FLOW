@@ -1,7 +1,11 @@
-// Single source of truth for the application roles and the routes they may
-// open. Used by the middleware (server-side enforcement before a page renders),
-// by the route gate in components/layout/app-layout.tsx and by the navigation
-// filter, so all three stay in sync.
+/**
+ * Single source of truth for the application roles and the routes they may
+ * open. Used by the middleware (server-side enforcement before a page renders),
+ * by the route gate in components/layout/app-layout.tsx and by the navigation
+ * filter, so all three stay in sync.
+ *
+ * @packageDocumentation
+ */
 
 /**
  * The application roles. The values must match `roles.role_name` in the

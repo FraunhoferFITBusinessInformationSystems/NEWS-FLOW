@@ -24,6 +24,11 @@ interface ComparisonYearSelectProps {
 	onChange: Dispatch<SetStateAction<number[]>>;
 }
 
+/**
+ * Multi-select for the comparison years, limited to MAX_COMPARISON_YEARS; a
+ * further selection is refused with a toast. Receives only the years that have
+ * data in the same calendar window.
+ */
 export default function ComparisonYearSelect({
 	options,
 	selectedYears,

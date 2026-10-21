@@ -1,14 +1,17 @@
+/**
+ * Single home for every Leaflet marker icon used across the app's maps: the
+ * tree "pin" icons (colored markers, with sensor and recent-watering variants).
+ *
+ * The route markers (ordered stops, route endpoints) and the water extraction
+ * point markers were removed together with irrigation route planning, which is
+ * not part of this build. When those features return, the original functions
+ * (createStopIcon, createRouteEndpointIcon, createWaterPointIcon,
+ * createDynamicWaterPointIcon) and the route colors from map-config.ts can be
+ * restored from commit 00b219b.
+ *
+ * @packageDocumentation
+ */
 import L from 'leaflet';
-
-// Single home for every Leaflet marker icon used across the app's maps: the
-// tree "pin" icons (colored markers, with sensor and recent-watering variants).
-//
-// The route markers (ordered stops, route endpoints) and the water extraction
-// point markers were removed together with irrigation route planning, which is
-// not part of this build. When those features return, the original functions
-// (createStopIcon, createRouteEndpointIcon, createWaterPointIcon,
-// createDynamicWaterPointIcon) and the route colors from map-config.ts can be
-// restored from commit 00b219b.
 
 // ---------------------------------------------------------------------------
 // Tree pin icons

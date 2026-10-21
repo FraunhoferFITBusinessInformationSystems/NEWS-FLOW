@@ -1,5 +1,7 @@
 /**
  * Dashboard utilities: sensor data transformation and date helpers for German date format.
+ *
+ * @packageDocumentation
  */
 
 import type { SoilMoistureDataPoint } from '@/lib/types/dashboard';

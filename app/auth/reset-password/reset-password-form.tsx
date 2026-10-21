@@ -27,6 +27,12 @@ import {
 // GET requests) cannot consume the one-time token before the user clicks.
 type RecoveryPhase = 'checking' | 'confirm' | 'ready' | 'invalid';
 
+/**
+ * Form to set a new password after following the reset link. A link with a
+ * `token_hash` is only redeemed after the user confirms; a link that delivers
+ * the session directly is handled as a fallback. After saving, the user is
+ * signed out and has to sign in with the new password.
+ */
 export function ResetPasswordForm() {
 	const router = useRouter();
 	const [phase, setPhase] = useState<RecoveryPhase>('checking');

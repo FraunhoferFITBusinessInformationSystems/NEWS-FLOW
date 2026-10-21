@@ -1,3 +1,10 @@
+/**
+ * Server actions of the overview. They run on the server only; the page calls
+ * them while rendering and the map calls them from the client. All queries use
+ * the caller's session, so row level security decides what they may read.
+ *
+ * @packageDocumentation
+ */
 'use server';
 
 import { getMultipleTreeTargetValues } from '@/lib/actions/tree-target-values';
@@ -8,7 +15,9 @@ import { filterTreesForLiveMap } from '@/lib/utils/live-map-sensors';
 import { filterInvalidSensorKpaValues } from '@/lib/utils/sensor-data-validation';
 
 /**
- * Loads all trees with sensors, each with its latest and earliest reading.
+ * Loads all trees with sensors, each with its latest and earliest reading,
+ * from v_soil_moisture_latest_earliest_per_sensor. Invalid values are set to
+ * null.
  *
  * @returns One row per sensor; only rows with complete readings kpa_ch1–3.
  * @throws Error if the Supabase query fails.
@@ -76,8 +85,7 @@ export async function getTreeOverviewForLiveMap(): Promise<
 	}
 }
 
-export type TreeOverviewWithSensors = TreeOverviewWithSensorRow[];
-
+/** One overview row together with the targets of its tree. */
 export type OverviewTableRow = TreeOverviewWithSensorRow & TreeWithTargetValues;
 
 /**

@@ -163,6 +163,12 @@ function buildMapWateringDebugDetailRows(
 	return out.slice(0, limit);
 }
 
+/**
+ * Live map of all trees with an active sensor, coloured by irrigation need,
+ * with search, filters and legend. Client component that loads its data
+ * through the getTreeOverviewForLiveMap and getMultipleTreeTargetValues server
+ * actions.
+ */
 export default function MapComponent() {
 	const [trees, setTrees] = useState<OverviewTableRow[]>([]);
 	const [isLoading, setIsLoading] = useState(true);

@@ -248,6 +248,13 @@ function formatYearLabel(year: number, isCrossYearRange: boolean): string {
 	return `${shortStart}/${shortEnd}`;
 }
 
+/**
+ * Soil water tension chart for the selected period, one line per depth, with
+ * optional target lines and comparison years. Depths and target lines can be
+ * switched on and off. Without comparison years, gaps in the data stay
+ * visible; with them, the lines are connected across gaps so the series stay
+ * comparable.
+ */
 export default function LineChartComponent({
 	data,
 	startDate,

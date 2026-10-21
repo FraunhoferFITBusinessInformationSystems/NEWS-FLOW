@@ -1,5 +1,7 @@
 /**
  * Shared types for the dashboard route (tree overview, sensor data, comparisons).
+ *
+ * @packageDocumentation
  */
 
 /** Soil moisture data point (German date format DD.MM.YYYY, kPa per depth). */

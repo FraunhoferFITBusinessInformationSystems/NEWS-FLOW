@@ -16,6 +16,11 @@ interface SiteSelectProps {
 	selectedSite?: string;
 }
 
+/**
+ * Searchable select for the site ("Objekt"). Client component that loads the
+ * sites through the getDistinctSites server action and preselects
+ * selectedSite once it is among them.
+ */
 export default function SiteSelect({
 	onChange,
 	selectedSite,

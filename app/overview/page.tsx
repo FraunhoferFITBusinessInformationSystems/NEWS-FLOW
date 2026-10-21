@@ -4,6 +4,10 @@ import { getOverviewTableData } from './actions';
 import MapTabClient from './components/Map/MapTabClient';
 import { TreeList } from './components/Table/baumliste';
 
+/**
+ * Page /overview with a map tab and a table tab. Server component: loads the
+ * table rows while rendering; the map loads its own data in the browser.
+ */
 export default async function Page() {
 	const tableRows = await getOverviewTableData();
 

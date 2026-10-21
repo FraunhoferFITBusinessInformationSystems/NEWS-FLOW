@@ -1,10 +1,5 @@
 'use client';
 
-/**
- * TreeSpecificContent: tree-specific sections (state, tree data, notes, new note).
- * Used directly in the single-tree view and once per tab in the multi-tree view.
- * Always bound to the active tree (treeId/treeOverview).
- */
 import { getStatusColor } from '@/components/data-display/StatusColoring';
 import { Button } from '@/components/ui/button';
 import { HelpHint } from '@/components/ui/help-hint';
@@ -76,6 +71,12 @@ function InfoPair({
 	);
 }
 
+/**
+ * Tree-specific sections: state (Ist vs. Soll), tree data, notes and the form
+ * for a new note. Used directly in the single-tree view and once per tab in the
+ * multi-tree view. Client component that loads and changes the notes through
+ * the server actions in ../action.ts.
+ */
 export default function TreeSpecificContent({
 	treeId,
 	treeOverview,

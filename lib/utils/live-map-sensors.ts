@@ -1,6 +1,8 @@
 /**
  * Helpers for showing only active sensors on the Live map (/overview).
  * Detail views, analysis, and the overview table are not filtered here.
+ *
+ * @packageDocumentation
  */
 
 /** The sensor reference of an overview row; either field may be set. */

@@ -1,6 +1,8 @@
-// Placeholder privacy policy. Every operator of a public deployment has to
-// replace the bracketed values with their own details and have the text
-// checked before going live.
+/**
+ * Page /datenschutz; reachable without a session. Placeholder privacy policy:
+ * every operator of a public deployment has to replace the bracketed values
+ * with their own details and have the text checked before going live.
+ */
 export default function DatenschutzPage() {
 	return (
 		<div className="max-w-2xl mx-auto p-8">

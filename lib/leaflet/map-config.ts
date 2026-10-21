@@ -1,6 +1,10 @@
-// Shared configuration for every Leaflet map in the app. Centralizing these
-// values keeps the tile source, zoom limits and default view consistent across
-// all map components.
+/**
+ * Shared configuration for every Leaflet map in the app. Centralizing these
+ * values keeps the tile source, zoom limits and default view consistent across
+ * all map components.
+ *
+ * @packageDocumentation
+ */
 
 /**
  * OpenStreetMap raster tiles. URL and attribution follow the OSM tile usage

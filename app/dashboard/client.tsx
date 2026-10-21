@@ -35,6 +35,13 @@ import ComparisonYearSelect from './components/ComparisonYearSelect';
 import TreeSelect from './components/TreeSelect';
 import TreeSpecificContent from './components/TreeSpecificContent';
 
+/**
+ * Client component with the dashboard's filters, chart and tree details. It
+ * loads its data from the browser through the server actions in ./action.ts
+ * and lib/actions/tree-target-values.ts whenever the site, trees, period or
+ * comparison years change. Site and trees can be preset with
+ * `?site=…&trees=1,2`.
+ */
 export default function DashboardClient() {
 	const searchParams = useSearchParams();
 	const siteParam = searchParams.get('site');

@@ -25,6 +25,10 @@ function DashboardLoadingFallback() {
 	);
 }
 
+/**
+ * Page /dashboard. The content is the client component DashboardClient, which
+ * reads the URL parameters and therefore needs a Suspense boundary.
+ */
 export default function DashboardPage() {
 	return (
 		<Suspense fallback={<DashboardLoadingFallback />}>

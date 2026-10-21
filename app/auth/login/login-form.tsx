@@ -21,6 +21,10 @@ import {
 	loginFormSchema,
 } from '@/lib/validations/auth-form-schema';
 
+/**
+ * Email and password form; submits to the pwdSignIn server action and shows
+ * its error message.
+ */
 export function LoginForm() {
 	const {
 		register,

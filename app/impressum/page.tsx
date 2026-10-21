@@ -1,5 +1,8 @@
-// Placeholder legal notice. Every operator of a public deployment has to
-// replace the bracketed values with their own details before going live.
+/**
+ * Page /impressum; reachable without a session. Placeholder legal notice:
+ * every operator of a public deployment has to replace the bracketed values
+ * with their own details before going live.
+ */
 export default function ImpressumPage() {
 	return (
 		<div className="max-w-2xl mx-auto p-8">

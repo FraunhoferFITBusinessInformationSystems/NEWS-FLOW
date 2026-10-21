@@ -1,3 +1,11 @@
+/**
+ * Server actions of the dashboard. They run on the server only, but the client
+ * components call them directly, so every export is a public endpoint. All
+ * queries use the caller's session, so row level security decides what they
+ * may read and write.
+ *
+ * @packageDocumentation
+ */
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
@@ -19,11 +27,16 @@ interface GetFilteredTreeSensorDataParams {
 	toDate: string;
 }
 
+/**
+ * Re-export of getCurrentUser from lib/supabase/server.ts, so client components
+ * can call it as a server action.
+ */
 export const getCurrentUser = getUserCurrent;
 
 /**
- * Fetches soil moisture readings for the given site, date range and optional tree(s).
- * Only readings with values for all of kpa_ch1–3 are returned.
+ * Fetches soil moisture readings for the given site, date range and optional
+ * tree(s) from v_soil_moisture_readings_mapped. Only readings with values for
+ * all of kpa_ch1–3 are returned, and invalid values are set to null.
  *
  * @throws Error if the Supabase query fails.
  */
@@ -143,7 +156,8 @@ export async function getDistinctTreeNumbersBySite(
 }
 
 /**
- * Fetches the metadata of one tree, found by site and tree number.
+ * Fetches the metadata of one tree, found by site and tree number, from
+ * v_soil_moisture_readings_mapped.
  *
  * @returns The tree, or null if no reading row exists for it.
  * @throws Error if the Supabase query fails.
@@ -174,7 +188,7 @@ export async function getTreeOverview(
 }
 
 /**
- * Fetches all notes of a tree.
+ * Fetches all notes of a tree from tree_notes.
  *
  * @throws Error if the Supabase query fails.
  */

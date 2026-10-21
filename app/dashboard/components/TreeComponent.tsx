@@ -1,9 +1,5 @@
 'use client';
 
-/**
- * TreeComponent: wrapper for the single-tree view.
- * Shows TreeSpecificContent (state, tree data, notes, new note).
- */
 import type {
 	CurrentValues,
 	TargetValues,
@@ -20,6 +16,10 @@ interface TreeComponentProps {
 	periodEndsToday: boolean;
 }
 
+/**
+ * Wrapper for the single-tree view: renders TreeSpecificContent, or nothing
+ * while the tree overview is not loaded yet.
+ */
 export default function TreeComponent({
 	treeId,
 	currentValues,

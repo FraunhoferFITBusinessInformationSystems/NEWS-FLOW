@@ -144,6 +144,9 @@ Shared schemas live in `lib/validations/`.
 - Write comments in plain English, without emojis.
 - Explain *why* something is done, not what the next line does.
 - Document exported functions, types and components with a short TSDoc block.
+- A comment that describes a whole file is a TSDoc block tagged
+  `@packageDocumentation`. It is the first comment in the file, above
+  `'use client'` or `'use server'`.
 - Documentation describes the current state of the code, not the history of
   how it got there.
 

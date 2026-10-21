@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 
 import { createClient } from '@/lib/supabase/server';
 
+/**
+ * Exchanges the auth code from a Supabase redirect for a session and forwards
+ * to the start page, where the middleware picks the page for the role.
+ */
 export async function GET(request: Request) {
 	// The `/auth/callback` route is required for the server-side auth flow implemented
 	// by the SSR package. It exchanges an auth code for the user's session.

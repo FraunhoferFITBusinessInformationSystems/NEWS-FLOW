@@ -1,4 +1,11 @@
+/**
+ * Sign-in and sign-out as server actions. They run on the server only and talk
+ * to Supabase Auth; no table is read except the caller's role.
+ *
+ * @packageDocumentation
+ */
 'use server';
+
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -6,6 +13,11 @@ import { getUserRoleAction } from '@/lib/actions/auth';
 import { createClient } from '@/lib/supabase/server';
 import { getHomeRouteForRole } from '@/lib/utils/route-access';
 
+/**
+ * Signs in with email and password and redirects to the start page of the
+ * caller's role. Returns `{ error }` with a German message when the sign-in
+ * fails; the message does not reveal whether the email exists.
+ */
 export async function pwdSignIn(username: string, password: string) {
 	const sb = await createClient();
 
@@ -65,6 +77,7 @@ export async function pwdSignIn(username: string, password: string) {
 	redirect(`${target}?refresh=true`);
 }
 
+/** Ends the session and redirects to the login page. */
 export async function signOut() {
 	const sb = await createClient();
 

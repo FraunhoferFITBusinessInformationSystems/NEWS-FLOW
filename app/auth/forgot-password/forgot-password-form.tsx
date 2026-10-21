@@ -21,6 +21,10 @@ import {
 	forgotPasswordFormSchema,
 } from '@/lib/validations/auth-form-schema';
 
+/**
+ * Form to request a password reset email. Always shows the same confirmation,
+ * so it does not reveal whether a login exists for the address.
+ */
 export function ForgotPasswordForm() {
 	const [submitted, setSubmitted] = useState(false);
 

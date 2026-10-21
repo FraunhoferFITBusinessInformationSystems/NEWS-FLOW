@@ -22,6 +22,12 @@ interface TreeSelectProps {
 	selectedTrees?: string[];
 }
 
+/**
+ * Multi-select for the trees of the selected site, with "select all". Client
+ * component that loads the tree numbers through the
+ * getDistinctTreeNumbersBySite server action and clears the selection when the
+ * site is removed.
+ */
 export default function TreeSelect({
 	site,
 	onChange,

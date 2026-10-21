@@ -206,6 +206,10 @@ function mapOverviewTableRowToCsvRecord(
 	};
 }
 
+/**
+ * Table of all trees with sensors, including inactive ones, with search,
+ * filters and CSV export. Receives its rows from the overview page.
+ */
 export function TreeList({ rows }: TreeListProps) {
 	const router = useRouter();
 	const columnHelper = createColumnHelper<OverviewTableRow>();

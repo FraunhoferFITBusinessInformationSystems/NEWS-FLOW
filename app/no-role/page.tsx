@@ -1,6 +1,8 @@
-// Landing page for an authenticated user whose account has no usable role.
-// Reached through getHomeRouteForRole() in lib/utils/route-access.ts. Public,
-// so the middleware does not redirect it to itself.
+/**
+ * Landing page for an authenticated user whose account has no usable role.
+ * Reached through getHomeRouteForRole() in lib/utils/route-access.ts. Public,
+ * so the middleware does not redirect it to itself.
+ */
 export default function NoRolePage() {
 	return (
 		<div className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 space-y-4">
