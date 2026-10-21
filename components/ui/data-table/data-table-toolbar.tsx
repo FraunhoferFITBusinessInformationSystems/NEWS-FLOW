@@ -42,7 +42,6 @@ function flattenObject(
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
-	data: TData[];
 	globalFilterValue: string;
 	setGlobalFilterValue: React.Dispatch<React.SetStateAction<string>>;
 	/** When set, CSV export uses these keys/values instead of flattening raw row objects. */
@@ -62,7 +61,6 @@ interface DataTableToolbarProps<TData> {
  */
 export function DataTableToolbar<TData>({
 	table,
-	data,
 	globalFilterValue,
 	setGlobalFilterValue,
 	csvExportRowMapper,

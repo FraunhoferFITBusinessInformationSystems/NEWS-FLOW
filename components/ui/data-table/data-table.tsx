@@ -33,7 +33,6 @@ import { z } from 'zod';
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
-	onRowSelected?: (row: TData) => void;
 	initialSorting?: SortingState;
 	sortingQueryParamKey?: string;
 	persistSortingInQuery?: boolean;
@@ -53,7 +52,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
 	columns,
 	data,
-	onRowSelected,
 	initialSorting,
 	sortingQueryParamKey = 'sorting',
 	persistSortingInQuery = true,
@@ -200,7 +198,6 @@ export function DataTable<TData, TValue>({
 	return (
 		<div className="space-y-4">
 			<DataTableToolbar
-				data={data}
 				globalFilterValue={globalFilter}
 				setGlobalFilterValue={setGlobalFilter}
 				table={table}
@@ -238,8 +235,6 @@ export function DataTable<TData, TValue>({
 									key={row.id}
 									className="even:bg-muted/20"
 									data-state={row.getIsSelected() && 'selected'}
-									// onClick={(_) => onRowSelected && onRowSelected(row.original)}
-									// onDoubleClick={(_) => onRowSelected && onRowSelected(row.original)}
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>

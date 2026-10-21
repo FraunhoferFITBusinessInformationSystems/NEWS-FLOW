@@ -4,7 +4,6 @@ import {
 	ArrowDownIcon,
 	ArrowUpIcon,
 	CaretSortIcon,
-	Cross2Icon,
 	EraserIcon,
 	EyeNoneIcon,
 	MixerHorizontalIcon,
@@ -13,18 +12,9 @@ import type { Column } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from '@/components/ui/command';
-import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuPortal,
 	DropdownMenuSeparator,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
