@@ -10,5 +10,4 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Re-export auth utilities
-export type { NavigationItem } from './auth';
 export { filterNavigationByRole } from './auth';

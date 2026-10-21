@@ -3,7 +3,8 @@
 import { AccessDenied } from '@/components/features/auth/access-denied';
 import { AppHeader } from '@/components/layout/app-header';
 import { Footer } from '@/components/layout/footer';
-import { type NavigationItem, filterNavigationByRole } from '@/lib/utils';
+import type { NavigationItem } from '@/lib/types/navigation';
+import { filterNavigationByRole } from '@/lib/utils';
 import {
 	PLANNING_ROLES,
 	isRouteAllowedForRole,

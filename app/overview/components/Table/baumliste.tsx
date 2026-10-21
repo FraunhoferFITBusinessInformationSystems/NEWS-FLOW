@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/ui/data-table/data-table-column-header';
-import type { TreeMapPinColor } from '@/lib/leaflet/map-icons';
+import type { TreeMapPinColor } from '@/lib/types/map';
+import type { OverviewTableRow } from '@/lib/types/tree-overview';
 import { cn } from '@/lib/utils';
 import {
 	WATERING_NEED_LABEL_DE,
@@ -18,7 +19,6 @@ import {
 } from '@tanstack/react-table';
 import { Info } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import type { OverviewTableRow } from '../../actions';
 
 interface TreeListProps {
 	rows: OverviewTableRow[];

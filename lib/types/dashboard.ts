@@ -5,26 +5,29 @@
  */
 
 /** Soil moisture data point (German date format DD.MM.YYYY, kPa per depth). */
-export type SoilMoistureDataPoint = {
+export interface SoilMoistureDataPoint {
 	date: string;
 	cm30: number | null;
 	cm60: number | null;
 	cm90: number | null;
-};
+}
 
 /** Target values per depth in kPa. */
-export type TargetValues = {
+export interface TargetValues {
 	cm30: number;
 	cm60: number;
 	cm90: number;
-};
+}
 
-/** Current sensor values per depth in kPa — individual depths may be null when sensor data is missing. */
-export type CurrentValues = {
+/**
+ * Current sensor values per depth in kPa; individual depths may be null when
+ * sensor data is missing.
+ */
+export interface CurrentValues {
 	cm30: number | null;
 	cm60: number | null;
 	cm90: number | null;
-};
+}
 
 /** Latest sensor values per tree (for multi-tree view). */
 export type LatestSensorPerTree = Record<
@@ -84,13 +87,13 @@ export interface TreeNote {
 }
 
 /** Option for comparison year select. */
-export type ComparisonYearOption = {
+export interface ComparisonYearOption {
 	value: number;
 	label: string;
-};
+}
 
 /** Comparison series for chart (year + shifted data). */
-export type ComparisonSeriesItem = {
+export interface ComparisonSeriesItem {
 	year: number;
 	data: SoilMoistureDataPoint[];
-};
+}

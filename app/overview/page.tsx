@@ -1,6 +1,6 @@
 import { HelpHint } from '@/components/ui/help-hint';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getOverviewTableData } from './actions';
+import { fetchOverviewTableData } from './actions';
 import MapTabClient from './components/Map/MapTabClient';
 import { TreeList } from './components/Table/baumliste';
 
@@ -9,7 +9,7 @@ import { TreeList } from './components/Table/baumliste';
  * table rows while rendering; the map loads its own data in the browser.
  */
 export default async function Page() {
-	const tableRows = await getOverviewTableData();
+	const tableRows = await fetchOverviewTableData();
 
 	return (
 		<div className="p-4">

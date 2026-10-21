@@ -2,7 +2,7 @@
 
 import { signOut } from '@/app/auth/login/action';
 import { Button } from '@/components/ui/button';
-import type { NavigationItem } from '@/lib/utils';
+import type { NavigationItem } from '@/lib/types/navigation';
 import { ChevronDown, HelpCircle, LogOut, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

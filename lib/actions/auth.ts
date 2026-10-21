@@ -17,7 +17,7 @@ async function fetchRoleOrNull(
 		return await getUserRoleByUserId(supabase, userId);
 	} catch (error) {
 		console.error(
-			`Fehler in getAuthStateAction: ${
+			`Fehler in fetchRoleOrNull: ${
 				error instanceof Error ? error.message : String(error)
 			}`,
 		);
@@ -30,7 +30,7 @@ async function fetchRoleOrNull(
  * anyway. Read by UserRoleProvider, which drives both the navigation and the
  * login/logout button in the header.
  */
-export async function getAuthStateAction(): Promise<AuthState> {
+export async function fetchAuthStateAction(): Promise<AuthState> {
 	const supabase = await createClient();
 
 	const {
@@ -51,13 +51,13 @@ export async function getAuthStateAction(): Promise<AuthState> {
  * pwdSignIn calls it to pick the landing page, where an exception would surface
  * as a failed login even though the sign-in itself succeeded.
  */
-export async function getUserRoleAction(): Promise<string | null> {
+export async function fetchUserRoleAction(): Promise<string | null> {
 	try {
-		const { role } = await getAuthStateAction();
+		const { role } = await fetchAuthStateAction();
 		return role;
 	} catch (error) {
 		console.error(
-			`Fehler in getUserRoleAction: ${
+			`Fehler in fetchUserRoleAction: ${
 				error instanceof Error ? error.message : String(error)
 			}`,
 		);

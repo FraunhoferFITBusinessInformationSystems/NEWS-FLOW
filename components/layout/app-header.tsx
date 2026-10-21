@@ -11,7 +11,8 @@ import {
 	NavigationMenuTrigger,
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { type NavigationItem, cn } from '@/lib/utils';
+import type { NavigationItem } from '@/lib/types/navigation';
+import { cn } from '@/lib/utils';
 import { HelpCircle, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 

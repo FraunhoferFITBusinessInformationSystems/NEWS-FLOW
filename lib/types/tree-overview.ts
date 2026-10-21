@@ -1,3 +1,5 @@
+import type { TreeWithTargetValues } from '@/lib/types/irrigation-targets';
+
 /**
  * One row of the view `v_soil_moisture_latest_earliest_per_sensor`: a sensor
  * with its latest reading, the values of its earliest reading, and the tree and
@@ -41,3 +43,6 @@ export interface TreeOverviewWithSensorRow {
 	recently_irrigated_at: string | null;
 	is_active: boolean | null;
 }
+
+/** One overview row together with the targets of its tree. */
+export type OverviewTableRow = TreeOverviewWithSensorRow & TreeWithTargetValues;

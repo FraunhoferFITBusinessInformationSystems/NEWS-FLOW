@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import type { TreeWithTargetValues } from '@/lib/types/irrigation-targets';
 
 /** Row of `irrigation_targets_by_age`, limited to the columns read here. */
 interface IrrigationTargetRow {
@@ -11,18 +12,10 @@ interface IrrigationTargetRow {
 }
 
 /**
- * Target soil water tension per depth in kPa; null when the tree has no target.
- */
-export interface TreeWithTargetValues {
-	target_30cm: number | null;
-	target_60cm: number | null;
-	target_90cm: number | null;
-}
-
-/**
  * Get the target values for one tree from `irrigation_targets_by_age` via its
  * `tree_site_age`. Trees without a site age or without a matching target row
- * get null values.
+ * get null values. Does not throw: a failed query is logged and also returns
+ * null values, so the tree is still shown.
  */
 export async function getTreeTargetValues(tree: {
 	tree_site_age?: number | null;
@@ -50,6 +43,7 @@ export async function getTreeTargetValues(tree: {
 		console.error(`Fehler in getTreeTargetValues: ${error.message}`);
 		return defaultValues;
 	}
+	console.log('getTreeTargetValues erfolgreich');
 	if (!data) {
 		return defaultValues;
 	}
@@ -65,6 +59,8 @@ export async function getTreeTargetValues(tree: {
  * Batch function to get target values for multiple trees efficiently.
  * Fetches the targets for all distinct `tree_site_age` values in one query.
  * Trees without a site age or without a matching target row get null values.
+ * Does not throw: a failed query is logged and all trees get null values, so
+ * they are still shown.
  */
 export async function getMultipleTreeTargetValues<
 	T extends { tree_site_age?: number | null },
@@ -92,6 +88,7 @@ export async function getMultipleTreeTargetValues<
 		if (error) {
 			console.error(`Fehler in getMultipleTreeTargetValues: ${error.message}`);
 		} else if (data) {
+			console.log('getMultipleTreeTargetValues erfolgreich');
 			targetsBySiteAge = Object.fromEntries(
 				data.map((target: IrrigationTargetRow) => [
 					target.tree_site_age,

@@ -6,7 +6,7 @@ interface UserRoleRow {
 
 /**
  * Reads the role name of a user. Shared by the middleware and by
- * getUserRoleAction so both resolve the role with the same query.
+ * fetchUserRoleAction so both resolve the role with the same query.
  *
  * The left join plus maybeSingle keeps three cases apart: a user without an
  * assigned role and a user without a row both resolve to null, while only a

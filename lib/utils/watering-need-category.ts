@@ -1,5 +1,5 @@
 import { getStatusColor } from '@/components/data-display/StatusColoring';
-import type { TreeMapPinColor } from '@/lib/leaflet/map-icons';
+import type { TreeMapPinColor } from '@/lib/types/map';
 
 /**
  * Latest reading of a tree's sensor (channels 1 to 3 are 30, 60 and 90 cm)

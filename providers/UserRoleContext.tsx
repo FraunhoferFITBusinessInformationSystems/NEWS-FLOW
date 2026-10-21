@@ -1,6 +1,6 @@
 'use client';
 
-import { getAuthStateAction } from '@/lib/actions/auth';
+import { fetchAuthStateAction } from '@/lib/actions/auth';
 import { ANONYMOUS_AUTH_STATE, type AuthState } from '@/lib/types/auth';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -40,7 +40,7 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
 			await new Promise((resolve) => setTimeout(resolve, 200));
 
 			// Use server action for authentication
-			setAuthState(await getAuthStateAction());
+			setAuthState(await fetchAuthStateAction());
 		} catch (error) {
 			// Treat an unreachable auth state as no session: the header then offers
 			// a login instead of a logout that could not work anyway.

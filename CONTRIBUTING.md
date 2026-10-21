@@ -77,7 +77,9 @@ and only components that need interactivity are marked `'use client'`.
 | Types, interfaces, classes, enums, components | PascalCase | `TreeNote`, `LineChartComponent` |
 
 Use normal function declarations (`function foo() {}`) for named functions,
-not arrow functions assigned to a constant (`const foo = () => {}`).
+not arrow functions assigned to a constant (`const foo = () => {}`). A helper
+that is only used inside the function that declares it (for example an event
+handler in a component or a loader inside an effect) may be an arrow function.
 
 ### `get` and `fetch` functions
 
@@ -95,6 +97,10 @@ not arrow functions assigned to a constant (`const foo = () => {}`).
 - Log errors as `Fehler in <functionName>: <errorMessage>`.
 - Log success as `<functionName> erfolgreich`.
 - Always include the function name, so a log line can be traced to its source.
+- Exception: a lookup whose failure must not break the page may log the error
+  and return an empty result instead of throwing. The target lookups in
+  `lib/actions/tree-target-values.ts` do this, so a tree is still shown,
+  without targets. Say so in the function's TSDoc.
 
 ## TypeScript
 

@@ -9,7 +9,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { getUserRoleAction } from '@/lib/actions/auth';
+import { fetchUserRoleAction } from '@/lib/actions/auth';
 import { createClient } from '@/lib/supabase/server';
 import { getHomeRouteForRole } from '@/lib/utils/route-access';
 
@@ -66,7 +66,7 @@ export async function pwdSignIn(username: string, password: string) {
 
 	// Land on the page the role starts on, using the same mapping the
 	// middleware applies, so both cannot drift apart.
-	const role = await getUserRoleAction();
+	const role = await fetchUserRoleAction();
 
 	// An unresolved role right after sign-in can also be a cookie timing
 	// issue. Redirect to "/" in that case and let the middleware decide on

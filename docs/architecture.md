@@ -59,7 +59,7 @@ Everything interactive lives below the root layout in
 - A Suspense boundary around `UserRoleProvider`. It sits inside `<body>`, so
   its fallback can only replace the content area, never the document.
 - `UserRoleProvider` loads session and role in one call
-  (`getAuthStateAction` in `lib/actions/auth.ts`) and reloads them after
+  (`fetchAuthStateAction` in `lib/actions/auth.ts`) and reloads them after
   login, which redirects with `?refresh=true`.
 - Header, `<main>` and footer. The navigation is filtered by role.
   `isAuthenticated` separates "not signed in" (login link, no navigation)

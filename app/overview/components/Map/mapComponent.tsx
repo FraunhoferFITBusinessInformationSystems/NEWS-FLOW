@@ -5,7 +5,7 @@ import { getMultipleTreeTargetValues } from '@/lib/actions/tree-target-values';
 import { utmToWgs84 } from '@/lib/utils/coordinates';
 import L from 'leaflet';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getTreeOverviewForLiveMap } from '../../actions';
+import { fetchTreeOverviewForLiveMap } from '../../actions';
 import './../../styles.css';
 import {
 	Combobox,
@@ -25,13 +25,16 @@ import {
 } from '@/components/ui/select';
 import {
 	DEFAULT_MAP_CENTER,
-	type TreeMapIconRegistry,
-	type TreeMapPinColor,
-	type TreeMapPinVariant,
 	bindReactPopup,
 	createTreeMapIconRegistry,
 	getTreeMapPinIcon,
 } from '@/lib/leaflet';
+import type {
+	TreeMapIconRegistry,
+	TreeMapPinColor,
+	TreeMapPinVariant,
+} from '@/lib/types/map';
+import type { OverviewTableRow } from '@/lib/types/tree-overview';
 import { cn } from '@/lib/utils';
 import { getFuzzyMatches } from '@/lib/utils/fuzzy';
 import {
@@ -41,7 +44,6 @@ import {
 import { getWateringNeedCategory } from '@/lib/utils/watering-need-category';
 import { ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import type { OverviewTableRow } from '../../actions';
 
 type AllOrValue<T extends string> = T | 'all';
 
@@ -166,7 +168,7 @@ function buildMapWateringDebugDetailRows(
 /**
  * Live map of all trees with an active sensor, coloured by irrigation need,
  * with search, filters and legend. Client component that loads its data
- * through the getTreeOverviewForLiveMap and getMultipleTreeTargetValues server
+ * through the fetchTreeOverviewForLiveMap and getMultipleTreeTargetValues server
  * actions.
  */
 export default function MapComponent() {
@@ -244,7 +246,7 @@ export default function MapComponent() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const treeData = await getTreeOverviewForLiveMap();
+				const treeData = await fetchTreeOverviewForLiveMap();
 				const treesWithTargets = await getMultipleTreeTargetValues(treeData);
 				setTrees(treesWithTargets);
 			} catch (error) {

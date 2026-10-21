@@ -8,9 +8,11 @@
 'use server';
 
 import { getMultipleTreeTargetValues } from '@/lib/actions/tree-target-values';
-import type { TreeWithTargetValues } from '@/lib/actions/tree-target-values';
 import { createClient } from '@/lib/supabase/server';
-import type { TreeOverviewWithSensorRow } from '@/lib/types/tree-overview';
+import type {
+	OverviewTableRow,
+	TreeOverviewWithSensorRow,
+} from '@/lib/types/tree-overview';
 import { filterTreesForLiveMap } from '@/lib/utils/live-map-sensors';
 import { filterInvalidSensorKpaValues } from '@/lib/utils/sensor-data-validation';
 
@@ -67,7 +69,7 @@ async function getActiveSensorIds(): Promise<string[]> {
  * Same data as `getTreeOverviewWithSensors`, but excludes trees linked to
  * manually deactivated sensors (`sensors.is_active = false`). Used only by the Live map.
  */
-export async function getTreeOverviewForLiveMap(): Promise<
+export async function fetchTreeOverviewForLiveMap(): Promise<
 	TreeOverviewWithSensorRow[]
 > {
 	try {
@@ -76,31 +78,28 @@ export async function getTreeOverviewForLiveMap(): Promise<
 			getActiveSensorIds(),
 		]);
 		const filtered = filterTreesForLiveMap(rows, new Set(activeSensorIds));
-		console.log('getTreeOverviewForLiveMap erfolgreich');
+		console.log('fetchTreeOverviewForLiveMap erfolgreich');
 		return filtered;
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
-		console.error(`Fehler in getTreeOverviewForLiveMap: ${message}`);
+		console.error(`Fehler in fetchTreeOverviewForLiveMap: ${message}`);
 		throw error;
 	}
 }
-
-/** One overview row together with the targets of its tree. */
-export type OverviewTableRow = TreeOverviewWithSensorRow & TreeWithTargetValues;
 
 /**
  * Loads sensor overview rows for the table tab (same view as the map) plus the
  * target values, so the watering recommendation matches the map.
  */
-export async function getOverviewTableData(): Promise<OverviewTableRow[]> {
+export async function fetchOverviewTableData(): Promise<OverviewTableRow[]> {
 	try {
 		const rows = await getTreeOverviewWithSensors();
 		const enriched = await getMultipleTreeTargetValues(rows);
-		console.log('getOverviewTableData erfolgreich');
+		console.log('fetchOverviewTableData erfolgreich');
 		return enriched;
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
-		console.error(`Fehler in getOverviewTableData: ${message}`);
+		console.error(`Fehler in fetchOverviewTableData: ${message}`);
 		throw error;
 	}
 }
