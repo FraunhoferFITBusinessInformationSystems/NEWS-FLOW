@@ -17,6 +17,7 @@ interface TreeComponentProps {
 	targetValues?: TargetValues;
 	lastData?: Date | undefined;
 	treeOverview?: TreeOverview | null;
+	periodEndsToday: boolean;
 }
 
 export default function TreeComponent({
@@ -25,6 +26,7 @@ export default function TreeComponent({
 	targetValues,
 	lastData,
 	treeOverview,
+	periodEndsToday,
 }: TreeComponentProps) {
 	if (!treeOverview) return null;
 
@@ -36,6 +38,7 @@ export default function TreeComponent({
 				currentValues={currentValues}
 				targetValues={targetValues}
 				lastData={lastData}
+				periodEndsToday={periodEndsToday}
 			/>
 		</div>
 	);

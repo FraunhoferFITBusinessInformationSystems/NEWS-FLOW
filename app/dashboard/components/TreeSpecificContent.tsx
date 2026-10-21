@@ -44,6 +44,16 @@ interface TreeSpecificContentProps {
 	currentValues?: CurrentValues;
 	targetValues?: TargetValues;
 	lastData?: Date;
+	/** True when the selected period ends today; only then can a sensor be stale. */
+	periodEndsToday: boolean;
+}
+
+function formatLastDataDate(date: Date): string {
+	return date.toLocaleDateString('de-DE', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+	});
 }
 
 function InfoPair({
@@ -72,6 +82,7 @@ export default function TreeSpecificContent({
 	currentValues,
 	targetValues,
 	lastData,
+	periodEndsToday,
 }: TreeSpecificContentProps) {
 	const depths = [30, 60, 90];
 	const [creatorId, setCreatorId] = useState('');
@@ -165,17 +176,18 @@ export default function TreeSpecificContent({
 						</tbody>
 					</table>
 				</div>
-				{lastData && isOutdated(new Date(lastData)) && (
-					<div className="mt-4 text-center text-red-600 text-sm font-semibold flex items-center justify-center gap-2">
-						<AlertTriangle className="w-5 h-5" />
-						Letztes Sensor-Update:{' '}
-						{lastData.toLocaleDateString('de-DE', {
-							day: '2-digit',
-							month: '2-digit',
-							year: 'numeric',
-						})}
-					</div>
-				)}
+				{/* The values above are the last reading in the selected period */}
+				{lastData &&
+					(periodEndsToday && isOutdated(lastData) ? (
+						<div className="mt-4 text-center text-red-600 text-sm font-semibold flex items-center justify-center gap-2">
+							<AlertTriangle className="w-5 h-5" />
+							Letztes Sensor-Update: {formatLastDataDate(lastData)}
+						</div>
+					) : (
+						<p className="mt-4 text-center text-sm text-gray-500">
+							Letzter Wert im Zeitraum: {formatLastDataDate(lastData)}
+						</p>
+					))}
 			</div>
 
 			{/* Tree data */}

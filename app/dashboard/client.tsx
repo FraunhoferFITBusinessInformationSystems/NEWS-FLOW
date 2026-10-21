@@ -70,6 +70,12 @@ export default function DashboardClient() {
 	const currentValues =
 		chartData.length > 0 ? chartData[chartData.length - 1] : undefined;
 
+	// End dates are always the end of a day and never after today, so comparing
+	// the calendar day is enough. Without an end date the default range applies.
+	const periodEndsToday = endDate
+		? new Date(endDate).toDateString() === new Date().toDateString()
+		: true;
+
 	useEffect(() => {
 		if (!treeOverview) return;
 
@@ -594,6 +600,7 @@ export default function DashboardClient() {
 										: undefined
 								}
 								treeOverview={treeOverview}
+								periodEndsToday={periodEndsToday}
 							/>
 						) : treeOverviews.length > 1 ? (
 							<Tabs defaultValue="0" className="w-full">
@@ -638,6 +645,7 @@ export default function DashboardClient() {
 												currentValues={currentData}
 												targetValues={targetData}
 												lastData={lastData}
+												periodEndsToday={periodEndsToday}
 											/>
 										</TabsContent>
 									);
