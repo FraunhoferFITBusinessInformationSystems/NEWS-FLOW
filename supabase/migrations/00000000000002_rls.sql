@@ -95,7 +95,7 @@ grant execute on function public.is_app_planner() to authenticated;
 -- 3. Users and roles
 --
 -- No write policy on either table: profiles and role assignments are managed
--- outside the application (see docs/setup.md). A write policy on users would
+-- outside the application (see "Sign in" in the README). A write policy on users would
 -- let a user change their own role_id.
 -- ---------------------------------------------------------------------------
 

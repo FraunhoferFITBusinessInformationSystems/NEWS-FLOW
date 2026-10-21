@@ -5,9 +5,9 @@ export async function createClient() {
 	const cookieStore = await cookies();
 
 	return createServerClient(
-		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and docs/setup.md
+		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and the README
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and docs/setup.md
+		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and the README
 		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 		{
 			cookies: {

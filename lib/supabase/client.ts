@@ -4,8 +4,8 @@ import type { Database } from './supabase';
 
 export const createClient = () =>
 	createBrowserClient<Database>(
-		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and docs/setup.md
+		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and the README
 		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and docs/setup.md
+		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and the README
 		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 	);
