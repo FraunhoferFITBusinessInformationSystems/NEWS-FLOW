@@ -25,9 +25,11 @@ async function fetchRoleOrNull(
 	}
 }
 
-// Session and role in one round trip, because resolving the role needs the user
-// anyway. Read by UserRoleProvider, which drives both the navigation and the
-// login/logout button in the header.
+/**
+ * Session and role in one round trip, because resolving the role needs the user
+ * anyway. Read by UserRoleProvider, which drives both the navigation and the
+ * login/logout button in the header.
+ */
 export async function getAuthStateAction(): Promise<AuthState> {
 	const supabase = await createClient();
 
@@ -44,9 +46,11 @@ export async function getAuthStateAction(): Promise<AuthState> {
 	};
 }
 
-// Role only, for callers that have no use for the session flag. Never throws:
-// pwdSignIn calls it to pick the landing page, where an exception would surface
-// as a failed login even though the sign-in itself succeeded.
+/**
+ * Role only, for callers that have no use for the session flag. Never throws:
+ * pwdSignIn calls it to pick the landing page, where an exception would surface
+ * as a failed login even though the sign-in itself succeeded.
+ */
 export async function getUserRoleAction(): Promise<string | null> {
 	try {
 		const { role } = await getAuthStateAction();

@@ -1,3 +1,6 @@
+/**
+ * Formats a date as DD.MM.YYYY in local time. Returns "–" for an empty value.
+ */
 export default function formatDate(dateValue: string | Date | null): string {
 	if (!dateValue) return '–';
 	const d = new Date(dateValue);

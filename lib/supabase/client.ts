@@ -2,6 +2,10 @@ import { createBrowserClient } from '@supabase/ssr';
 
 import type { Database } from './supabase';
 
+/**
+ * Supabase client for client components. Uses the session from the browser's
+ * cookies, so row level security applies to every query.
+ */
 export const createClient = () =>
 	createBrowserClient<Database>(
 		// biome-ignore lint/style/noNonNullAssertion: Required variable, documented in .env.example and the README

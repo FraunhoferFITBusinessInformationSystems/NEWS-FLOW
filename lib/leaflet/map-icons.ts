@@ -14,6 +14,10 @@ import L from 'leaflet';
 // Tree pin icons
 // ---------------------------------------------------------------------------
 
+/**
+ * Pin colour of a tree; the meaning of each colour is in
+ * WATERING_NEED_LABEL_DE.
+ */
 export type TreeMapPinColor =
 	| 'green'
 	| 'red'
@@ -22,12 +26,17 @@ export type TreeMapPinColor =
 	| 'orange'
 	| 'grey';
 
+/**
+ * Shape of a pin: the plain marker, the marker with a "recently watered" dot,
+ * a diamond for sensors, and a smaller marker for the tree control map.
+ */
 export type TreeMapPinVariant =
 	| 'default'
 	| 'recentWatering'
 	| 'sensor'
 	| 'treeControlMap';
 
+/** Every pin icon, created once per map, by variant and colour. */
 export interface TreeMapIconRegistry {
 	base: Record<TreeMapPinColor, L.Icon>;
 	recentWatering: Record<TreeMapPinColor, L.DivIcon>;
@@ -38,9 +47,11 @@ export interface TreeMapIconRegistry {
 const LEAFLET_COLOR_MARKERS_BASE =
 	'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img';
 
+/** Shadow image shared by all marker pins. */
 export const TREE_MAP_SHADOW_URL =
 	'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png';
 
+/** Marker image per pin colour. */
 export const TREE_MAP_PIN_ICON_URLS: Record<TreeMapPinColor, string> = {
 	green: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-green.png`,
 	red: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-red.png`,
@@ -155,6 +166,10 @@ export function createTreeMapIconRegistry(): TreeMapIconRegistry {
 	return { base, recentWatering, sensor, treeControlMap };
 }
 
+/**
+ * Picks the icon for a colour and variant from a registry built by
+ * createTreeMapIconRegistry.
+ */
 export function getTreeMapPinIcon(
 	registry: TreeMapIconRegistry,
 	color: TreeMapPinColor,

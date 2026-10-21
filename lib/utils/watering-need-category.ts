@@ -1,6 +1,10 @@
 import { getStatusColor } from '@/components/data-display/StatusColoring';
 import type { TreeMapPinColor } from '@/lib/leaflet/map-icons';
 
+/**
+ * Latest reading of a tree's sensor (channels 1 to 3 are 30, 60 and 90 cm)
+ * together with the tree's targets.
+ */
 export interface WateringNeedCategoryInput {
 	readonly kpa_ch1: number | null | undefined;
 	readonly kpa_ch2: number | null | undefined;
@@ -25,6 +29,7 @@ export function isSoilMeasurementStale(
 	return sensorDate < twoDaysAgo;
 }
 
+/** German label per pin colour, shown in the map legend and the table. */
 export const WATERING_NEED_LABEL_DE: Record<TreeMapPinColor, string> = {
 	green: 'Kein Bewässerungsbedarf',
 	yellow: 'Geringer Bewässerungsbedarf',

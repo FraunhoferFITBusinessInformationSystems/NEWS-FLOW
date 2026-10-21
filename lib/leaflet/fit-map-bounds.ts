@@ -1,9 +1,10 @@
 import L from 'leaflet';
 
-// Fits a Leaflet map to a set of [lat, lng] positions. Centralizes the
-// auto-zoom logic that was duplicated across the map components: no positions
-// is a no-op, a single position centers at a close zoom (a zero-size bounding
-// box cannot be fitted), and multiple positions fit the bounding box with padding.
+/**
+ * Fits a Leaflet map to a set of [lat, lng] positions. No positions is a no-op,
+ * a single position centers at a close zoom (a zero-size bounding box cannot be
+ * fitted), and multiple positions fit the bounding box with padding.
+ */
 export function fitMapToPositions(
 	map: L.Map,
 	positions: [number, number][],

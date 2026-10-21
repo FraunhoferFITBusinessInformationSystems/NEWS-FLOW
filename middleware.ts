@@ -2,11 +2,15 @@ import type { NextRequest } from 'next/server';
 
 import { updateSession } from '@/lib/supabase/middleware';
 
+/**
+ * Next.js middleware: session refresh, session guard and role check for every
+ * matched request. The logic lives in updateSession.
+ */
 export async function middleware(request: NextRequest) {
-	// update user's auth session
 	return await updateSession(request);
 }
 
+/** Paths the middleware runs on: everything except static assets. */
 export const config = {
 	matcher: [
 		/*

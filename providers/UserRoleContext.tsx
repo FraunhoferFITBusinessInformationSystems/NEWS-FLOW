@@ -22,6 +22,11 @@ const UserRoleContext = createContext<UserRoleContextType | undefined>(
 	undefined,
 );
 
+/**
+ * Provides session flag and role to the client. Loads them once on mount and
+ * again after login, which redirects with `?refresh=true`. Reads the search
+ * params, so it has to sit inside a Suspense boundary.
+ */
 export function UserRoleProvider({ children }: { children: React.ReactNode }) {
 	const [authState, setAuthState] = useState<AuthState>(ANONYMOUS_AUTH_STATE);
 	const [isLoading, setIsLoading] = useState(true);
@@ -89,6 +94,11 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
 	);
 }
 
+/**
+ * Role, session flag and loading state from UserRoleProvider.
+ *
+ * @throws Error if used outside a UserRoleProvider.
+ */
 export function useUserRole() {
 	const context = useContext(UserRoleContext);
 	if (context === undefined) {

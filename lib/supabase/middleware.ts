@@ -9,6 +9,12 @@ import {
 	isRouteAllowedForRole,
 } from '@/lib/utils/route-access';
 
+/**
+ * Runs for every request through middleware.ts: refreshes the Supabase
+ * session, redirects requests without a session to the login, and checks the
+ * role against lib/utils/route-access.ts before the page renders. A failed
+ * role lookup is refused and sent to /error. See docs/architecture.md.
+ */
 export async function updateSession(request: NextRequest) {
 	let supabaseResponse = NextResponse.next({
 		request,

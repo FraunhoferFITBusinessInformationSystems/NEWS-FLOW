@@ -2,16 +2,18 @@ import type L from 'leaflet';
 import type { ReactNode } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
 
-// Binds a Leaflet popup whose content is rendered by React. This replaces
-// react-leaflet's <Popup>: it lazily mounts a React root into the popup's DOM
-// node on first open and re-renders the content on every open, so popups keep
-// their full React content (interactive buttons, recharts charts).
-//
-// The root is unmounted only when the marker is removed (e.g. when the layer
-// group is cleared on a data change), and that unmount is deferred to a later
-// task. Marker removal usually happens inside a React effect cleanup, and
-// unmounting a root synchronously during React's render/commit phase throws
-// "Attempted to synchronously unmount a root while React was already rendering".
+/**
+ * Binds a Leaflet popup whose content is rendered by React. This replaces
+ * react-leaflet's <Popup>: it lazily mounts a React root into the popup's DOM
+ * node on first open and re-renders the content on every open, so popups keep
+ * their full React content (interactive buttons, recharts charts).
+ *
+ * The root is unmounted only when the marker is removed (e.g. when the layer
+ * group is cleared on a data change), and that unmount is deferred to a later
+ * task. Marker removal usually happens inside a React effect cleanup, and
+ * unmounting a root synchronously during React's render/commit phase throws
+ * "Attempted to synchronously unmount a root while React was already rendering".
+ */
 export function bindReactPopup(
 	marker: L.Marker,
 	content: ReactNode,

@@ -3,6 +3,10 @@
 // by the route gate in components/layout/app-layout.tsx and by the navigation
 // filter, so all three stay in sync.
 
+/**
+ * The application roles. The values must match `roles.role_name` in the
+ * database exactly.
+ */
 export const USER_ROLES = {
 	superAdministrator: 'Super-Administrator',
 	administrator: 'Administrator',
@@ -10,10 +14,13 @@ export const USER_ROLES = {
 	gardener: 'Gärtner:in',
 } as const;
 
+/** One of the role names in USER_ROLES. */
 export type UserRoleName = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
-// Roles that may open the overview and the dashboard. Mirrored by
-// is_app_planner() in supabase/migrations/00000000000002_rls.sql.
+/**
+ * Roles that may open the overview and the dashboard. Mirrored by
+ * is_app_planner() in supabase/migrations/00000000000002_rls.sql.
+ */
 export const PLANNING_ROLES: readonly UserRoleName[] = [
 	USER_ROLES.officeClerk,
 	USER_ROLES.administrator,
@@ -59,15 +66,21 @@ function matchesPrefix(pathname: string, prefix: string): boolean {
 	return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
 
-// Whether a path may be opened without an authenticated session. Checked by the
-// middleware before the session guard, so these routes never reach the role
-// check either.
+/**
+ * Whether a path may be opened without an authenticated session. Checked by the
+ * middleware before the session guard, so these routes never reach the role
+ * check either.
+ */
 export function isAnonymousRoute(pathname: string): boolean {
 	return ANONYMOUS_ROUTE_PREFIXES.some((prefix) =>
 		matchesPrefix(pathname, prefix),
 	);
 }
 
+/**
+ * Whether a path is open to every role, including a signed-in user without a
+ * role. Apart from the anonymous routes, these still need a session.
+ */
 export function isPublicRoute(pathname: string): boolean {
 	return PUBLIC_ROUTE_PREFIXES.some((prefix) =>
 		matchesPrefix(pathname, prefix),
@@ -91,6 +104,12 @@ function findRouteAccessRule(pathname: string): RouteAccessRule | undefined {
 	return match;
 }
 
+/**
+ * Whether a role may open a path. Public routes are always allowed; any other
+ * route needs a rule in ROUTE_ACCESS_RULES that lists the role, so unlisted
+ * routes are denied. Used by the middleware and by the route gate in the
+ * layout.
+ */
 export function isRouteAllowedForRole(
 	pathname: string,
 	role: string | null,
@@ -104,9 +123,11 @@ export function isRouteAllowedForRole(
 	return (rule.roles as readonly string[]).includes(role);
 }
 
-// Landing page for a role: used after login and whenever a role opens a route
-// it may not see. Always returns a route the role is allowed to open, so no
-// redirect loop can occur.
+/**
+ * Landing page for a role: used after login and whenever a role opens a route
+ * it may not see. Always returns a route the role is allowed to open, so no
+ * redirect loop can occur.
+ */
 export function getHomeRouteForRole(role: string | null): string {
 	if (
 		role === USER_ROLES.officeClerk ||

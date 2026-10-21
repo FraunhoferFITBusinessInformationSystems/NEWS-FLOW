@@ -3,11 +3,16 @@
  * Detail views, analysis, and the overview table are not filtered here.
  */
 
+/** The sensor reference of an overview row; either field may be set. */
 export interface LiveMapSensorRow {
 	sid?: string | null;
 	sensor_id?: string | null;
 }
 
+/**
+ * Returns the sensor id of an overview row, preferring `sid` over
+ * `sensor_id`, or null when neither is set.
+ */
 export function getSensorKeyFromOverviewRow(
 	row: LiveMapSensorRow,
 ): string | null {
@@ -21,7 +26,7 @@ export function getSensorKeyFromOverviewRow(
 }
 
 /**
- * Returns false when the row is linked to a sensor marked inactive in `sensors.active`.
+ * Returns false when the row is linked to a sensor marked inactive in `sensors.is_active`.
  * Rows without a resolvable sensor key are kept (unchanged legacy behavior).
  */
 export function isTreeVisibleOnLiveMap(
@@ -33,6 +38,10 @@ export function isTreeVisibleOnLiveMap(
 	return activeSensorIds.has(key);
 }
 
+/**
+ * Removes the trees whose sensor is inactive, for the live map only. See
+ * isTreeVisibleOnLiveMap for the rule.
+ */
 export function filterTreesForLiveMap<T extends LiveMapSensorRow>(
 	trees: T[],
 	activeSensorIds: ReadonlySet<string>,

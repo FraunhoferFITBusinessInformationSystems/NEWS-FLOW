@@ -14,6 +14,7 @@ export const loginFormSchema = z.object({
 	password: z.string().min(1, 'Bitte geben Sie Ihr Passwort ein.'),
 });
 
+/** Values of the login form, inferred from loginFormSchema. */
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 /**
@@ -28,6 +29,7 @@ export const forgotPasswordFormSchema = z.object({
 		.trim(),
 });
 
+/** Values of the forgot-password form, inferred from forgotPasswordFormSchema. */
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordFormSchema>;
 
 /**
@@ -46,4 +48,5 @@ export const resetPasswordFormSchema = z
 		path: ['confirmPassword'],
 	});
 
+/** Values of the reset-password form, inferred from resetPasswordFormSchema. */
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordFormSchema>;

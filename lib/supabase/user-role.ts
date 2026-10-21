@@ -4,16 +4,20 @@ interface UserRoleRow {
 	roles: { role_name: string } | { role_name: string }[] | null;
 }
 
-// Reads the role name of a user. Shared by the middleware and by
-// getUserRoleAction so both resolve the role with the same query.
-//
-// The left join plus maybeSingle keeps three cases apart: a user without an
-// assigned role and a user without a row both resolve to null, while only a
-// real database or policy failure throws. An inner join with single() would
-// report "no role assigned" as an error, because both produce zero rows.
-//
-// Deliberately without a success log: this runs on every request, including
-// client-side navigations, and would flood the log.
+/**
+ * Reads the role name of a user. Shared by the middleware and by
+ * getUserRoleAction so both resolve the role with the same query.
+ *
+ * The left join plus maybeSingle keeps three cases apart: a user without an
+ * assigned role and a user without a row both resolve to null, while only a
+ * real database or policy failure throws. An inner join with single() would
+ * report "no role assigned" as an error, because both produce zero rows.
+ *
+ * Deliberately without a success log: this runs on every request, including
+ * client-side navigations, and would flood the log.
+ *
+ * @throws Error if the query fails.
+ */
 export async function getUserRoleByUserId(
 	supabase: SupabaseClient,
 	userId: string,

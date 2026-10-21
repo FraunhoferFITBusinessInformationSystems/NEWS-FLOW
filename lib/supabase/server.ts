@@ -1,6 +1,11 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+/**
+ * Supabase client for server components and server actions. Reads and writes
+ * the session cookies of the current request, so row level security applies
+ * to every query with the signed-in user's rights.
+ */
 export async function createClient() {
 	const cookieStore = await cookies();
 
@@ -30,7 +35,10 @@ export async function createClient() {
 	);
 }
 
-// Get current user - shared utility function
+/**
+ * Returns the signed-in user, validated against Supabase Auth. Returns the
+ * error instead of throwing, so callers can treat "no user" as a normal case.
+ */
 export const getCurrentUser = async () => {
 	const supabase = await createClient();
 
@@ -44,7 +52,10 @@ export const getCurrentUser = async () => {
 	return { data, error: null };
 };
 
-// Get current session - shared utility function
+/**
+ * Returns the session from the request cookies without validating it against
+ * Supabase Auth. Use getCurrentUser for anything that decides about access.
+ */
 export const getCurrentSession = async () => {
 	const supabase = await createClient();
 

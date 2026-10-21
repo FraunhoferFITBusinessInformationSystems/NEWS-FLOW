@@ -11,4 +11,5 @@ export const treeNoteFormSchema = z.object({
 		.trim(),
 });
 
+/** Values of the note form, inferred from treeNoteFormSchema. */
 export type TreeNoteFormValues = z.infer<typeof treeNoteFormSchema>;
