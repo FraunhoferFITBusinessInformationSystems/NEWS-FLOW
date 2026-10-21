@@ -1,6 +1,6 @@
 export default function DatenschutzPage() {
 	return (
-		<main className="max-w-2xl mx-auto p-8">
+		<div className="max-w-2xl mx-auto p-8">
 			<h1 className="text-2xl font-bold mb-4">Datenschutz</h1>
 			<section className="mt-6 text-sm text-gray-700 space-y-4">
 				<div>
@@ -72,6 +72,6 @@ export default function DatenschutzPage() {
 					</address>
 				</div>
 			</section>
-		</main>
+		</div>
 	);
 }

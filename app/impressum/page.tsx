@@ -2,7 +2,7 @@
 // replace the bracketed values with their own details before going live.
 export default function ImpressumPage() {
 	return (
-		<main className="max-w-2xl mx-auto p-8">
+		<div className="max-w-2xl mx-auto p-8">
 			<h1 className="text-2xl font-bold mb-4">Impressum</h1>
 
 			<section className="mt-6 text-sm text-gray-700 space-y-4">
@@ -45,6 +45,6 @@ export default function ImpressumPage() {
 					</p>
 				</div>
 			</section>
-		</main>
+		</div>
 	);
 }
