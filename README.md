@@ -235,14 +235,24 @@ providers/           React context providers
 supabase/
   migrations/        Database schema, views and row level security
   scripts/           SQL scripts run by hand (removing the demo data)
+  templates/         Email templates (password reset)
   seed.sql           Fictional demo data for local development
   config.toml        Local Supabase configuration
+docs/                Developer documentation, see below
 ```
 
 Each route follows the same split: `page.tsx` as the entry point, an optional
 client component for interactive logic, `action.ts` with the route's server
 actions, and a `components/` folder for components used only by that route.
 Code used by more than one route lives in the shared folders.
+
+## Documentation
+
+| Document | Content |
+|---|---|
+| [docs/architecture.md](docs/architecture.md) | Request flow from middleware to page, data access, adding a page |
+| [docs/data-model.md](docs/data-model.md) | Tables and views, coordinates, site age and targets, data quality rules |
+| [docs/security-auth-rls.md](docs/security-auth-rls.md) | Sign-in, roles, middleware rules and row level security |
 
 ## Contributing
 
