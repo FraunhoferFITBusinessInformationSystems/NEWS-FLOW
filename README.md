@@ -178,7 +178,14 @@ Irrigation targets are removed only while they still hold the demo values.
 | `npx supabase stop` | Stops the local Supabase stack |
 
 Emails sent by the local stack (for example password reset links) are not
-delivered; they appear in the mail catcher at `http://127.0.0.1:54324`.
+delivered to real mailboxes; they appear in the mail catcher at
+`http://127.0.0.1:54324`. To send real emails, connect an SMTP server of your
+own: locally with the `[auth.email.smtp]` settings in `supabase/config.toml`
+(see the [CLI configuration reference](https://supabase.com/docs/guides/local-development/cli/config#auth.email.smtp.host)),
+on a hosted project in the dashboard (see
+[Send emails with custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp)).
+Keep the SMTP password out of `config.toml`: reference it as
+`env(SMTP_PASS)` and put the value into `supabase/.env`, which git ignores.
 
 ## Using a hosted Supabase project
 
@@ -192,6 +199,13 @@ The dashboard loads all readings of the selected period in one request.
 With the default of 1000 rows, longer periods or several trees at once lose
 their oldest readings without a warning, so the chart starts later than the
 selected start date.
+
+The password reset email also has to be set up by hand: under
+**Authentication → Email Templates → Reset password**, paste the content of
+`supabase/templates/recovery.html` and set the subject to
+`News Flow: Passwort zurücksetzen`. Without it, the project sends Supabase's
+default English email, whose link only works in the browser that requested
+the reset.
 
 ## Project structure
 

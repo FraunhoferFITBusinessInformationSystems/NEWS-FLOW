@@ -246,6 +246,12 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Password reset email. The link carries a token_hash that the reset page only
+# redeems after a click, so link scanners in mail systems cannot use it up.
+[auth.email.template.recovery]
+subject = "News Flow: Passwort zurücksetzen"
+content_path = "./supabase/templates/recovery.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"
