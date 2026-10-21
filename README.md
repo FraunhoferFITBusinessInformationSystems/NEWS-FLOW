@@ -180,6 +180,19 @@ Irrigation targets are removed only while they still hold the demo values.
 Emails sent by the local stack (for example password reset links) are not
 delivered; they appear in the mail catcher at `http://127.0.0.1:54324`.
 
+## Using a hosted Supabase project
+
+`supabase/config.toml` only applies to the local stack. When you run NEWS FLOW
+against a project on [supabase.com](https://supabase.com/), raise the row
+limit there as well: in the Supabase dashboard, open the project's Data API
+settings and set **Max rows** to `10000` (the default is `1000`, the local
+stack uses `10000`).
+
+The dashboard loads all readings of the selected period in one request.
+With the default of 1000 rows, longer periods or several trees at once lose
+their oldest readings without a warning, so the chart starts later than the
+selected start date.
+
 ## Project structure
 
 ```
