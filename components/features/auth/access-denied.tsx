@@ -1,6 +1,8 @@
-// Shown by the layout when the current role may not open the current route.
-// The middleware already redirects such requests server-side, so this is the
-// fallback for the case where the role could not be resolved there.
+/**
+ * Shown by the layout when the current role may not open the current route.
+ * The middleware already redirects such requests server-side, so this is the
+ * fallback for the case where the role could not be resolved there.
+ */
 export function AccessDenied() {
 	return (
 		<div className="flex items-center justify-center min-h-[200px]">

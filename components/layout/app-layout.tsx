@@ -100,13 +100,15 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
 	);
 }
 
-// Everything the application needs around a page: the query-state adapter, the
-// role provider and the toaster.
-//
-// The Suspense boundary belongs to UserRoleProvider, which reads the search
-// params and therefore suspends until the client takes over. It sits inside
-// <body> on purpose: the document is rendered by the root layout above, so a
-// fallback can only ever replace the content area, never the document itself.
+/**
+ * Everything the application needs around a page: the query-state adapter, the
+ * role provider and the toaster.
+ *
+ * The Suspense boundary belongs to UserRoleProvider, which reads the search
+ * params and therefore suspends until the client takes over. It sits inside
+ * <body> on purpose: the document is rendered by the root layout above, so a
+ * fallback can only ever replace the content area, never the document itself.
+ */
 export function AppLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<NuqsAdapter>

@@ -1,5 +1,9 @@
 import Link from 'next/link';
 
+/**
+ * Page footer with the copyright line and the links to Impressum and
+ * Datenschutz.
+ */
 export function Footer() {
 	return (
 		<footer className="w-full border-t mt-8 py-6 sm:py-8">

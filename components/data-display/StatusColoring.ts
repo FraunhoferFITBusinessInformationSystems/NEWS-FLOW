@@ -1,3 +1,9 @@
+/**
+ * Colour for one depth, comparing the current soil water tension with the
+ * target maximum (both in kPa). Returns an `rgb(...)` string: grey without a
+ * current value, blue without a target, otherwise green, yellow, orange or
+ * red by deviation. The thresholds are explained on the help page (/hilfe).
+ */
 export function getStatusColor(
 	current: number | null | undefined,
 	target: number | null | undefined,

@@ -54,6 +54,12 @@ interface DataTableToolbarProps<TData> {
 	toolbarTrailing?: React.ReactNode;
 }
 
+/**
+ * Search field, reset button and CSV export above the data table. The search
+ * term is kept in the URL as `?search=`. The export contains the rows that
+ * match the current filters, mapped by csvExportRowMapper when given and
+ * flattened otherwise.
+ */
 export function DataTableToolbar<TData>({
 	table,
 	data,

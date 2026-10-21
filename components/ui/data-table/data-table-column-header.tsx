@@ -41,6 +41,10 @@ interface DataTableColumnHeaderProps<TData, TValue>
 	isFilterable?: boolean;
 }
 
+/**
+ * Column header with a menu for sorting and, when isFilterable is set, a value
+ * filter. Columns that cannot be sorted show the plain title.
+ */
 export function DataTableColumnHeader<TData, TValue>({
 	column,
 	title,

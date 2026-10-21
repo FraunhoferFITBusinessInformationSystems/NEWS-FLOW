@@ -21,6 +21,7 @@ interface DataTablePaginationProps<TData> {
 	table: Table<TData>;
 }
 
+/** Rows-per-page selector and page navigation below the data table. */
 export function DataTablePagination<TData>({
 	table,
 }: DataTablePaginationProps<TData>) {

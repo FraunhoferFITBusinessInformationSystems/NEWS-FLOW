@@ -11,6 +11,12 @@ interface Props {
 	onChange: (start: string, end: string) => void;
 }
 
+/**
+ * Start and end date inputs for the dashboard period. Takes and returns ISO
+ * timestamps: the start at the beginning, the end at the end of its local
+ * day. Dates after today and before MIN_DATE cannot be picked, and the start
+ * can never be after the end. onChange fires only when both dates are valid.
+ */
 export default function DateRangePicker({
 	startDate,
 	endDate,

@@ -52,10 +52,12 @@ function AuthButton({
 	);
 }
 
-// Fixed header bar. Purely presentational: what may be shown is decided by the
-// shell, which owns the role. While the role is still being resolved the bar
-// holds nothing but a spinner, because both the navigation and the session
-// control depend on it.
+/**
+ * Fixed header bar. Purely presentational: what may be shown is decided by the
+ * shell, which owns the role. While the role is still being resolved the bar
+ * holds nothing but a spinner, because both the navigation and the session
+ * control depend on it.
+ */
 export function AppHeader({
 	navigationItems,
 	isAuthenticated,

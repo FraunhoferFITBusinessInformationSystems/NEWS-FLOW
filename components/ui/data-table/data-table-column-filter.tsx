@@ -26,6 +26,10 @@ type DateFilterOptions = {
 	end: number;
 };
 
+/**
+ * Searchable list of the distinct values of a column; the selected values
+ * become the column filter. Used inside DataTableColumnHeader.
+ */
 export function DataTableColumnFilter<TData, TValue>({
 	column,
 	title,

@@ -1,6 +1,8 @@
-// Shown instead of the application while NEXT_PUBLIC_MAINTENANCE_MODE is set.
-// Deliberately free of providers, navigation and theme classes: it has to work
-// even when the rest of the application does not.
+/**
+ * Shown instead of the application while NEXT_PUBLIC_MAINTENANCE_MODE is set.
+ * Deliberately free of providers, navigation and theme classes: it has to work
+ * even when the rest of the application does not.
+ */
 export function MaintenanceNotice() {
 	return (
 		<div

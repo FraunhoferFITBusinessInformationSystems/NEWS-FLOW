@@ -11,6 +11,11 @@ interface MobileNavProps {
 	navigationItems: NavigationItem[];
 }
 
+/**
+ * Menu button and slide-in navigation below 1400px width, with expandable
+ * submenus and the logout button. Receives the entries already filtered by
+ * role.
+ */
 export function MobileNav({ navigationItems }: MobileNavProps) {
 	const [open, setOpen] = useState(false);
 	const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(

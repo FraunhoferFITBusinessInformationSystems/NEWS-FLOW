@@ -44,6 +44,12 @@ interface DataTableProps<TData, TValue> {
 	toolbarTrailing?: React.ReactNode;
 }
 
+/**
+ * Table built on TanStack Table with sorting, column filters, a global search,
+ * pagination and CSV export. Sorting and filters are kept in the URL (nuqs), so
+ * a shared link restores the view; set persistSortingInQuery to false to keep
+ * sorting local.
+ */
 export function DataTable<TData, TValue>({
 	columns,
 	data,

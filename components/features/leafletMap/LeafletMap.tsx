@@ -42,6 +42,13 @@ interface LeafletMapProps {
 	children?: ReactNode;
 }
 
+/**
+ * The shared Leaflet map container: creates the map with the OSM tile layer,
+ * handles resizing, fullscreen and teardown, and passes the map instance to
+ * the parent through onMapReady. Markers and layers are drawn by the parent.
+ * Needs the browser, so load the component that uses it with
+ * `next/dynamic` and `ssr: false`.
+ */
 export default function LeafletMap({
 	initialView,
 	scrollWheelZoom = true,
