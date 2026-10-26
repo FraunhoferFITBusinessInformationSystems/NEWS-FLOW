@@ -22,21 +22,20 @@ import L from 'leaflet';
 // Tree pin icons
 // ---------------------------------------------------------------------------
 
-const LEAFLET_COLOR_MARKERS_BASE =
-	'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img';
+/** Local copies of the colored pins and the shared shadow, served from /public. */
+const TREE_MAP_MARKER_BASE = '/leaflet/markers';
 
 /** Shadow image shared by all marker pins. */
-export const TREE_MAP_SHADOW_URL =
-	'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png';
+export const TREE_MAP_SHADOW_URL = `${TREE_MAP_MARKER_BASE}/marker-shadow.png`;
 
 /** Marker image per pin colour. */
 export const TREE_MAP_PIN_ICON_URLS: Record<TreeMapPinColor, string> = {
-	green: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-green.png`,
-	red: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-red.png`,
-	blue: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-blue.png`,
-	yellow: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-yellow.png`,
-	orange: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-orange.png`,
-	grey: `${LEAFLET_COLOR_MARKERS_BASE}/marker-icon-2x-grey.png`,
+	green: `${TREE_MAP_MARKER_BASE}/marker-icon-2x-green.png`,
+	red: `${TREE_MAP_MARKER_BASE}/marker-icon-2x-red.png`,
+	blue: `${TREE_MAP_MARKER_BASE}/marker-icon-2x-blue.png`,
+	yellow: `${TREE_MAP_MARKER_BASE}/marker-icon-2x-yellow.png`,
+	orange: `${TREE_MAP_MARKER_BASE}/marker-icon-2x-orange.png`,
+	grey: `${TREE_MAP_MARKER_BASE}/marker-icon-2x-grey.png`,
 };
 
 const TREE_MAP_ICON_LAYOUT = {
