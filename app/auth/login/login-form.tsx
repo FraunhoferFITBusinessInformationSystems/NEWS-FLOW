@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { pwdSignIn } from './action';
 
+import { PasswordInput } from '@/components/features/auth/password-input';
 import { Button } from '@/components/ui/button';
 import {
 	Card,
@@ -86,9 +87,8 @@ export function LoginForm() {
 								Passwort vergessen?
 							</Link>
 						</div>
-						<Input
+						<PasswordInput
 							id="password"
-							type="password"
 							autoComplete="current-password"
 							{...register('password')}
 						/>

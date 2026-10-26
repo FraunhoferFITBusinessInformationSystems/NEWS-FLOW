@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { PasswordInput } from '@/components/features/auth/password-input';
 import { Button } from '@/components/ui/button';
 import {
 	Card,
@@ -15,7 +16,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -207,9 +207,8 @@ export function ResetPasswordForm() {
 				>
 					<div className="grid gap-2">
 						<Label htmlFor="password">Neues Passwort</Label>
-						<Input
+						<PasswordInput
 							id="password"
-							type="password"
 							autoComplete="new-password"
 							{...register('password')}
 						/>
@@ -221,9 +220,8 @@ export function ResetPasswordForm() {
 					</div>
 					<div className="grid gap-2">
 						<Label htmlFor="confirmPassword">Passwort bestätigen</Label>
-						<Input
+						<PasswordInput
 							id="confirmPassword"
-							type="password"
 							autoComplete="new-password"
 							{...register('confirmPassword')}
 						/>
