@@ -1,7 +1,8 @@
-/* Map popup styles */
+/* Map popup styles. Wrapper and tip stay light green; the inner content must
+   not paint its own background, otherwise the popup looks partly white. */
 .leaflet-popup-content {
-	background-color: #f9f9f9;
-	color: #333;
+	background-color: transparent;
+	color: #006e3f;
 	font-size: 14px;
 	padding: 10px;
 	border-radius: 5px;
@@ -13,4 +14,8 @@
 	font-family: "Arial", sans-serif;
 	border-radius: 12px;
 	padding: 10px;
+}
+
+.leaflet-popup-tip {
+	background-color: #c4d9bc;
 }
