@@ -88,14 +88,15 @@ The demo data includes a login with the role `Sachbearbeiter:in`:
 
 | Email | Password |
 |---|---|
-| `demo@example.com` | `demo1234` |
+| `demo@example.com` | `Demo1234` |
 
 To create a login of your own, follow the steps below. Logins are created by
 an administrator; there is no self-registration.
 
 1. Open Supabase Studio at `http://127.0.0.1:54323`.
 2. Go to **Authentication → Users → Add user → Create new user**, enter an
-   email and a password (at least 6 characters) and tick **Auto Confirm User**.
+   email and a password (at least 8 characters with upper and lower case
+   letters and a digit) and tick **Auto Confirm User**.
 3. In the **SQL Editor**, link the login to a role:
 
    ```sql
@@ -125,7 +126,7 @@ drives or in some VM setups), use `npm run dev:polling` instead.
 `supabase/seed.sql` fills the local database with fictional data, so every
 page can be tried out right after the setup:
 
-- a login `demo@example.com` / `demo1234` with the role `Sachbearbeiter:in`
+- a login `demo@example.com` / `Demo1234` with the role `Sachbearbeiter:in`
 - four sites (Lindenallee, Am Stadtpark, Kastanienweg, Platanenring) with five
   trees each; trees 1 to 4 have a sensor, tree 5 has none and therefore does
   not appear on the overview or the dashboard
@@ -200,12 +201,40 @@ With the default of 1000 rows, longer periods or several trees at once lose
 their oldest readings without a warning, so the chart starts later than the
 selected start date.
 
+Under **Authentication → URL Configuration**, set **Site URL** to the address
+the application runs at (for example `https://newsflow.example.org`) and add
+the same address followed by `/**` to **Redirect URLs**. The password reset
+email builds its link from the Site URL; a new project starts with
+`http://localhost:3000`, so without this change every reset link points to
+localhost. The redirect URL is only used if the default email template is
+still active.
+
+A hosted project needs an SMTP server of your own (see
+[Useful commands](#useful-commands) and
+[Send emails with custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp)).
+Supabase's built-in mail service is meant for testing: it sends only a few
+emails per hour and only to the addresses of the project's team members, so
+password reset emails would not reach regular users.
+
 The password reset email also has to be set up by hand: under
 **Authentication → Email Templates → Reset password**, paste the content of
 `supabase/templates/recovery.html` and set the subject to
 `News Flow: Passwort zurücksetzen`. Without it, the project sends Supabase's
 default English email, whose link only works in the browser that requested
 the reset.
+
+Under **Authentication → Sign In / Providers**, turn off **Allow new users to
+sign up**, as in the local stack. Logins are created by an administrator (see
+[Sign in](#4-sign-in)), which still works with sign-up turned off. The anon key
+is public, so with sign-up on, anyone can create a login through the Supabase
+Auth API; such a login has no role and sees no data, but it still ends up in
+your project and can trigger emails.
+
+Set the same password policy as the local stack under **Authentication → Sign
+In / Providers → Email**: minimum length `8` and the requirement "Lowercase,
+uppercase letters and digits". The form for setting a new password checks
+these rules; with a weaker policy on the project, the form is stricter than
+necessary, with a stronger one, passwords that pass the form are rejected.
 
 The maps load their tiles from the OpenStreetMap tile servers. They are a
 free, best-effort service without availability guarantees, and heavy use can

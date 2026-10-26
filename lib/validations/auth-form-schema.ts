@@ -34,13 +34,18 @@ export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordFormSchema>;
 
 /**
  * Schema for the "Neues Passwort" form where the user sets a new password
- * after following the recovery link.
+ * after following the recovery link. Mirrors the Supabase password policy
+ * (`minimum_password_length = 8`, `password_requirements =
+ * "lower_upper_letters_digits"`), which only counts ASCII letters and digits.
  */
 export const resetPasswordFormSchema = z
 	.object({
 		password: z
 			.string()
-			.min(8, 'Das Passwort muss mindestens 8 Zeichen lang sein.'),
+			.min(8, 'Das Passwort muss mindestens 8 Zeichen lang sein.')
+			.regex(/[a-z]/, 'Das Passwort muss einen Kleinbuchstaben enthalten.')
+			.regex(/[A-Z]/, 'Das Passwort muss einen Großbuchstaben enthalten.')
+			.regex(/[0-9]/, 'Das Passwort muss eine Ziffer enthalten.'),
 		confirmPassword: z.string().min(1, 'Bitte bestätigen Sie das Passwort.'),
 	})
 	.refine((data) => data.password === data.confirmPassword, {

@@ -6,7 +6,7 @@
 -- roles are not seed data; they are inserted by the initial schema migration.
 --
 -- Contents:
---   1. Demo login (demo@example.com / demo1234, role Sachbearbeiter:in)
+--   1. Demo login (demo@example.com / Demo1234, role Sachbearbeiter:in)
 --   2. Irrigation areas and irrigation targets
 --   3. Four sites with five trees each; trees 1 to 4 have a sensor, tree 5 not
 --   4. Two readings per day per sensor from 1 January two years ago until now
@@ -54,7 +54,7 @@ insert into auth.users (
 	'authenticated',
 	'authenticated',
 	'demo@example.com',
-	extensions.crypt('demo1234', extensions.gen_salt('bf')),
+	extensions.crypt('Demo1234', extensions.gen_salt('bf')),
 	now(),
 	'{"provider": "email", "providers": ["email"]}',
 	'{}',
