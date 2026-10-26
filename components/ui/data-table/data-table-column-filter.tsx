@@ -99,7 +99,7 @@ export function DataTableColumnFilter<TData, TValue>({
 		<Command>
 			<CommandInput placeholder={title} />
 			<CommandList>
-				<CommandEmpty>No results found.</CommandEmpty>
+				<CommandEmpty>Keine Ergebnisse gefunden.</CommandEmpty>
 				{options.map((option) => {
 					let isSelected = false;
 
@@ -168,7 +168,7 @@ export function DataTableColumnFilter<TData, TValue>({
 								className="justify-center text-center"
 								onSelect={() => column?.setFilterValue(undefined)}
 							>
-								Clear filters
+								Filter löschen
 							</CommandItem>
 						</CommandGroup>
 					</>

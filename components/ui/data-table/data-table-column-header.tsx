@@ -77,11 +77,11 @@ export function DataTableColumnHeader<TData, TValue>({
 				<DropdownMenuContent align="start">
 					<DropdownMenuItem onClick={() => column.toggleSorting(false)}>
 						<ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-						Asc
+						Aufsteigend
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => column.toggleSorting(true)}>
 						<ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-						Desc
+						Absteigend
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					{isFilterable ? (
@@ -90,12 +90,12 @@ export function DataTableColumnHeader<TData, TValue>({
 								onClick={() => column.setFilterValue(undefined)}
 							>
 								<EraserIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-								Reset Filter
+								Filter zurücksetzen
 							</DropdownMenuItem>
 							<DropdownMenuSub>
 								<DropdownMenuSubTrigger>
 									<MixerHorizontalIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-									<span>Set Filter</span>
+									<span>Filter setzen</span>
 								</DropdownMenuSubTrigger>
 								<DropdownMenuSubContent className="p-0">
 									<DataTableColumnFilter column={column} title={title} />
@@ -106,7 +106,7 @@ export function DataTableColumnHeader<TData, TValue>({
 					) : null}
 					<DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
 						<EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-						Hide
+						Ausblenden
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
