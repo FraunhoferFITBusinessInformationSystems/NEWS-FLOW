@@ -77,6 +77,7 @@ Copy `.env.example` to `.env.local` and fill in the values:
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | "anon key" or "Publishable key" from `npx supabase status` |
 | `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` |
 | `NEXT_PUBLIC_MAINTENANCE_MODE` | optional, `false` |
+| `NEXT_PUBLIC_SOURCE_CODE_URL` | optional, leave empty (see [License](#license)) |
 
 **The first three variables are required. Without them the application does
 not start.** Never put the service role key into `.env.local`; the application
@@ -300,5 +301,13 @@ The hooks are installed by `npm install`. If they are missing, run
 
 ## License
 
+Copyright © 2026 Fraunhofer-Gesellschaft, Fraunhofer FIT
+
 NEWS FLOW is licensed under the
-[GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only).
+[GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only). It is
+distributed without any warranty; see sections 15 and 16 of the license.
+
+The AGPL requires that every user of a running instance can get its source
+code. The "Quellcode" link in the footer covers this; it points to this
+repository by default. If you deploy a modified version, set
+`NEXT_PUBLIC_SOURCE_CODE_URL` to the public source code of your version.
