@@ -1,0 +1,97 @@
+import { getStatusColor } from '@/components/data-display/status-coloring';
+import type { TreeMapPinColor } from '@/lib/types/map';
+
+/**
+ * Latest reading of a tree's sensor (channels 1 to 3 are 30, 60 and 90 cm)
+ * together with the tree's targets.
+ */
+export interface WateringNeedCategoryInput {
+	readonly kpa_ch1: number | null | undefined;
+	readonly kpa_ch2: number | null | undefined;
+	readonly kpa_ch3: number | null | undefined;
+	readonly measured_at: string | null | undefined;
+	readonly target_30cm: number | null | undefined;
+	readonly target_60cm: number | null | undefined;
+	readonly target_90cm: number | null | undefined;
+}
+
+/**
+ * Same rule as the map (`assignIcon`): `measured_at` older than two calendar days back
+ * from today → stale. Matches `new Date(measured_at as string) < twoDaysAgo` (including
+ * `null` → epoch, which counts as stale).
+ */
+export function isSoilMeasurementStale(
+	measuredAt: string | null | undefined,
+): boolean {
+	const sensorDate = new Date(measuredAt as string);
+	const twoDaysAgo = new Date();
+	twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+	return sensorDate < twoDaysAgo;
+}
+
+/** German label per pin colour, shown in the map legend and the table. */
+export const WATERING_NEED_LABEL_DE: Record<TreeMapPinColor, string> = {
+	green: 'Kein Bewässerungsbedarf',
+	yellow: 'Geringer Bewässerungsbedarf',
+	orange: 'Deutlicher Bewässerungsbedarf',
+	red: 'Hoher Bewässerungsbedarf',
+	grey: 'Messung älter als 2 Tage / ungültige Werte',
+	blue: 'Keine Bewässerungsstrategie vorhanden',
+};
+
+/**
+ * Derives the same map pin color / irrigation need category as the overview map
+ * (`assignIcon` in map-component.tsx): sensor age (2 calendar days), then worst depth vs. target.
+ */
+export function getWateringNeedCategory(
+	input: WateringNeedCategoryInput,
+): TreeMapPinColor {
+	let iconKey: TreeMapPinColor = 'grey';
+
+	const hasSensorData =
+		input.kpa_ch1 != null || input.kpa_ch2 != null || input.kpa_ch3 != null;
+
+	if (hasSensorData) {
+		if (isSoilMeasurementStale(input.measured_at)) {
+			return 'grey';
+		}
+
+		const color30cm = getStatusColor(input.kpa_ch1, input.target_30cm);
+		const color60cm = getStatusColor(input.kpa_ch2, input.target_60cm);
+		const color90cm = getStatusColor(input.kpa_ch3, input.target_90cm);
+
+		if (
+			color30cm === 'rgb(255,0,0)' ||
+			color60cm === 'rgb(255,0,0)' ||
+			color90cm === 'rgb(255,0,0)'
+		) {
+			iconKey = 'red';
+		} else if (
+			color30cm === 'rgb(255,128,0)' ||
+			color60cm === 'rgb(255,128,0)' ||
+			color90cm === 'rgb(255,128,0)'
+		) {
+			iconKey = 'orange';
+		} else if (
+			color30cm === 'rgb(255,204,0)' ||
+			color60cm === 'rgb(255,204,0)' ||
+			color90cm === 'rgb(255,204,0)'
+		) {
+			iconKey = 'yellow';
+		} else if (
+			color30cm === 'rgb(0,200,0)' ||
+			color60cm === 'rgb(0,200,0)' ||
+			color90cm === 'rgb(0,200,0)'
+		) {
+			iconKey = 'green';
+		} else if (
+			color30cm === 'rgb(0, 0, 255)' ||
+			color60cm === 'rgb(0, 0, 255)' ||
+			color90cm === 'rgb(0, 0, 255)'
+		) {
+			iconKey = 'blue';
+		}
+	}
+
+	return iconKey;
+}

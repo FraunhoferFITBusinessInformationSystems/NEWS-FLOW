@@ -1,0 +1,12 @@
+# Git hooks for NEWS FLOW, managed by lefthook (https://lefthook.dev).
+# `npm install` installs them automatically; no extra setup is needed.
+
+pre-commit:
+  jobs:
+    # Checks formatting, lint rules and import order with Biome for the staged
+    # files. The repository is Biome-clean, so checking the staged files keeps
+    # the whole codebase clean. Nothing is changed automatically: fix the
+    # reported issues (for formatting, `npm run format`) and commit again.
+    - name: biome
+      glob: "*.{js,jsx,ts,tsx,json,jsonc,css}"
+      run: npx biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
